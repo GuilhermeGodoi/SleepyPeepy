@@ -18,6 +18,7 @@ import Privacidade from "./pages/Privacidade";
 import Termos from "./pages/Termos";
 import Cookies from "./pages/Cookies";
 import NotFound from "./pages/NotFound";
+import QuizInsonia from "./pages/QuizInsonia";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
         <CookieConsent />
         <Routes>
           {/* --- ROTAS PÚBLICAS --- */}
+          <Route path="/quiz-insonia" element={<QuizInsonia />} />
           <Route path="/privacidade" element={<Privacidade />} />
           <Route path="/termos" element={<Termos />} />
           <Route path="/cookies" element={<Cookies />} />
@@ -77,7 +79,8 @@ const App = () => (
               </RequireAuth>
             }
           />
-
+          
+          {/* <Route path="/receitas" element={<RequireAuth><Receitas/></RequireAuth>} /> */}
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -87,3 +90,4 @@ const App = () => (
 );
 
 export default App;
+
