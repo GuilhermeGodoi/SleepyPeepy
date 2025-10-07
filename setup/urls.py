@@ -9,6 +9,7 @@ def health(request): return HttpResponse("ok", content_type="text/plain")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("admin", RedirectView.as_view(url="/admin/", permanent=False)), 
     path("accounts/", include("allauth.urls")),
     path("api/whoami/", whoami),
     path("accounts/invites/", manage_invites, name="manage_invites"),
