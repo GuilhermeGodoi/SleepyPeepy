@@ -151,12 +151,24 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 # Mantém a sua config sqlite padrão:
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'vJfHlxbLRDyEubmpDulPkMFckSAWTmNy',
+        'HOST': 'postgres.railway.internal',
+        'PORT': '5432',
     }
 }
+
 # Em produção (Railway), se existir DATABASE_URL no ambiente e dj_database_url estiver disponível,
 # sobrepõe usando Postgres automaticamente, sem remover a variável original.
 if dj_database_url and os.getenv("DATABASE_URL"):
