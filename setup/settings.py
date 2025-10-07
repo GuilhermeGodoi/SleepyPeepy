@@ -121,6 +121,8 @@ LOGIN_EXEMPT_URLS = [
     r"^\.well-known/.*$",
 
     r"^api/public/.*$",
+
+    r"^quiz-insonia/?$",
 ]
 
 
