@@ -24,6 +24,8 @@ dist-ssr
 
 venv/
 .venv/
+node_modules/
+dist/
 staticfiles/
 *.sqlite3
 .env
