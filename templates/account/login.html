@@ -1,0 +1,44 @@
+{% extends "account/base_auth.html" %}
+{% load i18n account %}
+
+{% block title %}{% trans "Entrar" %}{% endblock %}
+
+{% block content %}
+  <h1 class="title">{% trans "Entrar" %}</h1>
+  <p class="muted">Acesse sua conta para ver seus conteúdos.</p>
+
+  {% if form.non_field_errors %}
+    <div class="errors">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+
+    <label>
+      <span>Usuário ou e-mail</span>
+      {{ form.login }}
+      {{ form.login.errors }}
+    </label>
+
+    <label>
+      <span>Senha</span>
+      {{ form.password }}
+      {{ form.password.errors }}
+    </label>
+
+    <div class="row">
+      {{ form.remember }} <span class="muted">Lembrar</span>
+    </div>
+
+    {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+    {% endif %}
+
+    <button class="btn btn-primary" type="submit">Entrar</button>
+
+    <div class="top-actions">
+      <a href="{% url 'account_reset_password' %}">Esqueceu a senha?</a>
+      <a href="{% url 'account_signup' %}">Criar conta</a>
+    </div>
+  </form>
+{% endblock %}

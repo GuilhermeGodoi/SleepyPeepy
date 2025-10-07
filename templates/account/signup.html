@@ -1,0 +1,60 @@
+{% extends "account/base_auth.html" %}
+{% load i18n account %}
+
+{% block title %}{% trans "Criar conta" %}{% endblock %}
+
+{% block content %}
+  <h1 class="title">{% trans "Criar conta" %}</h1>
+  <p class="muted">Leva menos de 1 minuto.</p>
+
+  {% if form.non_field_errors %}
+    <div class="errors">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <form method="post" action="{% url 'account_signup' %}">
+    {% csrf_token %}
+
+    {% if form.username %}
+      <label>
+        <span>Usuário</span>
+        {{ form.username }}
+        {{ form.username.errors }}
+      </label>
+    {% endif %}
+
+    {% if form.email %}
+      <label>
+        <span>E-mail</span>
+        {{ form.email }}
+        {{ form.email.errors }}
+      </label>
+    {% endif %}
+
+    {% if form.password1 %}
+      <label>
+        <span>Senha</span>
+        {{ form.password1 }}
+        {{ form.password1.errors }}
+      </label>
+    {% endif %}
+
+    {% if form.password2 %}
+      <label>
+        <span>Confirmar senha</span>
+        {{ form.password2 }}
+        {{ form.password2.errors }}
+      </label>
+    {% endif %}
+
+    {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+    {% endif %}
+
+    <button class="btn btn-primary" type="submit">Criar conta</button>
+
+    <div class="center" style="margin-top:10px">
+      <span class="muted">Já tem conta?</span>
+      <a href="{% url 'account_login' %}">Entrar</a>
+    </div>
+  </form>
+{% endblock %}

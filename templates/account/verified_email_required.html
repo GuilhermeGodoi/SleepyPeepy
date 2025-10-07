@@ -1,0 +1,52 @@
+{% extends "account/base_auth.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Verificação de e-mail" %}{% endblock %}
+
+{% block content %}
+  <h1 class="title">{% trans "Verificação de e-mail necessária" %}</h1>
+  <p class="muted">
+    {% blocktrans %}Enviamos instruções de verificação para o seu e-mail. Verifique sua caixa de entrada.{% endblocktrans %}
+  </p>
+
+  {% if user.is_authenticated and not has_verified_email %}
+    <p class="muted" style="margin-top:8px">
+      {% trans "Caso não tenha recebido, você pode solicitar reenvio pela área de conta." %}
+    </p>
+  {% endif %}
+
+  <div class="sep"></div>
+
+  {% if user.is_authenticated and user.is_staff %}
+    <h2 class="title" style="font-size:1.2rem; margin-top:14px">Gerar convites (Staff)</h2>
+    <p class="muted">Crie links de convite para enviar pelo WhatsApp/Email.</p>
+
+    <form method="post" action="{% url 'manage_invites' %}" style="display:grid; gap:12px; margin-top:10px">
+      {% csrf_token %}
+      <div class="row">
+        <label style="flex:1">
+          <span>Quantidade</span>
+          <input type="number" name="qty" value="3" min="1" max="20" />
+        </label>
+        <label style="flex:1">
+          <span>Validade (dias)</span>
+          <input type="number" name="days" value="7" min="1" max="90" />
+        </label>
+      </div>
+      <button class="btn btn-primary" type="submit">Gerar convites</button>
+    </form>
+
+    {% if invites %}
+      <div class="sep" style="margin:14px 0"></div>
+      <h3 class="title" style="font-size:1.1rem;">Links gerados</h3>
+      <ul style="display:grid; gap:8px; padding-left:18px; margin:0">
+        {% for i in invites %}
+          <li>
+            <code style="word-break:break-all">{{ i.url }}</code>
+            <span class="muted">— expira em {{ i.days }} dia(s)</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+{% endblock %}

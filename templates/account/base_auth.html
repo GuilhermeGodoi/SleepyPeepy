@@ -1,0 +1,121 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}{% endblock %} • SonoVital</title>
+
+  <style>
+    /* === VARIÁVEIS: copiaram do seu index.css === */
+    :root{
+      --background: 240 25% 14%;
+      --foreground: 240 15% 95%;
+      --card: 240 20% 18%;
+      --card-foreground: 240 15% 95%;
+      --primary: 264 65% 60%;
+      --primary-foreground: 240 15% 95%;
+      --secondary: 240 15% 22%;
+      --muted: 240 15% 22%;
+      --muted-foreground: 240 10% 65%;
+      --accent: 280 55% 65%;
+      --accent-foreground: 240 15% 95%;
+      --destructive: 0 70% 60%;
+      --destructive-foreground: 240 15% 95%;
+      --border: 240 15% 28%;
+      --input: 240 15% 28%;
+      --ring: 264 65% 60%;
+      --radius: 0.75rem;
+      --shadow-soft: 0 8px 32px -8px hsl(264 60% 35% / 0.4);
+      --shadow-glow: 0 0 40px hsl(264 65% 60% / 0.25);
+    }
+
+    /* === RESET & BASE === */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    a { color: hsl(var(--accent)); text-decoration: underline; }
+    a:hover { opacity: .9; }
+
+    /* === CARD === */
+    .card{
+      width: 100%;
+      max-width: 420px;
+      background: hsl(var(--card));
+      color: hsl(var(--card-foreground));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      padding: 20px;
+    }
+    .title{
+      margin: 0 0 12px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .muted{ color: hsl(var(--muted-foreground)); font-size: .925rem; }
+
+    /* === FORM === */
+    form{ display: grid; gap: 12px; margin-top: 8px; }
+    label span{ display:block; font-size:.9rem; margin-bottom:6px; color:hsl(var(--muted-foreground)); }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"]{
+      width: 100%;
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      border: 1px solid hsl(var(--input));
+      border-radius: calc(var(--radius) - 2px);
+      padding: 10px 12px;
+      outline: none;
+      transition: box-shadow .15s, border-color .15s;
+    }
+    input:focus{
+      border-color: hsl(var(--ring));
+      box-shadow: 0 0 0 3px hsl(var(--ring) / .25);
+    }
+
+    .btn{
+      appearance: none;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .02s ease, filter .15s ease;
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .btn-primary{
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+      box-shadow: var(--shadow-glow);
+    }
+    .btn-primary:hover{ filter: brightness(.98); }
+
+    .row{ display:flex; align-items:center; gap:8px; }
+    .sep{ height:1px; background:hsl(var(--border)); margin: 8px 0 0; }
+    .errors{ color: hsl(var(--destructive)); font-size: .9rem; }
+
+    /* small helpers */
+    .top-actions{ display:flex; justify-content: space-between; align-items:center; margin-top: 6px; }
+    .center{ text-align:center; }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <main class="card">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
