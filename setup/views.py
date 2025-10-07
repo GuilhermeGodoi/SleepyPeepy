@@ -46,3 +46,7 @@ def manage_invites(request):
         "account/verified_email_required.html",
         {"invites": invites, "has_verified_email": has_verified_email},
     )
+
+from django.http import HttpResponse
+def health(request):  # rota simples
+    return HttpResponse("ok", content_type="text/plain")
