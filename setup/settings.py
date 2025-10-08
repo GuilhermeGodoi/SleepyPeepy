@@ -123,6 +123,9 @@ LOGIN_EXEMPT_URLS = [
     r"^api/public/.*$",
 
     r"^quiz-insonia/?$",
+
+    r"^robots\.txt$", r"^sitemap\.xml$",
+    r"^\.well-known/.*$",
 ]
 
 
