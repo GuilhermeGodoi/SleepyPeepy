@@ -104,13 +104,14 @@ CSRF_TRUSTED_ORIGINS = [
 
 # URLs liberadas de login (regex, relativas à raiz, sem a "/")
 LOGIN_EXEMPT_URLS = [
-    # r"^$",                      # REMOVA se a home deve exigir login
-    r"^lp/$",                     # se for usar landing pública
-    r"^lp/.*$",
+    # públicas do seu site
+    r"^lp/$", r"^lp/.*$",
     r"^whatsapp/$",
     r"^politica-de-privacidade/$",
     r"^termos/$",
+    r"^quiz-insonia/?$",
 
+    # allauth/admin/estáticos
     r"^accounts/.*$",
     r"^admin/.*$",
     r"^static/.*$",
@@ -120,13 +121,10 @@ LOGIN_EXEMPT_URLS = [
     r"^sitemap\.xml$",
     r"^\.well-known/.*$",
 
+    # APIs públicas (se existirem)
     r"^api/public/.*$",
-
-    r"^quiz-insonia/?$",
-
-    r"^robots\.txt$", r"^sitemap\.xml$",
-    r"^\.well-known/.*$",
 ]
+
 
 
 CORS_ALLOW_CREDENTIALS = True  # Para cookies
