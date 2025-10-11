@@ -110,7 +110,9 @@ LOGIN_EXEMPT_URLS = [
     r"^politica-de-privacidade/$",
     r"^termos/$",
     r"^quiz-insonia/?$",
-
+    r"^quiz-ansiedade/?$",
+    r"^quiz-misto/?$",
+    
     # allauth/admin/estáticos
     r"^accounts/.*$",
     r"^admin/.*$",
@@ -123,6 +125,7 @@ LOGIN_EXEMPT_URLS = [
 
     # APIs públicas (se existirem)
     r"^api/public/.*$",
+    
 ]
 
 
@@ -215,7 +218,13 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [ BASE_DIR / "dist" ]
+STATICFILES_DIRS = [
+    BASE_DIR / "dist",              # build do Vite (SPA)
+    BASE_DIR / "public",            # se usar
+    BASE_DIR / "src" / "assets",    # assets do React (se realmente precisar)
+    BASE_DIR / "setup" / "static",  # ⬅️ ADICIONE ESTA LINHA
+]
+
 # Em produção, ativa storage com manifest + compressão (sem remover sua config original)
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

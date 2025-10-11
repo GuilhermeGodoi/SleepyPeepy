@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
-/** ===== Imagens (src/assets/quiz_1/pgt1.png ... pgt10.png) ===== */
+/** ===== (Opcional) Imagens — se quiser usar, crie src/assets/quiz_misto/pgt1.png ... pgt15.png ===== */
 const quizImgs = import.meta.glob("@/assets/quiz_1/*.png", {
   eager: true,
   import: "default",
@@ -23,64 +23,28 @@ type Option = { letter: Letter; label: string };
 type Question = { id: string; title: string; imageUrl?: string; options: Option[] };
 
 /** ===== Pontuação (0–15, 0 = pior, 15 = melhor) =====
- * A/B/C = 1 ponto, D = 0 ponto
+ * A/B/C = 1 ponto; D = 0 ponto — mantém o viés de pontuação mais baixa.
  */
 const SCORE: Record<Letter, number> = { A: 1, B: 1, C: 1, D: 0 };
 
-/** ===== Perguntas =====
- * Q1–Q10 = Dor (mantidas)
- * Q11–Q13 = Concordância (novas)
- * Q14–Q15 = Solução (novas)
- */
+/** ===== Perguntas (mistas — ansiedade + insônia) ===== */
 const QUESTIONS: Question[] = [
+  // — Etapa 1: perceber a dor —
   {
     id: "q1",
-    title: "Quanto tempo você leva para pegar no sono?",
-    imageUrl: "pgt8.png",
+    title: "Você sente que sua mente não desliga, mesmo quando tenta relaxar ou dormir?",
+    imageUrl: "pgt5.png",
     options: [
-      { letter: "A", label: "Menos de 15 minutos" },
-      { letter: "B", label: "Entre 15 e 30 minutos" },
-      { letter: "C", label: "Entre 30 minutos e 1 hora" },
-      { letter: "D", label: "Mais de 1 hora" },
+      { letter: "A", label: "Raramente, consigo relaxar facilmente" },
+      { letter: "B", label: "Às vezes tenho dificuldade" },
+      { letter: "C", label: "Frequentemente minha mente acelera" },
+      { letter: "D", label: "Sempre, é impossível desligar os pensamentos" },
     ],
   },
   {
     id: "q2",
-    title: "Quantas vezes você acorda durante a noite?",
-    imageUrl: "pgt2.png",
-    options: [
-      { letter: "A", label: "Nenhuma vez" },
-      { letter: "B", label: "1–2 vezes" },
-      { letter: "C", label: "3–4 vezes" },
-      { letter: "D", label: "Mais de 4 vezes" },
-    ],
-  },
-  {
-    id: "q3",
-    title: "Como você se sente ao acordar?",
-    imageUrl: "pgt3.png",
-    options: [
-      { letter: "A", label: "Descansado e energizado" },
-      { letter: "B", label: "Razoavelmente descansado" },
-      { letter: "C", label: "Ainda cansado" },
-      { letter: "D", label: "Exausto e sem energia" },
-    ],
-  },
-  {
-    id: "q4",
-    title: "Quantas horas você dorme por noite em média?",
-    imageUrl: "pgt4.png",
-    options: [
-      { letter: "A", label: "7–9 horas" },
-      { letter: "B", label: "6–7 horas" },
-      { letter: "C", label: "5–6 horas" },
-      { letter: "D", label: "Menos de 5 horas" },
-    ],
-  },
-  {
-    id: "q5",
-    title: "Com que frequência você tem dificuldade para dormir?",
-    imageUrl: "pgt5.png",
+    title: "Com que frequência você passa a noite acordado(a) pensando em preocupações?",
+    imageUrl: "pgt8.png",
     options: [
       { letter: "A", label: "Nunca ou raramente" },
       { letter: "B", label: "1–2 vezes por semana" },
@@ -89,156 +53,185 @@ const QUESTIONS: Question[] = [
     ],
   },
   {
-    id: "q6",
-    title: "Você usa o celular/tablet na cama antes de dormir?",
-    imageUrl: "pgt6.png",
+    id: "q3",
+    title: "Ao longo do dia, você se sente cansado(a) mas à noite não consegue dormir?",
+    imageUrl: "pgt16.png",
     options: [
-      { letter: "A", label: "Nunca" },
-      { letter: "B", label: "Raramente (1–2x por semana)" },
-      { letter: "C", label: "Às vezes (3–4x por semana)" },
-      { letter: "D", label: "Sempre ou quase sempre" },
+      { letter: "A", label: "Não, durmo normalmente quando estou cansado(a)" },
+      { letter: "B", label: "Às vezes acontece" },
+      { letter: "C", label: "Frequentemente me sinto assim" },
+      { letter: "D", label: "Sempre! Exausto(a) mas insone" },
+    ],
+  },
+  {
+    id: "q4",
+    title: "Sintomas físicos (coração acelerado, tensão muscular, sudorese) acontecem com você?",
+    imageUrl: "pgt19.png",
+    options: [
+      { letter: "A", label: "Raramente ou nunca" },
+      { letter: "B", label: "Ocasionalmente" },
+      { letter: "C", label: "Frequentemente sinto" },
+      { letter: "D", label: "Diariamente; é muito desconfortável" },
+    ],
+  },
+  {
+    id: "q5",
+    title: "Como ansiedade e falta de sono têm impactado sua vida (trabalho, relacionamentos, saúde)?",
+    imageUrl: "pgt15.png",
+    options: [
+      { letter: "A", label: "Pouco ou nenhum impacto" },
+      { letter: "B", label: "Impacto leve ocasional" },
+      { letter: "C", label: "Impacto moderado frequente" },
+      { letter: "D", label: "Impacto severo em várias áreas" },
+    ],
+  },
+
+  // — Etapa 2: concordância —
+  {
+    id: "q6",
+    title: "Você acredita que ansiedade e insônia estão conectadas e se retroalimentam?",
+    imageUrl: "pgt5.png",
+    options: [
+      { letter: "A", label: "Não vejo conexão" },
+      { letter: "B", label: "Talvez haja relação" },
+      { letter: "C", label: "Sim; uma piora a outra" },
+      { letter: "D", label: "Totalmente; é um ciclo vicioso" },
     ],
   },
   {
     id: "q7",
-    title: "Você fica irritado(a) ou mal-humorado(a) facilmente?",
-    imageUrl: "pgt7.png",
+    title: "Tratar ansiedade e sono ao mesmo tempo seria mais eficaz para você?",
+    imageUrl: "pgt4.png",
     options: [
-      { letter: "A", label: "Nunca ou raramente" },
-      { letter: "B", label: "Às vezes" },
-      { letter: "C", label: "Frequentemente" },
-      { letter: "D", label: "Quase sempre; qualquer coisa me irrita" },
+      { letter: "A", label: "Não acho necessário" },
+      { letter: "B", label: "Talvez seja útil" },
+      { letter: "C", label: "Sim; faz sentido tratar junto" },
+      { letter: "D", label: "Com certeza; preciso abordagem integrada" },
     ],
   },
   {
     id: "q8",
-    title: "Como está sua libido/desejo sexual?",
-    imageUrl: "pgt8.png",
+    title: "Você conseguiria dedicar 20 minutos por dia para práticas que melhorem ansiedade e sono?",
+    imageUrl: "pgt3.png",
     options: [
-      { letter: "A", label: "Normal e saudável" },
-      { letter: "B", label: "Um pouco reduzida" },
-      { letter: "C", label: "Bastante reduzida" },
-      { letter: "D", label: "Praticamente inexistente" },
+      { letter: "A", label: "Não tenho tempo" },
+      { letter: "B", label: "Talvez ocasionalmente" },
+      { letter: "C", label: "Sim; posso me organizar" },
+      { letter: "D", label: "Sim; totalmente comprometido(a)" },
     ],
   },
   {
     id: "q9",
-    title: "Você tem dificuldade de concentração ou esquece as coisas?",
-    imageUrl: "pgt9.png",
+    title: "Já tentou técnicas naturais (respiração, meditação, chás) para ambos os problemas?",
+    imageUrl: "pgt14.png",
     options: [
-      { letter: "A", label: "Não; minha memória está ótima" },
-      { letter: "B", label: "Às vezes me distraio" },
-      { letter: "C", label: "Frequentemente esqueço coisas" },
-      { letter: "D", label: "Constantemente; afeta trabalho/estudos" },
+      { letter: "A", label: "Nunca tentei" },
+      { letter: "B", label: "Tentei sem consistência" },
+      { letter: "C", label: "Sim; ajudou quando pratiquei" },
+      { letter: "D", label: "Sim; funciona, mas preciso de estrutura" },
     ],
   },
   {
     id: "q10",
-    title: "Seu horário de dormir é regular?",
-    imageUrl: "pgt16.png",
+    title: "Você sente que precisa de um programa integrado (passo a passo) para ansiedade e sono?",
+    imageUrl: "pgt12.png",
     options: [
-      { letter: "A", label: "Sim; sempre no mesmo horário" },
-      { letter: "B", label: "Na maioria das vezes" },
-      { letter: "C", label: "Varia bastante" },
-      { letter: "D", label: "Totalmente irregular" },
+      { letter: "A", label: "Não preciso disso" },
+      { letter: "B", label: "Talvez fosse interessante" },
+      { letter: "C", label: "Sim; seria muito útil" },
+      { letter: "D", label: "Sim; é exatamente o que preciso" },
     ],
   },
 
-  // --- Etapa 2 — Concordância (novas) ---
+  // — Etapa 3: oferta —
   {
     id: "q11",
-    title: "Você percebe relação entre telas/cafeína à noite e sua dificuldade para dormir?",
-    imageUrl: "pgt18.png",
+    title: "Gostaria de acesso a um programa completo que trata ansiedade E insônia juntos?",
+    imageUrl: "pgt11.png",
     options: [
-      { letter: "A", label: "Sim, noto piora clara" },
-      { letter: "B", label: "Acho que atrapalha um pouco" },
-      { letter: "C", label: "Talvez, não tenho certeza" },
-      { letter: "D", label: "Não, não vejo relação" },
+      { letter: "A", label: "Não tenho interesse" },
+      { letter: "B", label: "Talvez; depende do formato" },
+      { letter: "C", label: "Sim; gostaria de conhecer" },
+      { letter: "D", label: "Sim; preciso disso urgentemente" },
     ],
   },
   {
     id: "q12",
-    title: "Você acredita que uma rotina noturna consistente (mesmo horário, ambiente adequado) melhora seu sono?",
-    imageUrl: "pgt12.png",
+    title: "Receitas naturais (chás/bebidas) para acalmar mente e corpo seriam valiosas para você?",
+    imageUrl: "pgt13.png",
     options: [
-      { letter: "A", label: "Sim, faz bastante diferença" },
-      { letter: "B", label: "Ajuda, mas nem sempre" },
-      { letter: "C", label: "Talvez ajude um pouco" },
-      { letter: "D", label: "Não acredito que influencie" },
+      { letter: "A", label: "Não me interessa" },
+      { letter: "B", label: "Interessante, mas não essencial" },
+      { letter: "C", label: "Sim; gostaria de experimentar" },
+      { letter: "D", label: "Sim; seriam fundamentais" },
     ],
   },
   {
     id: "q13",
-    title: "Você estaria disposto(a) a reservar 15–20 minutos antes de dormir para práticas simples (respiração/alongamento)?",
-    imageUrl: "pgt11.png",
-    options: [
-      { letter: "A", label: "Sim, todos os dias" },
-      { letter: "B", label: "Na maioria dos dias" },
-      { letter: "C", label: "Às vezes" },
-      { letter: "D", label: "Não, não pretendo" },
-    ],
-  },
-
-  // --- Etapa 3 — Solução (novas) ---
-  {
-    id: "q14",
-    title: "Você gostaria de seguir um plano guiado de 7 dias para melhorar o sono com passos objetivos?",
+    title: "Exercícios de respiração 24/7 (para crises e para dormir) ajudariam você?",
     imageUrl: "pgt14.png",
     options: [
-      { letter: "A", label: "Sim, começaria hoje" },
-      { letter: "B", label: "Sim, em breve" },
-      { letter: "C", label: "Talvez" },
-      { letter: "D", label: "Prefiro não" },
+      { letter: "A", label: "Provavelmente não usaria" },
+      { letter: "B", label: "Talvez experimentasse" },
+      { letter: "C", label: "Sim; usaria regularmente" },
+      { letter: "D", label: "Com certeza; seriam essenciais" },
+    ],
+  },
+  {
+    id: "q14",
+    title: "Acompanhamento personalizado aumentaria suas chances de superar ansiedade e insônia?",
+    imageUrl: "pgt14.png",
+    options: [
+      { letter: "A", label: "Não faz diferença" },
+      { letter: "B", label: "Talvez ajudasse" },
+      { letter: "C", label: "Sim; me manteria focado(a)" },
+      { letter: "D", label: "Sim; preciso muito desse suporte" },
     ],
   },
   {
     id: "q15",
-    title: "Se tivesse exercícios guiados + receitas relaxantes prontas, você começaria agora?",
-    imageUrl: "pgt13.png",
+    title: "Você está pronto(a) para quebrar o ciclo de ansiedade e insônia e recuperar sua qualidade de vida?",
+    imageUrl: "pgt3.png",
     options: [
-      { letter: "A", label: "Sim, com certeza" },
-      { letter: "B", label: "Provavelmente sim" },
-      { letter: "C", label: "Talvez" },
-      { letter: "D", label: "Não" },
+      { letter: "A", label: "Não estou pronto(a) agora" },
+      { letter: "B", label: "Estou considerando" },
+      { letter: "C", label: "Sim; quero começar em breve" },
+      { letter: "D", label: "Sim; quero transformar agora!" },
     ],
   },
 ];
 
-/** ===== Resultado por pontuação =====
- * total ∈ [0, 15]
- * Faixas mais rígidas para estimular ação:
- * 0–12: comprometido | 13–14: moderado | 15: boa forma
- */
+/** ===== Resultado por pontuação (0–15) ===== */
 function resultFromScore(total: number) {
   if (total <= 12) {
     return {
-      title: "Sono comprometido",
+      title: "Situação Crítica",
       desc:
-        "Seu padrão de sono indica dificuldades relevantes. Vamos agir agora com passos simples e guiados.",
+        "Sinais fortes de ansiedade e/ou insônia. Um plano integrado com técnicas simples e acompanhamento pode acelerar sua virada.",
       color: "text-red-600",
     };
   }
   if (total <= 14) {
     return {
-      title: "Sono moderado",
+      title: "Situação Moderada",
       desc:
-        "Há hábitos que estão atrapalhando seu descanso. Alguns ajustes já trazem melhora.",
+        "Há fatores importantes alimentando o ciclo ansiedade–insônia. Ajustes práticos com um roteiro guiado já trazem melhora consistente.",
       color: "text-yellow-300",
     };
   }
   return {
-    title: "Sono em boa forma",
+    title: "Situação Leve",
     desc:
-      "Você tem uma base razoável. Pequenos aprimoramentos podem otimizar ainda mais seu sono.",
+      "Boa base para estabilizar. Práticas rápidas e regulares ajudam a prevenir recaídas e consolidar noites melhores.",
     color: "text-yellow-300",
   };
 }
 
 /** ===== Página ===== */
-export default function QuizInsonia() {
+export default function QuizMisto() {
   const [answers, setAnswers] = useState<Record<string, Letter | undefined>>({});
   const [step, setStep] = useState(0);
-  const [tapping, setTapping] = useState<Letter | null>(null); // animação de seleção
+  const [tapping, setTapping] = useState<Letter | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const current = QUESTIONS[step];
@@ -267,7 +260,8 @@ export default function QuizInsonia() {
   const back = () => step > 0 && setStep((s) => s - 1);
 
   const waHref =
-    "https://wa.me/5519993315875?text=" + encodeURIComponent("Quero dormir melhor");
+    "https://wa.me/5519993315875?text=" +
+    encodeURIComponent("Quero uma ajuda integrada para ansiedade e sono");
 
   const OptionBtn = ({ opt }: { opt: Option }) => {
     const active = answers[current.id] === opt.letter;
@@ -304,7 +298,7 @@ export default function QuizInsonia() {
           <CardTitle className="text-base md:text-lg">{current.title}</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
-          {/* imagem centralizada, sem corte */}
+          {/* imagem centralizada, sem corte; se não existir, mostra placeholder */}
           <div className="w-full rounded-xl bg-muted/40 border border-border overflow-hidden">
             <div className="grid place-items-center p-2">
               {src ? (
@@ -322,14 +316,14 @@ export default function QuizInsonia() {
             </div>
           </div>
 
-          {/* opções empilhadas */}
+          {/* opções empilhadas A, B, C, D */}
           <div className="grid grid-cols-1 gap-2">
             {current.options.map((opt) => (
               <OptionBtn key={opt.letter} opt={opt} />
             ))}
           </div>
 
-          {/* voltar (sem avançar visível) */}
+          {/* voltar */}
           <div className="mt-auto pt-2">
             <Button variant="secondary" onClick={back} disabled={step === 0}>
               Voltar
@@ -353,22 +347,22 @@ export default function QuizInsonia() {
       <CardContent className="flex flex-col items-center gap-6 md:gap-7 text-center">
         <p className="text-muted-foreground max-w-prose">{res.desc}</p>
 
-        {/* Destaques — centralizados no desktop */}
         <div className="rounded-xl border border-border p-4 bg-card/70 w-full">
-          <h3 className="text-lg md:text-xl font-semibold mb-2">Como podemos ajudar agora</h3>
-
+          <h3 className="text-lg md:text-xl font-semibold mb-2">
+            Como podemos ajudar agora (abordagem integrada)
+          </h3>
           <ul className="space-y-1 text-sm md:text-base md:grid md:gap-2 md:justify-items-center">
             <li className="max-w-prose">
               <span className="font-extrabold tracking-wide bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Plano de 7 dias
+                Plano de 7 dias (Ansiedade + Sono)
               </span>{" "}
-              para acabar com a insônia com passos simples e guiados.
+              com passos simples e guiados.
             </li>
             <li className="max-w-prose">
               <span className="font-extrabold tracking-wide bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Exercícios guiados
               </span>{" "}
-              de relaxamento para dormir mais rápido.
+              respiração/relaxamento para crise e prevenção.
             </li>
             <li className="max-w-prose">
               <span className="font-extrabold tracking-wide bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -380,7 +374,7 @@ export default function QuizInsonia() {
               <span className="font-extrabold tracking-wide bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Conteúdo de valor
               </span>{" "}
-              prático, direto e fácil de aplicar no dia a dia.
+              prático, direto e aplicável no dia a dia.
             </li>
           </ul>
         </div>
@@ -403,9 +397,9 @@ export default function QuizInsonia() {
             className="h-5 w-5 shrink-0 -translate-y-[1px]"
             fill="currentColor"
           >
-            <path d="M19.11 17.3c-.27-.14-1.6-.79-1.84-.88-.25-.09-.43-.14-.62.14-.18.27-.71.88-.87 1.06-.16.18-.32.2-.59.07-.27-.14-1.16-.43-2.2-1.37-.81-.72-1.35-1.6-1.51-1.86-.16-.27-.02-.41.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.06-.22-.53-.44-.46-.62-.46-.16-.01-.34-.01-.52-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3 0 1.36.99 2.67 1.13 2.85.14.18 1.95 2.98 4.73 4.15.66.28 1.18.45 1.58.58.66.21 1.27.18 1.75.11.53-.08 1.6-.65 1.83-1.28.23-.63.23-1.18.16-1.29-.07-.11-.25-.18-.52-.32zM16.02 3.2c-7.1 0-12.87 5.77-12.87 12.87 0 2.27.6 4.5 1.74 6.45L3 29l6.65-1.74a12.83 12.83 0 0 0 6.37 1.67h.01c7.1 0 12.87-5.77 12.87-12.87 0-3.44-1.34-6.67-3.78-9.1a12.82 12.82 0 0 0-9.1-3.78zm0 23.49h-.01a10.6 10.6 0 0 1-5.39-1.48l-.39-.23-3.97 1.04 1.06-3.87-.25-.4a10.63 10.63 0 0 1-1.62-5.65c0-5.86 4.77-10.63 10.64-10.63 2.85 0 5.53 1.11 7.54 3.12 2.01 2.01 3.11 4.69 3.11 7.54 0 5.86-4.77 10.63-10.62 10.63z"/>
+            <path d="M19.11 17.3c-.27-.14-1.6-.79-1.84-.88-.25-.09-.43-.14-.62.14-.18.27-.71.88-.87 1.06-.16.18-.32.2-.59.07-.27-.14-1.16-.43-2.2-1.37-.81-.72-1.35-1.6-1.51-1.86-.16-.27-.02-.41.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.06-.22-.53-.44-.46-.62-.46-.16-.01-.34-.01-.52-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3 0 1.36.99 2.67 1.13 2.85.14.18 1.95 2.98 4.73 4.15.66.28 1.18.45 1.58.58.66.21 1.27.18 1.75.11.53-.08 1.6-.65 1.83-1.28.23-.63.23-1.18.16-1.29-.07-.11-.25-.18-.52-.32zM16.02 3.2c-7.1 0-12.87 5.77-12.87 12.87 0 2.27.6 4.5 1.74 6.45L3 29l6.65-1.74a12.83 12.83 0 0 0 6.37 1.67h.01c7.1 0 12.87-5.77 12.87-12.87 0-3.44-1.34-6.67-3.78-9.1a12.82 12.82 0 0 0-9.1-3.78zm0 23.49h-.01a10.6 10.6 0 0 1-5.39-1.48l-.39-.23-3.97 1.04 1.06-3.87-.25-.4a10.63 10.63 0 0 1-1.62-5.65c0-5.86 4.77-10.63 10.64-10.63 2.85 0 5.53 1.11 7.54 3.12 2.01 2.01 3.11 4.69 3.11 7.54 0 5.86-4.77 10.63-10.62 10.63z" />
           </svg>
-          <span className="leading-none">Quero dormir melhor</span>
+          <span className="leading-none">Quero ajuda integrada</span>
         </a>
       </CardContent>
     </Card>
@@ -439,7 +433,7 @@ export default function QuizInsonia() {
       `}</style>
 
       <div className="min-h-[100svh] w-full overflow-hidden bg-gradient-calm flex flex-col p-4">
-        {/* CONTAINER CENTRALIZADO E LIMITADO A 900px */}
+        {/* CONTAINER CENTRALIZADO E LIMITADO A 900px (mesmo padrão) */}
         <div className="w-full max-w-[900px] mx-auto">
           {!submitted ? (
             <>
@@ -454,7 +448,6 @@ export default function QuizInsonia() {
               </div>
             </>
           ) : (
-            // Resultado — ocupar a tela e centralizar no desktop
             <div className="min-h-[70svh] md:min-h-[100svh] flex items-center justify-center">
               <ResultCard />
             </div>

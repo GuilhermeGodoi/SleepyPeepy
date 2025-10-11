@@ -104,3 +104,26 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Subtle pulse animation (custom, smoother than tailwind's default) */
+  @keyframes subtle-pulse {
+    0% {
+      transform: translateY(0) scale(1);
+      box-shadow: 0 6px 18px rgba(16,185,129,0.10);
+    }
+    50% {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(16,185,129,0.14);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      box-shadow: 0 6px 18px rgba(16,185,129,0.10);
+    }
+  }
+
+  .animate-subtle-pulse {
+    animation: subtle-pulse 2.2s ease-in-out infinite;
+    will-change: transform, box-shadow;
+  }
+}
