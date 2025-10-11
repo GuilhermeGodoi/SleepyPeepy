@@ -1,44 +1,123 @@
 {% extends "account/base_auth.html" %}
-{% load i18n account %}
+{% load i18n account static %}
 
 {% block title %}{% trans "Entrar" %}{% endblock %}
 
+{% block extra_head %}
+<style>
+  /* 1) “Zera” o card do base só nesta página */
+  .card{
+    max-width: none;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 12px 12px 20px;  /* pouco respiro geral */
+  }
+
+  /* 2) Banner topo – fora do card visual do form */
+  .login-hero-wrap{
+    display:flex; justify-content:center; margin:0 0 10px;
+  }
+  .login-hero{ width:min(1280px, 95vw); }
+  .login-hero__img{
+    display:block; width:100%; height:auto;
+    max-height: clamp(180px, 28vh, 320px); /* tamanho equilibrado desktop/mobile */
+    object-fit:contain; object-position:top center;
+    background: transparent; box-shadow: none; margin:0;
+  }
+
+  /* 3) Painel do formulário (o “novo” card visual) */
+  .auth-panel{
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 18px 18px;
+  }
+
+  .title{
+    margin: 2px 0 4px;
+    font-size: 1.5rem; font-weight:700; text-align:center;
+  }
+  .muted{
+    margin: 0 0 6px; text-align:center; font-size:.97rem; color:hsl(var(--muted-foreground));
+  }
+
+  form.login-form{ display:grid; gap:12px; margin-top:6px; }
+  .field label{ display:block; font-size:.92rem; margin-bottom:6px; color:hsl(var(--muted-foreground)); }
+  .field input[type="text"], .field input[type="email"], .field input[type="password"]{
+    width:100%; padding:12px 14px; border:1px solid hsl(var(--input));
+    border-radius: calc(var(--radius) - 1px);
+    background:hsl(var(--background)); color:hsl(var(--foreground));
+  }
+  .field input:focus{ border-color:hsl(var(--ring)); box-shadow:0 0 0 3px hsl(var(--ring)/.24); }
+
+  .login-remember{ display:flex; justify-content:center; align-items:center; gap:.55rem; margin-top:2px; }
+  .btn{ width:100%; padding:11px 16px; font-weight:700; border-radius:var(--radius); }
+  .btn-primary{ background:hsl(var(--primary)); color:hsl(var(--primary-foreground)); box-shadow:var(--shadow-glow); }
+
+  .login-actions{ display:flex; justify-content:center; gap:1rem; margin-top:8px; }
+  .errors{ color:hsl(var(--destructive)); font-size:.92rem; margin:4px 0 2px; text-align:center; }
+
+  @media (min-width:1024px){ .title{ font-size:1.6rem; } }
+</style>
+{% endblock %}
+
 {% block content %}
-  <h1 class="title">{% trans "Entrar" %}</h1>
-  <p class="muted">Acesse sua conta para ver seus conteúdos.</p>
-
-  {% if form.non_field_errors %}
-    <div class="errors">{{ form.non_field_errors }}</div>
-  {% endif %}
-
-  <form method="post" action="{% url 'account_login' %}">
-    {% csrf_token %}
-
-    <label>
-      <span>Usuário ou e-mail</span>
-      {{ form.login }}
-      {{ form.login.errors }}
-    </label>
-
-    <label>
-      <span>Senha</span>
-      {{ form.password }}
-      {{ form.password.errors }}
-    </label>
-
-    <div class="row">
-      {{ form.remember }} <span class="muted">Lembrar</span>
+  <!-- Banner “fora” do card visual -->
+  <div class="login-hero-wrap">
+    <div class="login-hero" role="img" aria-label="Dormindo melhor em 7 dias">
+      <img
+        class="login-hero__img"
+        src="{% static 'img/dormindo_melhor_em_7dias.png' %}"
+        alt="Dormindo melhor em 7 dias"
+        width="1600" height="800"
+      />
     </div>
+  </div>
 
-    {% if redirect_field_value %}
-      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+  <!-- Card somente para o formulário -->
+  <div class="auth-panel">
+    {% if form.non_field_errors %}
+      <div class="errors">{{ form.non_field_errors }}</div>
     {% endif %}
 
-    <button class="btn btn-primary" type="submit">Entrar</button>
+    <h1 class="title">{% trans "Entrar" %}</h1>
+    <p class="muted">Acesse sua conta para ver seus conteúdos.</p>
 
-    <div class="top-actions">
-      <a href="{% url 'account_reset_password' %}">Esqueceu a senha?</a>
-      <a href="{% url 'account_signup' %}">Criar conta</a>
-    </div>
-  </form>
+    <form class="login-form" method="post" action="{% url 'account_login' %}">
+      {% csrf_token %}
+
+      <div class="field">
+        <label>Usuário ou e-mail</label>
+        {{ form.login }}
+        {{ form.login.errors }}
+      </div>
+
+      <div class="field">
+        <label>Senha</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+      </div>
+
+      <div class="login-remember">
+        {{ form.remember }} <span class="muted">Lembrar</span>
+      </div>
+
+      {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+      {% endif %}
+
+      <button class="btn btn-primary" type="submit">Entrar</button>
+
+      <div class="login-actions">
+        <a href="{% url 'account_reset_password' %}">Esqueceu a senha?</a>
+        <a href="{% url 'account_signup' %}">Criar conta</a>
+      </div>
+    </form>
+  </div>
 {% endblock %}
