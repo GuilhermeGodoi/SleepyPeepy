@@ -128,7 +128,15 @@ LOGIN_EXEMPT_URLS = [
     
 ]
 
+# Login só por e-mail
+ACCOUNT_LOGIN_METHODS = {"email"}
 
+# Cadastro com apenas e-mail e senha (e-mail obrigatório por causa do "*")
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False  # 1 campo de senha
+
+# Não exigir/verificar e-mail
+ACCOUNT_EMAIL_VERIFICATION = "none"  # nada de confirmação
 
 CORS_ALLOW_CREDENTIALS = True  # Para cookies
 

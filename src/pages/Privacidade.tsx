@@ -23,7 +23,7 @@ const Privacidade = () => {
               <section>
                 <CardTitle className="text-xl mb-3">1. Introdução</CardTitle>
                 <p className="text-muted-foreground leading-relaxed">
-                  A SonoVital ("nós", "nosso" ou "nossa") está comprometida em proteger sua privacidade. 
+                  A SleepyPeepy ("nós", "nosso" ou "nossa") está comprometida em proteger sua privacidade. 
                   Esta Política de Privacidade explica como coletamos, usamos, divulgamos e protegemos suas 
                   informações pessoais quando você utiliza nosso site e serviços.
                 </p>
@@ -120,8 +120,8 @@ const Privacidade = () => {
                 <p className="text-muted-foreground leading-relaxed">
                   Para questões sobre esta Política de Privacidade ou sobre o tratamento de seus dados 
                   pessoais, entre em contato conosco em:{" "}
-                  <a href="mailto:privacidade@sonovital.com.br" className="text-primary hover:underline">
-                    privacidade@sonovital.com.br
+                  <a href="mailto:contato@sleepypeepy.site" className="text-primary hover:underline">
+                    contato@sleepypeepy.site
                   </a>
                 </p>
               </section>
