@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { ComentariosProduto } from "@/pages/ComentariosProduto";
 
 /** ===== (Opcional) Imagens — se quiser usar, crie src/assets/quiz_misto/pgt1.png ... pgt15.png ===== */
 const quizImgs = import.meta.glob("@/assets/quiz_1/*.png", {
@@ -234,6 +235,20 @@ export default function QuizMisto() {
   const [tapping, setTapping] = useState<Letter | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
+  // === Banner fixo de urgência (timer + vagas) ===
+  const [countdown, setCountdown] = useState(7 * 68); // ~7m50s
+  const [slots, setSlots] = useState(5); // decrementa até 1
+
+  useEffect(() => {
+    if (!submitted) return;
+    const t = setInterval(() => setCountdown((s) => (s > 0 ? s - 1 : 0)), 1000);
+    const d = setInterval(() => setSlots((n) => Math.max(1, n - 1)), 60000);
+    return () => {
+      clearInterval(t);
+      clearInterval(d);
+    };
+  }, [submitted]);
+
   const current = QUESTIONS[step];
 
   const total = useMemo(
@@ -335,6 +350,8 @@ export default function QuizMisto() {
   };
 
   const res = resultFromScore(total);
+  const mm = String(Math.floor(countdown / 60)).padStart(2, "0");
+  const ss = String(countdown % 60).padStart(2, "0");
 
   const ResultCard = () => (
     <Card className="bg-card/70 border-transparent shadow-glow w-full max-w-2xl md:max-w-3xl mx-auto">
@@ -401,6 +418,9 @@ export default function QuizMisto() {
           </svg>
           <span className="leading-none">Quero ajuda integrada</span>
         </a>
+
+        {/* ===== Avaliações / Comentários com fotos ===== */}
+        <ComentariosProduto tema="misto" />
       </CardContent>
     </Card>
   );
@@ -432,7 +452,22 @@ export default function QuizMisto() {
         .animate-pulseGlow { animation: pulseGlow 1.6s ease-in-out infinite; }
       `}</style>
 
-      <div className="min-h-[100svh] w-full overflow-hidden bg-gradient-calm flex flex-col p-4">
+      {/* ===== Banner fixo no topo (apenas quando submitted) ===== */}
+      {submitted && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-red-600 text-white font-bold text-sm md:text-base">
+          <div className="mx-auto max-w-[1000px] px-3 py-2 text-center">
+            ⚠️ Últimas vagas: {slots} • prioridade expira em{" "}
+            <span className="tabular-nums underline">{mm}:{ss}</span> — fale com nossa equipe no WhatsApp.
+          </div>
+        </div>
+      )}
+
+      <div
+        className={cn(
+          "min-h-[100svh] w-full overflow-hidden bg-gradient-calm flex flex-col p-4",
+          submitted ? "pt-10" : "" // espaço para o banner fixo
+        )}
+      >
         {/* CONTAINER CENTRALIZADO E LIMITADO A 900px (mesmo padrão) */}
         <div className="w-full max-w-[900px] mx-auto">
           {!submitted ? (

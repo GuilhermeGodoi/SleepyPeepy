@@ -23,7 +23,7 @@ const Termos = () => {
               <section>
                 <CardTitle className="text-xl mb-3">1. Aceitação dos Termos</CardTitle>
                 <p className="text-muted-foreground leading-relaxed">
-                  Ao acessar e usar o site SonoVital, você concorda em cumprir e estar vinculado a estes 
+                  Ao acessar e usar o site SleepyPeepy, você concorda em cumprir e estar vinculado a estes 
                   Termos de Uso. Se você não concorda com qualquer parte destes termos, não deve usar nosso site.
                 </p>
               </section>
@@ -31,7 +31,7 @@ const Termos = () => {
               <section>
                 <CardTitle className="text-xl mb-3">2. Descrição do Serviço</CardTitle>
                 <p className="text-muted-foreground leading-relaxed">
-                  O SonoVital fornece informações, recursos e produtos relacionados à melhoria da qualidade 
+                  O SleepyPeepy fornece informações, recursos e produtos relacionados à melhoria da qualidade 
                   do sono e bem-estar. Nossos serviços incluem programas educacionais, exercícios de relaxamento, 
                   receitas e recomendações de produtos naturais.
                 </p>
@@ -42,7 +42,7 @@ const Termos = () => {
                 <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 mb-3">
                   <p className="text-foreground font-semibold mb-2">⚠️ Atenção</p>
                   <p className="text-muted-foreground leading-relaxed">
-                    As informações fornecidas no SonoVital são apenas para fins educacionais e informativos. 
+                    As informações fornecidas no SleepyPeepy são apenas para fins educacionais e informativos. 
                     Elas NÃO substituem aconselhamento, diagnóstico ou tratamento médico profissional. 
                     Sempre consulte um médico ou profissional de saúde qualificado antes de iniciar qualquer 
                     programa, tratamento ou suplementação.
@@ -69,7 +69,7 @@ const Termos = () => {
                 <CardTitle className="text-xl mb-3">5. Propriedade Intelectual</CardTitle>
                 <p className="text-muted-foreground leading-relaxed">
                   Todo o conteúdo do site, incluindo textos, gráficos, logotipos, imagens e software, é 
-                  propriedade da SonoVital ou de seus licenciadores e está protegido por leis de direitos 
+                  propriedade da SleepyPeepy ou de seus licenciadores e está protegido por leis de direitos 
                   autorais e propriedade intelectual. Você não pode usar, reproduzir ou distribuir qualquer 
                   conteúdo sem permissão expressa por escrito.
                 </p>
@@ -101,7 +101,7 @@ const Termos = () => {
               <section>
                 <CardTitle className="text-xl mb-3">8. Limitação de Responsabilidade</CardTitle>
                 <p className="text-muted-foreground leading-relaxed">
-                  Na extensão máxima permitida por lei, a SonoVital não será responsável por quaisquer 
+                  Na extensão máxima permitida por lei, a SleepyPeepy não será responsável por quaisquer 
                   danos diretos, indiretos, incidentais, consequenciais ou punitivos resultantes do uso 
                   ou incapacidade de usar nosso site ou produtos, mesmo que tenhamos sido avisados da 
                   possibilidade de tais danos.
@@ -138,8 +138,8 @@ const Termos = () => {
                 <CardTitle className="text-xl mb-3">12. Contato</CardTitle>
                 <p className="text-muted-foreground leading-relaxed">
                   Para questões sobre estes Termos de Uso, entre em contato conosco em:{" "}
-                  <a href="mailto:contato@sonovital.com.br" className="text-primary hover:underline">
-                    contato@sonovital.com.br
+                  <a href="mailto:contato@sleepypeepy.site" className="text-primary hover:underline">
+                    contato@sleepypeepy.site
                   </a>
                 </p>
               </section>

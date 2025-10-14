@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { ComentariosProduto } from "@/pages/ComentariosProduto";
 
 /** ===== Imagens (src/assets/quiz_1/pgt1.png ... pgt10.png) ===== */
 const quizImgs = import.meta.glob("@/assets/quiz_1/*.png", {
@@ -27,11 +28,7 @@ type Question = { id: string; title: string; imageUrl?: string; options: Option[
  */
 const SCORE: Record<Letter, number> = { A: 1, B: 1, C: 1, D: 0 };
 
-/** ===== Perguntas =====
- * Q1–Q10 = Dor (mantidas)
- * Q11–Q13 = Concordância (novas)
- * Q14–Q15 = Solução (novas)
- */
+/** ===== Perguntas ===== */
 const QUESTIONS: Question[] = [
   {
     id: "q1",
@@ -144,7 +141,7 @@ const QUESTIONS: Question[] = [
     ],
   },
 
-  // --- Etapa 2 — Concordância (novas) ---
+  // --- Etapa 2 — Concordância ---
   {
     id: "q11",
     title: "Você percebe relação entre telas/cafeína à noite e sua dificuldade para dormir?",
@@ -158,7 +155,8 @@ const QUESTIONS: Question[] = [
   },
   {
     id: "q12",
-    title: "Você acredita que uma rotina noturna consistente (mesmo horário, ambiente adequado) melhora seu sono?",
+    title:
+      "Você acredita que uma rotina noturna consistente (mesmo horário, ambiente adequado) melhora seu sono?",
     imageUrl: "pgt12.png",
     options: [
       { letter: "A", label: "Sim, faz bastante diferença" },
@@ -169,7 +167,8 @@ const QUESTIONS: Question[] = [
   },
   {
     id: "q13",
-    title: "Você estaria disposto(a) a reservar 15–20 minutos antes de dormir para práticas simples (respiração/alongamento)?",
+    title:
+      "Você estaria disposto(a) a reservar 15–20 minutos antes de dormir para práticas simples (respiração/alongamento)?",
     imageUrl: "pgt11.png",
     options: [
       { letter: "A", label: "Sim, todos os dias" },
@@ -179,10 +178,11 @@ const QUESTIONS: Question[] = [
     ],
   },
 
-  // --- Etapa 3 — Solução (novas) ---
+  // --- Etapa 3 — Solução ---
   {
     id: "q14",
-    title: "Você gostaria de seguir um plano guiado de 7 dias para melhorar o sono com passos objetivos?",
+    title:
+      "Você gostaria de seguir um plano guiado de 7 dias para melhorar o sono com passos objetivos?",
     imageUrl: "pgt14.png",
     options: [
       { letter: "A", label: "Sim, começaria hoje" },
@@ -193,7 +193,8 @@ const QUESTIONS: Question[] = [
   },
   {
     id: "q15",
-    title: "Se tivesse exercícios guiados + receitas relaxantes prontas, você começaria agora?",
+    title:
+      "Se tivesse exercícios guiados + receitas relaxantes prontas, você começaria agora?",
     imageUrl: "pgt13.png",
     options: [
       { letter: "A", label: "Sim, com certeza" },
@@ -206,7 +207,6 @@ const QUESTIONS: Question[] = [
 
 /** ===== Resultado por pontuação =====
  * total ∈ [0, 15]
- * Faixas mais rígidas para estimular ação:
  * 0–12: comprometido | 13–14: moderado | 15: boa forma
  */
 function resultFromScore(total: number) {
@@ -238,8 +238,29 @@ function resultFromScore(total: number) {
 export default function QuizInsonia() {
   const [answers, setAnswers] = useState<Record<string, Letter | undefined>>({});
   const [step, setStep] = useState(0);
-  const [tapping, setTapping] = useState<Letter | null>(null); // animação de seleção
+  const [tapping, setTapping] = useState<Letter | null>(null);
   const [submitted, setSubmitted] = useState(false);
+
+  // === Banner fixo de urgência (timer + vagas) ===
+  const [countdown, setCountdown] = useState(7 * 68); // ~7m50s (mantido do seu outro quiz)
+  const [slots, setSlots] = useState(5); // cai até 1
+
+  useEffect(() => {
+    if (!submitted) return;
+
+    const t = setInterval(() => {
+      setCountdown((s) => (s > 0 ? s - 1 : 0));
+    }, 1000);
+
+    const d = setInterval(() => {
+      setSlots((n) => Math.max(1, n - 1));
+    }, 60000);
+
+    return () => {
+      clearInterval(t);
+      clearInterval(d);
+    };
+  }, [submitted]);
 
   const current = QUESTIONS[step];
 
@@ -256,7 +277,6 @@ export default function QuizInsonia() {
     if (tapping) return;
     setAnswers((a) => ({ ...a, [current.id]: letter }));
     setTapping(letter);
-    // anima + avança automaticamente
     setTimeout(() => {
       setTapping(null);
       if (step < QUESTIONS.length - 1) setStep((s) => s + 1);
@@ -329,7 +349,7 @@ export default function QuizInsonia() {
             ))}
           </div>
 
-          {/* voltar (sem avançar visível) */}
+          {/* voltar */}
           <div className="mt-auto pt-2">
             <Button variant="secondary" onClick={back} disabled={step === 0}>
               Voltar
@@ -341,6 +361,8 @@ export default function QuizInsonia() {
   };
 
   const res = resultFromScore(total);
+  const mm = String(Math.floor(countdown / 60)).padStart(2, "0");
+  const ss = String(countdown % 60).padStart(2, "0");
 
   const ResultCard = () => (
     <Card className="bg-card/70 border-transparent shadow-glow w-full max-w-2xl md:max-w-3xl mx-auto">
@@ -407,6 +429,9 @@ export default function QuizInsonia() {
           </svg>
           <span className="leading-none">Quero dormir melhor</span>
         </a>
+
+        {/* ===== Avaliações / Comentários com fotos ===== */}
+        <ComentariosProduto tema="insonia" />
       </CardContent>
     </Card>
   );
@@ -438,7 +463,25 @@ export default function QuizInsonia() {
         .animate-pulseGlow { animation: pulseGlow 1.6s ease-in-out infinite; }
       `}</style>
 
-      <div className="min-h-[100svh] w-full overflow-hidden bg-gradient-calm flex flex-col p-4">
+      {/* ===== Banner fixo no topo (apenas quando submitted) ===== */}
+      {submitted && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-red-600 text-white font-bold text-sm md:text-base">
+          <div className="mx-auto max-w-[1000px] px-3 py-2 text-center">
+            ⚠️ Últimas vagas: {slots} • prioridade expira em{" "}
+            <span className="tabular-nums underline">
+              {mm}:{ss}
+            </span>{" "}
+            — fale com nossa equipe no WhatsApp.
+          </div>
+        </div>
+      )}
+
+      <div
+        className={cn(
+          "min-h-[100svh] w-full overflow-hidden bg-gradient-calm flex flex-col p-4",
+          submitted ? "pt-10" : "" // espaço para o banner fixo
+        )}
+      >
         {/* CONTAINER CENTRALIZADO E LIMITADO A 900px */}
         <div className="w-full max-w-[900px] mx-auto">
           {!submitted ? (

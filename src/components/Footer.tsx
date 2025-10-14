@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {/* Sobre */}
           <div>
-            <h3 className="font-semibold text-foreground mb-3">SonoVital</h3>
+            <h3 className="font-semibold text-foreground mb-3">SleepyPeepy</h3>
             <p className="text-sm text-muted-foreground">
               Seu guia completo para noites melhores e uma vida mais saudável através de técnicas naturais e comprovadas.
             </p>
@@ -74,16 +74,16 @@ const Footer = () => {
               Dúvidas ou sugestões?
             </p>
             <a 
-              href="mailto:contato@sonovital.com.br" 
+              href="mailto:contato@sleepypeepy.site" 
               className="text-sm text-primary hover:underline"
             >
-              contato@sonovital.com.br
+              contato@sleepypeepy.site
             </a>
           </div>
         </div>
 
         <div className="mt-8 pt-6 border-t border-border text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} SonoVital. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} SleepyPeepy. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

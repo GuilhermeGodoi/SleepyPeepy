@@ -1,12 +1,11 @@
-{# templates/account/signup.html #}
 {% extends "account/base_auth.html" %}
 {% load i18n account static %}
 
-{% block title %}{% trans "Criar conta" %}{% endblock %}
+{% block title %}{% trans "Entrar" %}{% endblock %}
 
 {% block extra_head %}
 <style>
-  /* Zera o card padrão do base só nesta página */
+  /* 1) “Zera” o card do base só nesta página */
   .card{
     max-width: none;
     background: transparent;
@@ -15,19 +14,17 @@
     padding: 12px 12px 20px;
   }
 
-  /* Banner topo – fora do card visual do form */
-  .signup-hero-wrap{
+  .login-hero-wrap{
     display:flex; justify-content:center; margin:0 0 10px;
   }
-  .signup-hero{ width:min(1280px, 95vw); }
-  .signup-hero__img{
+  .login-hero{ width:min(1280px, 95vw); }
+  .login-hero__img{
     display:block; width:100%; height:auto;
     max-height: clamp(180px, 28vh, 320px);
-    object-fit: contain; object-position: top center;
+    object-fit:contain; object-position:top center;
     background: transparent; box-shadow: none; margin:0;
   }
 
-  /* Painel do formulário (novo card visual) */
   .auth-panel{
     width: 100%;
     max-width: 520px;
@@ -40,30 +37,23 @@
     padding: 18px 18px;
   }
 
-  .title{
-    margin: 2px 0 4px;
-    font-size: 1.5rem; font-weight:700; text-align:center;
-  }
-  .muted{
-    margin: 0 0 6px; text-align:center; font-size:.97rem; color:hsl(var(--muted-foreground));
-  }
+  .title{ margin: 2px 0 4px; font-size: 1.5rem; font-weight:700; text-align:center; }
+  .muted{ margin: 0 0 6px; text-align:center; font-size:.97rem; color:hsl(var(--muted-foreground)); }
 
-  form.signup-form{ display:grid; gap:12px; margin-top:6px; }
+  form.login-form{ display:grid; gap:12px; margin-top:6px; }
   .field label{ display:block; font-size:.92rem; margin-bottom:6px; color:hsl(var(--muted-foreground)); }
-  .field input[type="text"],
-  .field input[type="email"],
-  .field input[type="password"]{
+  .field input[type="text"], .field input[type="email"], .field input[type="password"]{
     width:100%; padding:12px 14px; border:1px solid hsl(var(--input));
     border-radius: calc(var(--radius) - 1px);
     background:hsl(var(--background)); color:hsl(var(--foreground));
-    outline:none; transition: box-shadow .15s, border-color .15s;
   }
   .field input:focus{ border-color:hsl(var(--ring)); box-shadow:0 0 0 3px hsl(var(--ring)/.24); }
 
+  .login-remember{ display:flex; justify-content:center; align-items:center; gap:.55rem; margin-top:2px; }
   .btn{ width:100%; padding:11px 16px; font-weight:700; border-radius:var(--radius); }
   .btn-primary{ background:hsl(var(--primary)); color:hsl(var(--primary-foreground)); box-shadow:var(--shadow-glow); }
 
-  .signup-actions{ display:flex; justify-content:center; gap:1rem; margin-top:8px; }
+  .login-actions{ display:flex; justify-content:center; gap:1rem; margin-top:8px; }
   .errors{ color:hsl(var(--destructive)); font-size:.92rem; margin:4px 0 2px; text-align:center; }
 
   @media (min-width:1024px){ .title{ font-size:1.6rem; } }
@@ -71,11 +61,13 @@
 {% endblock %}
 
 {% block content %}
+
+{% if user.is_authenticated and user.is_staff %}
   <!-- Banner “fora” do card visual -->
-  <div class="signup-hero-wrap">
-    <div class="signup-hero" role="img" aria-label="Dormindo melhor em 7 dias">
+  <div class="login-hero-wrap">
+    <div class="login-hero" role="img" aria-label="Dormindo melhor em 7 dias">
       <img
-        class="signup-hero__img"
+        class="login-hero__img"
         src="{% static 'img/dormindo_melhor_em_7dias.png' %}"
         alt="Dormindo melhor em 7 dias"
         width="1600" height="800"
@@ -83,60 +75,51 @@
     </div>
   </div>
 
-  <!-- Card do formulário -->
+  <!-- Card somente para o formulário -->
   <div class="auth-panel">
     {% if form.non_field_errors %}
       <div class="errors">{{ form.non_field_errors }}</div>
     {% endif %}
 
-    <h1 class="title">{% trans "Criar conta" %}</h1>
-    <p class="muted">Leva menos de 1 minuto.</p>
+    <h1 class="title">{% trans "Entrar" %}</h1>
+    <p class="muted">Acesse sua conta para ver seus conteúdos.</p>
 
-    <form class="signup-form" method="post" action="{% url 'account_signup' %}">
+    <form class="login-form" method="post" action="{% url 'account_login' %}">
       {% csrf_token %}
 
-      {% if form.username %}
-        <div class="field">
-          <label>Usuário</label>
-          {{ form.username }}
-          {{ form.username.errors }}
-        </div>
-      {% endif %}
+      <div class="field">
+        <label>Usuário ou e-mail</label>
+        {{ form.login }}
+        {{ form.login.errors }}
+      </div>
 
-      {% if form.email %}
-        <div class="field">
-          <label>E-mail</label>
-          {{ form.email }}
-          {{ form.email.errors }}
-        </div>
-      {% endif %}
+      <div class="field">
+        <label>Senha</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+      </div>
 
-      {% if form.password1 %}
-        <div class="field">
-          <label>Senha</label>
-          {{ form.password1 }}
-          {{ form.password1.errors }}
-        </div>
-      {% endif %}
-
-      {% if form.password2 %}
-        <div class="field">
-          <label>Confirmar senha</label>
-          {{ form.password2 }}
-          {{ form.password2.errors }}
-        </div>
-      {% endif %}
+      <div class="login-remember">
+        {{ form.remember }} <span class="muted">Lembrar</span>
+      </div>
 
       {% if redirect_field_value %}
         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
       {% endif %}
 
-      <button class="btn btn-primary" type="submit">Criar conta</button>
+      <button class="btn btn-primary" type="submit">Entrar</button>
 
-      <div class="signup-actions">
-        <span class="muted">Já tem conta?</span>
-        <a href="{% url 'account_login' %}">Entrar</a>
+      <div class="login-actions">
+        <a href="{% url 'account_reset_password' %}">Esqueceu a senha?</a>
       </div>
     </form>
   </div>
+
+{% else %}
+  <div style="text-align:center; margin-top:80px;">
+    <h2 style="color:#c00; font-weight:700;">Acesso restrito</h2>
+    <p>Esta página é exclusiva para membros da equipe (staff).</p>
+  </div>
+{% endif %}
+
 {% endblock %}

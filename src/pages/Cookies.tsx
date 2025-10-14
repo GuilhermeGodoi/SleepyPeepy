@@ -32,7 +32,7 @@ const Cookies = () => {
               <section>
                 <CardTitle className="text-xl mb-3">2. Como Usamos Cookies</CardTitle>
                 <p className="text-muted-foreground leading-relaxed mb-3">
-                  O SonoVital utiliza cookies para diversos propósitos:
+                  O SleepyPeepy utiliza cookies para diversos propósitos:
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
                   <li>Garantir o funcionamento adequado do site</li>
@@ -158,8 +158,8 @@ const Cookies = () => {
                   Para mais informações sobre nossa Política de Cookies ou como processamos seus dados, 
                   consulte nossa <a href="/privacidade" className="text-primary hover:underline">Política de Privacidade</a> ou 
                   entre em contato conosco em:{" "}
-                  <a href="mailto:privacidade@sonovital.com.br" className="text-primary hover:underline">
-                    privacidade@sonovital.com.br
+                  <a href="mailto:contato@sleepypeepy.site" className="text-primary hover:underline">
+                    contato@sleepypeepy.site
                   </a>
                 </p>
               </section>
