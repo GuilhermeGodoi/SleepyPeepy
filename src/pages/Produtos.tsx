@@ -27,7 +27,7 @@ const Produtos = () => {
       type: "natural",
       priceFrom: 89.90,
       priceTo: 59.90,
-      inStock: true
+      inStock: false
     },
     {
       title: "Valeriana",
@@ -61,7 +61,7 @@ const Produtos = () => {
       type: "natural",
       priceFrom: 79.90,
       priceTo: 54.90,
-      inStock: true
+      inStock: false
     },
     {
       title: "Óleo Essencial de Lavanda",
@@ -78,7 +78,7 @@ const Produtos = () => {
       type: "natural",
       priceFrom: 99.90,
       priceTo: 69.90,
-      inStock: true
+      inStock: false
     },
     {
       title: "Máscara de Sono",

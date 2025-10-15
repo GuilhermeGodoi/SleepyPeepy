@@ -6,7 +6,6 @@ import chaCamomila from "@/assets/cha-camomila.jpg";
 import leiteDourado from "@/assets/leite-dourado.jpg";
 import chaLavanda from "@/assets/cha-lavanda.jpg";
 import chaMaracuja from "@/assets/cha-maracuja.jpg";
-import smoothieBanana from "@/assets/smoothie-banana.jpg";
 
 const Receitas = () => {
   const recipes = [
@@ -26,88 +25,68 @@ const Receitas = () => {
         "Deixe em infusão por 5-7 minutos",
         "Coe e adicione mel se desejar"
       ],
-      benefits: "Reduz ansiedade e promove relaxamento muscular"
+      benefits: "Ajuda a reduzir ansiedade e relaxar"
     },
     {
       title: "Leite Dourado",
       category: "Bebida",
       image: leiteDourado,
-      description: "Anti-inflamatório natural",
+      description: "Bebida morna anti-inflamatória",
       ingredients: [
         "250ml de leite (vegetal ou animal)",
-        "1 colher de chá de açafrão",
-        "1 pitada de pimenta preta",
+        "1 colher de chá de cúrcuma (açafrão-da-terra)",
+        "1 pitada de pimenta-preta",
         "Mel a gosto"
       ],
       instructions: [
         "Aqueça o leite em fogo médio",
-        "Adicione o açafrão e a pimenta",
-        "Mexa bem até ficar homogêneo",
+        "Adicione a cúrcuma e a pimenta",
+        "Mexa até ficar homogêneo",
         "Adoce com mel antes de servir"
       ],
-      benefits: "Propriedades anti-inflamatórias e relaxantes"
+      benefits: "Conforto corporal e sensação de calma"
     },
     {
       title: "Chá de Lavanda",
       category: "Chá",
       image: chaLavanda,
-      description: "Aroma relaxante e calmante",
+      description: "Aroma floral relaxante",
       ingredients: [
         "1 colher de chá de flores de lavanda secas",
         "250ml de água fervente",
-        "Mel de lavanda (opcional)"
+        "Mel (opcional)"
       ],
       instructions: [
         "Ferva a água",
         "Adicione as flores de lavanda",
-        "Deixe em infusão por 4-5 minutos",
+        "Infunda por 4-5 minutos",
         "Coe e sirva quente"
       ],
-      benefits: "Alivia estresse e melhora a qualidade do sono"
+      benefits: "Ajuda a aliviar o estresse"
     },
     {
-      title: "Chá de Maracujá",
+      title: "Chá de Maracujá (Folhas)",
       category: "Chá",
       image: chaMaracuja,
-      description: "Poderoso calmante natural",
+      description: "Calmante suave tradicional",
       ingredients: [
         "2 colheres de sopa de folhas de maracujá secas",
         "250ml de água fervente",
-        "Limão (opcional)"
+        "Rodela de limão (opcional)"
       ],
       instructions: [
         "Ferva a água",
-        "Adicione as folhas de maracujá",
-        "Deixe em infusão por 8-10 minutos",
-        "Coe e sirva com limão se desejar"
+        "Adicione as folhas",
+        "Infunda por 8-10 minutos",
+        "Coe e sirva"
       ],
-      benefits: "Reduz ansiedade e insônia naturalmente"
+      benefits: "Apoia o relaxamento noturno"
     },
     {
-      title: "Smoothie de Banana",
-      category: "Smoothie",
-      image: smoothieBanana,
-      description: "Rico em magnésio e triptofano",
-      ingredients: [
-        "1 banana madura",
-        "200ml de leite",
-        "1 colher de sopa de aveia",
-        "1 colher de chá de mel",
-        "Canela em pó"
-      ],
-      instructions: [
-        "Congele a banana previamente",
-        "Bata todos os ingredientes no liquidificador",
-        "Adicione canela por cima",
-        "Sirva imediatamente"
-      ],
-      benefits: "Promove produção de melatonina naturalmente"
-    },
-    {
-      title: "Chá de Melissa",
+      title: "Chá de Melissa (Erva-cidreira)",
       category: "Chá",
       image: chaCamomila,
-      description: "Alivia tensão e ansiedade",
+      description: "Acalma e suaviza a tensão",
       ingredients: [
         "2 colheres de chá de folhas de melissa",
         "250ml de água fervente",
@@ -115,179 +94,296 @@ const Receitas = () => {
       ],
       instructions: [
         "Ferva a água",
-        "Adicione as folhas de melissa",
-        "Deixe em infusão por 10 minutos",
-        "Coe e adoce com mel"
+        "Adicione as folhas",
+        "Infunda por 8-10 minutos",
+        "Coe e adoce"
       ],
-      benefits: "Reduz estresse, melhora humor e qualidade do sono"
+      benefits: "Sensação de bem-estar e tranquilidade"
     },
     {
       title: "Leite com Canela",
       category: "Bebida",
       image: leiteDourado,
-      description: "Bebida reconfortante tradicional",
+      description: "Conforto morno e aromático",
       ingredients: [
         "250ml de leite morno",
         "1 pau de canela",
         "1 colher de chá de mel",
-        "Noz-moscada ralada (opcional)"
+        "Noz-moscada (pitada, opcional)"
       ],
       instructions: [
-        "Aqueça o leite com o pau de canela",
-        "Deixe ferver levemente por 3 minutos",
-        "Retire o pau de canela",
-        "Adoce com mel e polvilhe noz-moscada"
+        "Aqueça o leite com o pau de canela por 3 minutos",
+        "Retire a canela",
+        "Adoce e finalize com noz-moscada"
       ],
-      benefits: "Aquece o corpo e promove sensação de conforto e relaxamento"
+      benefits: "Aconchego antes de dormir"
     },
     {
-      title: "Chá de Erva-Cidreira",
+      title: "Chá de Erva-Cidreira Fresca",
       category: "Chá",
       image: chaLavanda,
-      description: "Calmante suave e aromático",
+      description: "Aromático e relaxante",
       ingredients: [
         "2 colheres de sopa de folhas frescas",
         "250ml de água fervente",
-        "Limão siciliano (opcional)"
+        "Rodelas de limão-siciliano (opcional)"
       ],
       instructions: [
         "Ferva a água",
-        "Adicione as folhas de erva-cidreira",
-        "Deixe em infusão por 5-8 minutos",
-        "Coe e adicione rodelas de limão"
+        "Adicione as folhas amassadas de leve",
+        "Infunda por 5-8 minutos",
+        "Coe e sirva"
       ],
-      benefits: "Combate insônia leve e acalma o sistema nervoso"
+      benefits: "Ajuda em noites agitadas"
     },
     {
-      title: "Suco de Cereja",
+      title: "Suco de Cereja (sem açúcar)",
       category: "Suco",
-      image: smoothieBanana,
-      description: "Rico em melatonina natural",
+      image: chaMaracuja,
+      description: "Opção fria pré-sono",
       ingredients: [
         "200g de cerejas frescas ou congeladas",
         "150ml de água",
-        "1 colher de chá de mel",
-        "Gelo a gosto"
+        "Gelo (opcional)"
       ],
       instructions: [
         "Descaroce as cerejas",
-        "Bata no liquidificador com água",
-        "Coe se preferir",
-        "Adoce com mel e sirva gelado"
+        "Bata com a água",
+        "Coe se preferir e sirva"
       ],
-      benefits: "Aumenta níveis de melatonina e melhora duração do sono"
+      benefits: "Bebida leve para rotina noturna"
     },
     {
       title: "Chá de Hortelã",
       category: "Chá",
       image: chaMaracuja,
-      description: "Relaxante digestivo",
+      description: "Refrescante e digestivo",
       ingredients: [
         "10-12 folhas de hortelã fresca",
-        "250ml de água fervente",
-        "Limão (opcional)"
+        "250ml de água fervente"
       ],
       instructions: [
         "Ferva a água",
-        "Amasse levemente as folhas",
-        "Adicione à água e deixe em infusão por 5 minutos",
-        "Coe e sirva"
+        "Macere levemente as folhas",
+        "Infunda por 5 minutos, coe e sirva"
       ],
-      benefits: "Alivia tensão muscular e desconfortos digestivos"
+      benefits: "Ajuda a aliviar desconfortos e tensão"
     },
     {
       title: "Leite de Amêndoas com Mel",
       category: "Bebida",
       image: leiteDourado,
-      description: "Nutritivo e relaxante",
+      description: "Leve e reconfortante",
       ingredients: [
         "250ml de leite de amêndoas",
         "1 colher de sopa de mel",
         "1 pitada de cardamomo",
-        "Essência de baunilha"
+        "2 gotas de essência de baunilha"
       ],
       instructions: [
-        "Aqueça o leite de amêndoas",
-        "Adicione mel e cardamomo",
-        "Acrescente 2 gotas de essência de baunilha",
-        "Mexa bem e sirva morno"
+        "Aqueça o leite",
+        "Misture mel, cardamomo e baunilha",
+        "Sirva morno"
       ],
-      benefits: "Rico em magnésio, promove relaxamento profundo"
+      benefits: "Textura suave que acalma"
     },
     {
       title: "Chá de Mulungu",
       category: "Chá",
       image: chaCamomila,
-      description: "Poderoso sedativo natural",
+      description: "Tradicional no Brasil",
       ingredients: [
         "1 colher de sopa de casca de mulungu",
         "250ml de água",
         "Mel a gosto"
       ],
       instructions: [
-        "Ferva a água com a casca de mulungu",
-        "Deixe ferver por 5 minutos",
-        "Desligue e deixe em infusão por mais 5 minutos",
+        "Ferva a casca em água por 5 minutos",
+        "Desligue e infunda por mais 5",
         "Coe e adoce"
       ],
-      benefits: "Combate insônia severa e ansiedade profunda"
+      benefits: "Uso noturno para desacelerar"
     },
+
+    /* ====== Novas receitas (10+) sem smoothies ====== */
     {
-      title: "Smoothie de Kiwi",
-      category: "Smoothie",
-      image: smoothieBanana,
-      description: "Rico em serotonina",
+      title: "Chá de Erva-Doce (Funcho)",
+      category: "Chá",
+      image: chaCamomila,
+      description: "Doce, leve e calmante",
       ingredients: [
-        "2 kiwis maduros",
-        "1 banana",
-        "150ml de iogurte natural",
-        "1 colher de sopa de sementes de chia",
-        "Mel a gosto"
+        "1 colher de chá de sementes de erva-doce",
+        "250ml de água fervente"
       ],
       instructions: [
-        "Descasque os kiwis e a banana",
-        "Bata tudo no liquidificador",
-        "Adicione as sementes de chia",
-        "Deixe descansar 5 minutos antes de servir"
+        "Amasse levemente as sementes",
+        "Infunda em água fervente por 6-8 minutos",
+        "Coe e sirva"
       ],
-      benefits: "Alto teor de serotonina melhora regulação do sono"
+      benefits: "Contribui para relaxar e aliviar gases"
     },
     {
-      title: "Chá de Tília",
+      title: "Rooibos com Baunilha",
       category: "Chá",
       image: chaLavanda,
-      description: "Tranquilizante natural europeu",
+      description: "Sem cafeína e aconchegante",
       ingredients: [
-        "1 colher de sopa de flores de tília",
+        "1 sachê ou 1 colher de chá de rooibos",
         "250ml de água fervente",
-        "Mel de flores"
+        "Gotas de essência de baunilha (opcional)"
       ],
       instructions: [
-        "Ferva a água",
-        "Adicione as flores de tília",
-        "Deixe em infusão por 7-10 minutos",
-        "Coe e adoce com mel"
+        "Infunda o rooibos por 5-7 minutos",
+        "Aromatize com baunilha",
+        "Sirva puro ou com mel"
       ],
-      benefits: "Reduz tensão nervosa e promove sono reparador"
+      benefits: "Perfil doce natural, ideal à noite"
     },
     {
-      title: "Leite de Aveia com Açafrão",
+      title: "Chá de Maçã com Canela",
+      category: "Chá",
+      image: chaMaracuja,
+      description: "Conforto frutado",
+      ingredients: [
+        "1 maçã em fatias",
+        "1 pau de canela",
+        "300ml de água"
+      ],
+      instructions: [
+        "Ferva água com a maçã e a canela por 5 minutos",
+        "Desligue, tampe e infunda por 5 minutos",
+        "Coe e sirva"
+      ],
+      benefits: "Aroma aconchegante que acalma"
+    },
+    {
+      title: "Casca de Laranja & Camomila",
+      category: "Chá",
+      image: chaCamomila,
+      description: "Cítrico suave com floral",
+      ingredients: [
+        "1 tira de casca de laranja (sem parte branca)",
+        "1 colher de chá de camomila",
+        "250ml de água fervente"
+      ],
+      instructions: [
+        "Infunda tudo por 5-6 minutos",
+        "Coe e sirva",
+        "Adoce se desejar"
+      ],
+      benefits: "Leve e perfumado para a noite"
+    },
+    {
+      title: "Verbena (Lúcia-lima)",
+      category: "Chá",
+      image: chaLavanda,
+      description: "Erva cítrica relaxante",
+      ingredients: [
+        "1 colher de chá de verbena seca",
+        "250ml de água fervente"
+      ],
+      instructions: [
+        "Infunda por 5-7 minutos",
+        "Coe e sirva"
+      ],
+      benefits: "Ajuda a desacelerar o ritmo mental"
+    },
+    {
+      title: "Chá de Valeriana",
+      category: "Chá",
+      image: chaMaracuja,
+      description: "Tradicional para a noite",
+      ingredients: [
+        "1 colher de chá de raiz de valeriana seca",
+        "250ml de água quente (não fervente)"
+      ],
+      instructions: [
+        "Despeje água quente sobre a valeriana",
+        "Infunda por 10 minutos",
+        "Coe e sirva"
+      ],
+      benefits: "Opção clássica pré-sono"
+    },
+    {
+      title: "Água de Aveia Morna com Mel",
       category: "Bebida",
       image: leiteDourado,
-      description: "Anti-inflamatório e reconfortante",
+      description: "Textura suave, leve para o estômago",
       ingredients: [
-        "250ml de leite de aveia",
-        "1/2 colher de chá de açafrão",
-        "1 pitada de gengibre em pó",
+        "1 colher de sopa de aveia fina",
+        "250ml de água",
+        "1 colher de chá de mel"
+      ],
+      instructions: [
+        "Aqueça água e aveia por 3-4 minutos, mexendo",
+        "Coe para ficar mais leve",
+        "Adoce com mel e sirva morno"
+      ],
+      benefits: "Sensação de saciedade e conforto"
+    },
+    {
+      title: "Cevada Morna (Café de Cevada)",
+      category: "Bebida",
+      image: chaCamomila,
+      description: "Alternativa sem cafeína",
+      ingredients: [
+        "1 colher de chá de pó de cevada torrada",
+        "200ml de água quente",
+        "Leite a gosto (opcional)"
+      ],
+      instructions: [
+        "Dissolva a cevada em água quente",
+        "Complete com um pouco de leite se quiser",
+        "Sirva imediatamente"
+      ],
+      benefits: "Sabor parecido com café, mas noturno"
+    },
+    {
+      title: "Chá de Rosas com Mel",
+      category: "Chá",
+      image: chaLavanda,
+      description: "Floral delicado",
+      ingredients: [
+        "1 colher de chá de pétalas de rosa comestíveis secas",
+        "250ml de água quente",
         "Mel a gosto"
       ],
       instructions: [
-        "Aqueça o leite de aveia",
-        "Adicione açafrão e gengibre",
-        "Misture bem até ficar dourado",
-        "Adoce e sirva morno"
+        "Infunda as pétalas por 5 minutos",
+        "Coe e adoce levemente"
       ],
-      benefits: "Combina propriedades calmantes com ação anti-inflamatória"
+      benefits: "Aroma suave que acalma"
+    },
+    {
+      title: "Chá de Hibisco Suave com Maçã",
+      category: "Chá",
+      image: chaMaracuja,
+      description: "Levemente ácido e relaxante",
+      ingredients: [
+        "1 colher de chá de hibisco",
+        "3 fatias de maçã",
+        "300ml de água quente"
+      ],
+      instructions: [
+        "Infunda hibisco e maçã por 4-5 minutos",
+        "Coe e sirva morno"
+      ],
+      benefits: "Refrescante sem estimulantes"
+    },
+    {
+      title: "Chá de Macela (Camomila Gaúcha)",
+      category: "Chá",
+      image: chaCamomila,
+      description: "Tradicional no sul do Brasil",
+      ingredients: [
+        "1 colher de chá de flores de macela",
+        "250ml de água quente"
+      ],
+      instructions: [
+        "Infunda por 5-7 minutos",
+        "Coe e sirva"
+      ],
+      benefits: "Perfil semelhante à camomila, reconfortante"
     }
   ];
 
@@ -365,7 +461,7 @@ const Receitas = () => {
 
           <div className="mt-8 sm:mt-12 text-center">
             <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl mx-auto px-4">
-              💡 Dica: Consuma essas bebidas 30-60 minutos antes de dormir para melhores resultados
+              💡 Dica: Consuma essas bebidas 30–60 minutos antes de dormir. Evite cafeína à noite.
             </p>
           </div>
         </div>
