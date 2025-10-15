@@ -287,7 +287,7 @@ export default function QuizInsonia() {
   const back = () => step > 0 && setStep((s) => s - 1);
 
   const waHref =
-    "https://wa.me/5519993315875?text=" + encodeURIComponent("Quero dormir melhor");
+    "https://wa.me/551935189471?text=" + encodeURIComponent("Quero dormir melhor");
 
   const OptionBtn = ({ opt }: { opt: Option }) => {
     const active = answers[current.id] === opt.letter;
