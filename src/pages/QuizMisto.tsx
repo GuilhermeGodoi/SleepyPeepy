@@ -275,7 +275,7 @@ export default function QuizMisto() {
   const back = () => step > 0 && setStep((s) => s - 1);
 
   const waHref =
-    "https://wa.me/5519993315875?text=" +
+    "https://wa.me/551935189471?text=" +
     encodeURIComponent("Quero uma ajuda integrada para ansiedade e sono");
 
   const OptionBtn = ({ opt }: { opt: Option }) => {

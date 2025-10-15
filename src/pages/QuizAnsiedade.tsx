@@ -170,7 +170,7 @@ export default function QuizAnsiedade() {
   const back = () => step > 0 && setStep((s) => s - 1);
 
   const waHref =
-    "https://wa.me/5519993315875?text=" + encodeURIComponent("Quero reduzir minha ansiedade");
+    "https://wa.me/551935189471?text=" + encodeURIComponent("Quero reduzir minha ansiedade");
 
   const OptionBtn = ({ opt }: { opt: Option }) => {
     const active = answers[current.id] === opt.letter;
