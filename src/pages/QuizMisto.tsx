@@ -69,7 +69,7 @@ const QUESTIONS: Question[] = [
     { letter: "A", label: "Não, durmo normalmente quando estou cansado(a)" },
     { letter: "B", label: "Às vezes acontece" },
     { letter: "C", label: "Frequentemente me sinto assim" },
-    { letter: "D", label: "Sempre! Exausto(a) mas insone" },
+    { letter: "D", label: "Sempre! Exausto(a) e sem sono" },
   ]},
   { id: "q4", title: "Sintomas físicos (coração acelerado, tensão muscular, sudorese) acontecem com você?", imageUrl: "pgt19.png", options: [
     { letter: "A", label: "Raramente ou nunca" },
