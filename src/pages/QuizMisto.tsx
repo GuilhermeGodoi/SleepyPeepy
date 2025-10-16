@@ -236,7 +236,7 @@ const QuestionCard = memo(function QuestionCard({
                 className="max-w-full object-contain max-h-[512px]"
                 loading="eager"
                 decoding="async"
-                fetchpriority="high"
+                fetchPriority="high"
               />
             ) : (
               <div className="h-[240px] w-full grid place-items-center text-muted-foreground text-sm">
