@@ -30,7 +30,7 @@ function getParam(name: string) {
   }
 }
 
-/** ===== (Opcional) Imagens — crie src/assets/quiz_1/pgt1.png ... pgt15.png ===== */
+/** ===== (Opcional) Imagens — crie src/assets/quiz_1/*.png ===== */
 const quizImgs = import.meta.glob("@/assets/quiz_1/*.png", {
   eager: true,
   import: "default",
@@ -48,106 +48,133 @@ type Letter = "A" | "B" | "C" | "D";
 type Option = { letter: Letter; label: string };
 type Question = { id: string; title: string; imageUrl?: string; options: Option[] };
 
-/** ===== Pontuação (0–15, 0 = pior, 15 = melhor) ===== */
+/** ===== Pontuação (0–10, 0 = pior, 10 = melhor) ===== */
 const SCORE: Record<Letter, number> = { A: 1, B: 1, C: 1, D: 0 };
 
-/** ===== Perguntas (mistas — ansiedade + insônia) ===== */
+/** ===== Perguntas (10) =====
+ * Ordem pensada para: Dor (q1–q5) → Concordância (q6–q8) → Solução/CTA (q9–q10)
+ */
 const QUESTIONS: Question[] = [
-  { id: "q1", title: "Você sente que sua mente não desliga, mesmo quando tenta relaxar ou dormir?", imageUrl: "pgt5.png", options: [
-    { letter: "A", label: "Raramente, consigo relaxar facilmente" },
-    { letter: "B", label: "Às vezes tenho dificuldade" },
-    { letter: "C", label: "Frequentemente minha mente acelera" },
-    { letter: "D", label: "Sempre, é impossível desligar os pensamentos" },
-  ]},
-  { id: "q2", title: "Com que frequência você passa a noite acordado(a) pensando em preocupações?", imageUrl: "pgt8.png", options: [
-    { letter: "A", label: "Nunca ou raramente" },
-    { letter: "B", label: "1–2 vezes por semana" },
-    { letter: "C", label: "3–4 vezes por semana" },
-    { letter: "D", label: "Quase todas as noites" },
-  ]},
-  { id: "q3", title: "Ao longo do dia, você se sente cansado(a) mas à noite não consegue dormir?", imageUrl: "pgt16.png", options: [
-    { letter: "A", label: "Não, durmo normalmente quando estou cansado(a)" },
-    { letter: "B", label: "Às vezes acontece" },
-    { letter: "C", label: "Frequentemente me sinto assim" },
-    { letter: "D", label: "Sempre! Exausto(a) e sem sono" },
-  ]},
-  { id: "q4", title: "Sintomas físicos (coração acelerado, tensão muscular, sudorese) acontecem com você?", imageUrl: "pgt19.png", options: [
-    { letter: "A", label: "Raramente ou nunca" },
-    { letter: "B", label: "Ocasionalmente" },
-    { letter: "C", label: "Frequentemente sinto" },
-    { letter: "D", label: "Diariamente; é muito desconfortável" },
-  ]},
-  { id: "q5", title: "Como ansiedade e falta de sono têm impactado sua vida (trabalho, relacionamentos, saúde)?", imageUrl: "pgt15.png", options: [
-    { letter: "A", label: "Pouco ou nenhum impacto" },
-    { letter: "B", label: "Impacto leve ocasional" },
-    { letter: "C", label: "Impacto moderado frequente" },
-    { letter: "D", label: "Impacto severo em várias áreas" },
-  ]},
-  { id: "q6", title: "Você acredita que ansiedade e insônia estão conectadas e se retroalimentam?", imageUrl: "pgt5.png", options: [
-    { letter: "A", label: "Não vejo conexão" },
-    { letter: "B", label: "Talvez haja relação" },
-    { letter: "C", label: "Sim; uma piora a outra" },
-    { letter: "D", label: "Totalmente; é um ciclo vicioso" },
-  ]},
-  { id: "q7", title: "Tratar ansiedade e sono ao mesmo tempo seria mais eficaz para você?", imageUrl: "pgt4.png", options: [
-    { letter: "A", label: "Não acho necessário" },
-    { letter: "B", label: "Talvez seja útil" },
-    { letter: "C", label: "Sim; faz sentido tratar junto" },
-    { letter: "D", label: "Com certeza; preciso abordagem integrada" },
-  ]},
-  { id: "q8", title: "Você conseguiria dedicar 20 minutos por dia para práticas que melhorem ansiedade e sono?", imageUrl: "pgt3.png", options: [
-    { letter: "A", label: "Não tenho tempo" },
-    { letter: "B", label: "Talvez ocasionalmente" },
-    { letter: "C", label: "Sim; posso me organizar" },
-    { letter: "D", label: "Sim; totalmente comprometido(a)" },
-  ]},
-  { id: "q9", title: "Já tentou técnicas naturais (respiração, meditação, chás) para ambos os problemas?", imageUrl: "pgt14.png", options: [
-    { letter: "A", label: "Nunca tentei" },
-    { letter: "B", label: "Tentei sem consistência" },
-    { letter: "C", label: "Sim; ajudou quando pratiquei" },
-    { letter: "D", label: "Sim; funciona, mas preciso de estrutura" },
-  ]},
-  { id: "q10", title: "Você sente que precisa de um programa integrado (passo a passo) para ansiedade e sono?", imageUrl: "pgt12.png", options: [
-    { letter: "A", label: "Não preciso disso" },
-    { letter: "B", label: "Talvez fosse interessante" },
-    { letter: "C", label: "Sim; seria muito útil" },
-    { letter: "D", label: "Sim; é exatamente o que preciso" },
-  ]},
-  { id: "q11", title: "Gostaria de acesso a um programa completo que trata ansiedade E insônia juntos?", imageUrl: "pgt11.png", options: [
-    { letter: "A", label: "Não tenho interesse" },
-    { letter: "B", label: "Talvez; depende do formato" },
-    { letter: "C", label: "Sim; gostaria de conhecer" },
-    { letter: "D", label: "Sim; preciso disso urgentemente" },
-  ]},
-  { id: "q12", title: "Receitas naturais (chás/bebidas) para acalmar mente e corpo seriam valiosas para você?", imageUrl: "pgt13.png", options: [
-    { letter: "A", label: "Não me interessa" },
-    { letter: "B", label: "Interessante, mas não essencial" },
-    { letter: "C", label: "Sim; gostaria de experimentar" },
-    { letter: "D", label: "Sim; seriam fundamentais" },
-  ]},
-  { id: "q13", title: "Exercícios de respiração 24/7 (para crises e para dormir) ajudariam você?", imageUrl: "pgt26.png", options: [
-    { letter: "A", label: "Provavelmente não usaria" },
-    { letter: "B", label: "Talvez experimentasse" },
-    { letter: "C", label: "Sim; usaria regularmente" },
-    { letter: "D", label: "Com certeza; seriam essenciais" },
-  ]},
-  { id: "q14", title: "Acompanhamento personalizado aumentaria suas chances de superar ansiedade e insônia?", imageUrl: "pgt23.png", options: [
-    { letter: "A", label: "Não faz diferença" },
-    { letter: "B", label: "Talvez ajudasse" },
-    { letter: "C", label: "Sim; me manteria focado(a)" },
-    { letter: "D", label: "Sim; preciso muito desse suporte" },
-  ]},
-  { id: "q15", title: "Você está pronto(a) para quebrar o ciclo de ansiedade e insônia e recuperar sua qualidade de vida?", imageUrl: "pgt3.png", options: [
-    { letter: "A", label: "Não estou pronto(a) agora" },
-    { letter: "B", label: "Estou considerando" },
-    { letter: "C", label: "Sim; quero começar em breve" },
-    { letter: "D", label: "Sim; quero transformar agora!" },
-  ]},
+  // ——— DOR / TOMADA DE CONSCIÊNCIA ———
+  {
+    id: "q1",
+    title: "Você sente que sua mente não desliga, mesmo quando tenta relaxar ou dormir?",
+    imageUrl: "pgt5.png",
+    options: [
+      { letter: "A", label: "Raramente, consigo relaxar facilmente" },
+      { letter: "B", label: "Às vezes tenho dificuldade" },
+      { letter: "C", label: "Frequentemente minha mente acelera" },
+      { letter: "D", label: "Sempre, é impossível desligar os pensamentos" },
+    ],
+  },
+  {
+    id: "q2",
+    title: "Com que frequência você passa a noite acordado(a) pensando em preocupações?",
+    imageUrl: "pgt8.png",
+    options: [
+      { letter: "A", label: "Nunca ou raramente" },
+      { letter: "B", label: "1–2 vezes por semana" },
+      { letter: "C", label: "3–4 vezes por semana" },
+      { letter: "D", label: "Quase todas as noites" },
+    ],
+  },
+  {
+    id: "q3",
+    title: "Ao longo do dia, você se sente cansado(a) mas à noite não consegue dormir?",
+    imageUrl: "pgt16.png",
+    options: [
+      { letter: "A", label: "Não, durmo normalmente quando estou cansado(a)" },
+      { letter: "B", label: "Às vezes acontece" },
+      { letter: "C", label: "Frequentemente me sinto assim" },
+      { letter: "D", label: "Sempre! Exausto(a) e sem sono" },
+    ],
+  },
+  {
+    id: "q4",
+    title: "Sintomas físicos (coração acelerado, tensão muscular, sudorese) acontecem com você?",
+    imageUrl: "pgt19.png",
+    options: [
+      { letter: "A", label: "Raramente ou nunca" },
+      { letter: "B", label: "Ocasionalmente" },
+      { letter: "C", label: "Frequentemente sinto" },
+      { letter: "D", label: "Diariamente; é muito desconfortável" },
+    ],
+  },
+  {
+    id: "q5",
+    title: "Como ansiedade e falta de sono têm impactado sua vida (trabalho, relacionamentos, saúde)?",
+    imageUrl: "pgt15.png",
+    options: [
+      { letter: "A", label: "Pouco ou nenhum impacto" },
+      { letter: "B", label: "Impacto leve ocasional" },
+      { letter: "C", label: "Impacto moderado frequente" },
+      { letter: "D", label: "Impacto severo em várias áreas" },
+    ],
+  },
+
+  // ——— CONCORDÂNCIA / ALINHAMENTO ———
+  {
+    id: "q6",
+    title: "Você acredita que ansiedade e insônia estão conectadas e se retroalimentam?",
+    imageUrl: "pgt5.png",
+    options: [
+      { letter: "A", label: "Não vejo conexão" },
+      { letter: "B", label: "Talvez haja relação" },
+      { letter: "C", label: "Sim; uma piora a outra" },
+      { letter: "D", label: "Totalmente; é um ciclo vicioso" },
+    ],
+  },
+  {
+    id: "q7",
+    title: "Tratar ansiedade e sono ao mesmo tempo seria mais eficaz para você?",
+    imageUrl: "pgt4.png",
+    options: [
+      { letter: "A", label: "Não acho necessário" },
+      { letter: "B", label: "Talvez seja útil" },
+      { letter: "C", label: "Sim; faz sentido tratar junto" },
+      { letter: "D", label: "Com certeza; preciso abordagem integrada" },
+    ],
+  },
+  {
+    id: "q8",
+    title: "Você conseguiria dedicar 20 minutos por dia para práticas que melhorem ansiedade e sono?",
+    imageUrl: "pgt3.png",
+    options: [
+      { letter: "A", label: "Não tenho tempo" },
+      { letter: "B", label: "Talvez ocasionalmente" },
+      { letter: "C", label: "Sim; posso me organizar" },
+      { letter: "D", label: "Sim; totalmente comprometido(a)" },
+    ],
+  },
+
+  // ——— SOLUÇÃO / PRONTO PARA AGIR ———
+  {
+    id: "q9",
+    title: "Você sente que precisa de um programa integrado (passo a passo) para ansiedade e sono?",
+    imageUrl: "pgt12.png",
+    options: [
+      { letter: "A", label: "Não preciso disso" },
+      { letter: "B", label: "Talvez fosse interessante" },
+      { letter: "C", label: "Sim; seria muito útil" },
+      { letter: "D", label: "Sim; é exatamente o que preciso" },
+    ],
+  },
+  {
+    id: "q10",
+    title: "Você está pronto(a) para quebrar o ciclo de ansiedade e insônia e recuperar sua qualidade de vida?",
+    imageUrl: "pgt3.png",
+    options: [
+      { letter: "A", label: "Não estou pronto(a) agora" },
+      { letter: "B", label: "Estou considerando" },
+      { letter: "C", label: "Sim; quero começar em breve" },
+      { letter: "D", label: "Sim; quero transformar agora!" },
+    ],
+  },
 ];
 
-/** ===== Resultado por pontuação ===== */
+/** ===== Resultado por pontuação (0–10) ===== */
 function resultFromScore(total: number) {
-  if (total <= 12) {
+  if (total <= 6) {
     return {
       title: "Situação Crítica",
       desc:
@@ -155,7 +182,7 @@ function resultFromScore(total: number) {
       color: "text-red-600",
     };
   }
-  if (total <= 14) {
+  if (total <= 8) {
     return {
       title: "Situação Moderada",
       desc:
@@ -281,7 +308,7 @@ const ResultCard = memo(function ResultCard({
     <Card className="bg-card/70 border-transparent shadow-glow w-full max-w-2xl md:max-w-3xl mx-auto">
       <CardHeader className="text-center">
         <CardTitle className={cn("text-2xl md:text-3xl", res.color)}>
-          {res.title} — Pontuação: {total} / 15
+          {res.title} — Pontuação: {total} / 10
         </CardTitle>
       </CardHeader>
 
@@ -336,7 +363,7 @@ const ResultCard = memo(function ResultCard({
               page: typeof window !== "undefined" ? window.location.pathname : "",
               value: 1,
               currency: "BRL",
-              event_id, // útil se um dia usar CAPI
+              event_id,
             });
           }}
           className={cn(

@@ -15,104 +15,97 @@ const Projeto7DiasAnsiedade = () => {
   const dailyProgram = [
     {
       day: 1,
-      title: "Reconhecendo e Acolhendo",
-      description: "O primeiro passo para superar a ansiedade é reconhecê-la sem julgamento. Hoje você aprenderá a observar seus pensamentos com compaixão.",
+      title: "Reconhecendo e Mapeando a Ansiedade",
+      description: "O primeiro passo é reconhecer a ansiedade sem julgamento e mapear seus gatilhos. Observar o padrão é o início do controle.",
       tasks: [
-        "Liste 3 situações que desencadeiam sua ansiedade",
-        "Pratique 5 minutos de respiração profunda ao acordar",
-        "Anote pensamentos ansiosos sem julgamento",
-        "Evite cafeína após 14h",
-        "Caminhe 15 minutos ao ar livre"
+        "Mapeamento: Liste 3 situações (gatilhos) que consistentemente desencadeiam sua ansiedade (Conhecer o inimigo)",
+        "Respiração Matinal: Pratique 5 minutos de respiração diafragmática logo ao acordar (Aciona o 'modo calma')",
+        "Diário de Pensamentos: Anote pensamentos ansiosos com o máximo de detalhes, sem julgamento (Tirar o pensamento da mente)",
+        "Regulação Química: Evite cafeína após 14h (A cafeína é um estimulante que mimetiza a crise de ansiedade)",
+        "Movimento Leve: Caminhe 15 minutos ao ar livre (A luz natural e o movimento ajudam a regular o humor)",
+        "Intenção: Defina uma intenção para o dia ('Hoje, eu serei gentil comigo')"
       ],
-      tip: "💡 Lembre-se: ansiedade não é fraqueza. É um sinal de que seu corpo precisa de mais cuidado e atenção."
+      tip: "💡 Ansiedade não é fraqueza, é apenas o seu sistema de alarme interno hiperativo. Acolha a emoção antes de tentar mudá-la."
     },
     {
       day: 2,
-      title: "Respiração Consciente",
-      description: "A respiração é sua ferramenta mais poderosa contra a ansiedade. Técnicas corretas podem reduzir sintomas em até 60%.",
+      title: "Respiração: O Ancoramento Imediato",
+      description: "A respiração é sua ferramenta mais rápida e acessível. Técnicas corretas manipulam o Sistema Nervoso, reduzindo os batimentos cardíacos e a adrenalina.",
       tasks: [
-        "Pratique respiração 4-7-8 ao acordar (4 repetições)",
-        "Faça 3 pausas de 2 minutos para respirar durante o dia",
-        "Siga meditação guiada de 10 minutos",
-        "Pratique 10 respirações profundas antes de dormir"
+        "Técnica 4-7-8: Pratique a respiração 4-7-8 ao acordar e antes de dormir (Induz o estado de relaxamento rapidamente)",
+        "Pausas Conscientes: Faça 3 pausas de 2 minutos para respirar profundamente durante momentos de estresse (Interrompe o ciclo de 'luta ou fuga')",
+        "Meditação Guiada: Siga uma meditação de 10 minutos focada na respiração (Fortalece o músculo da atenção plena)",
+        "Âncora Olfativa: Associe um aroma calmante (lavanda, hortelã) à sua respiração profunda (Cria um gatilho de calma instantâneo)"
       ],
-      tip: "💡 Baixe um app de respiração ou use nossa página de exercícios para praticar com um guia visual."
+      tip: "💡 Ao sentir a ansiedade subindo, concentre-se na expiração. Expirar mais lentamente que a inspiração é a chave para acalmar o sistema nervoso."
     },
     {
       day: 3,
-      title: "Movimento que Libera",
-      description: "Exercícios físicos liberam endorfinas e reduzem cortisol (hormônio do estresse) em até 50%. Movimento é medicina natural.",
+      title: "Movimento e Liberação de Tensão",
+      description: "O exercício libera endorfinas (analgésicos naturais) e queima o excesso de adrenalina/cortisol gerado pela ansiedade. Movimento é uma 'válvula de escape' química.",
       tasks: [
-        "Faça 30 minutos de exercício aeróbico: caminhada rápida, corrida, natação ou dança",
-        "Alongue-se por 10 minutos ao acordar - estique pescoço, braços, costas, pernas",
-        "Experimente uma aula de yoga, pilates ou tai chi (online ou presencial)",
-        "Escolha escadas em vez de elevador - movimento libera endorfinas",
-        "A cada hora sentado, levante e movimente-se por 2 minutos",
-        "Dance livremente por 5 minutos ao som da sua playlist favorita",
-        "Antes de dormir, tense e relaxe cada grupo muscular por 5 segundos (pés, pernas, abdômen, braços, rosto)"
+        "Aeróbico Terapêutico: Faça 30 minutos de exercício rítmico (caminhada rápida, corrida, dança) (Libera neurotransmissores do bem-estar)",
+        "Alongamento: Alongue-se por 10 minutos focando em ombros, pescoço e costas (Locais onde a ansiedade armazena tensão)",
+        "Alternativa Calma: Experimente uma aula de Yoga ou Tai Chi (Foco em coordenação e respiração, tirando o foco da ruminação)",
+        "Quebra de Padrão: A cada hora sentado, levante e faça uma pausa ativa de 2 minutos (Muda a fisiologia e o estado mental)",
+        "Relaxamento Muscular Progressivo: Tense e relaxe cada grupo muscular antes de dormir (Ajuda a identificar e liberar a tensão física)"
       ],
-      tip: "💡 Exercícios ao ar livre têm efeito duplo: movimento + contato com natureza reduzem ansiedade em 70%."
+      tip: "💡 Movimente-se ao ar livre para um efeito duplo: exercício + natureza (conexão com o ambiente) reduzem a ansiedade de forma sinérgica."
     },
     {
       day: 4,
-      title: "Mindfulness e Presença",
-      description: "Ansiedade é medo do futuro. Mindfulness te traz ao presente, onde você está seguro. Pratique estar aqui e agora.",
+      title: "Mindfulness: O Antídoto para o Futuro",
+      description: "Ansiedade é a preocupação excessiva com o futuro. O Mindfulness te 'ancora' no presente, o único lugar onde a ação é possível.",
       tasks: [
-        "Medite 15 minutos com guia (apps: Insight Timer, Calm, Headspace, Lojong)",
-        "Coma uma refeição com atenção plena: mastigue devagar, saboreie cada garfada",
-        "Durante ansiedade, use 5-4-3-2-1: nomeie 5 coisas que vê, 4 que toca, 3 que ouve, 2 que cheira, 1 que saboreia",
-        "Escolha uma tarefa rotineira e faça com total presença (banho, louça, escovar dentes)",
-        "Observe pensamentos ansiosos como nuvens que passam - não lute, apenas observe",
-        "Faça body scan guiado: escaneie mentalmente corpo dos pés à cabeça (10 min)",
-        "Anote 3 momentos do dia em que você estava 100% presente"
+        "Meditação do Presente: Medite 15 minutos com foco nas sensações do corpo (Traz a atenção do pensamento para o físico)",
+        "Conexão 5-4-3-2-1: Durante picos de ansiedade, use a técnica para focar nos 5 sentidos (Interrompe a espiral de pensamentos)",
+        "Alimentação Consciente: Coma uma refeição com total atenção: saboreie, sinta o cheiro e a textura (Pratica a presença em algo simples)",
+        "Observação Neutra: Observe pensamentos ansiosos como 'nuvens passando' sem se prender a eles (Distingue você de seus pensamentos)",
+        "Body Scan Guiado: Faça um escaneamento corporal de 10 minutos antes de dormir (Aumenta a consciência corporal e relaxamento)"
       ],
-      tip: "💡 Quando a ansiedade vier, pergunte: 'Estou em perigo AGORA?' Geralmente não. Respire e volte ao presente."
+      tip: "💡 Quando a ansiedade vier, pergunte: 'O que está acontecendo comigo AGORA?' e 'O que estou fazendo AGORA?'. Volte a focar na ação presente."
     },
     {
       day: 5,
-      title: "Reestruturação Cognitiva",
-      description: "Pensamentos ansiosos não são fatos. Aprenda a questionar e reformular padrões mentais que alimentam a ansiedade.",
+      title: "Reestruturação Cognitiva: O Questionamento",
+      description: "Pensamentos ansiosos são, muitas vezes, distorções. Aprender a questionar sua validade é essencial para desarmar a ansiedade.",
       tasks: [
-        "Escolha um pensamento ansioso recorrente e escreva-o exatamente como aparece",
-        "Pergunte: 'Isso é um FATO comprovado ou uma INTERPRETAÇÃO/SUPOSIÇÃO?'",
-        "Liste 3 evidências concretas que contradizem esse pensamento catastrófico",
-        "Reescreva o pensamento de forma equilibrada, realista e compassiva",
-        "Fale consigo como falaria com seu melhor amigo - com gentileza e compreensão",
-        "Crie 3 afirmações positivas e realistas baseadas em suas conquistas reais",
-        "Releia suas reestruturações antes de dormir e observe como se sente"
+        "Identificação: Escolha um pensamento ansioso recorrente e escreva-o (Torna o pensamento externo e tangível)",
+        "Verificação: Pergunte: 'Quais são as EVIDÊNCIAS a favor e contra esse pensamento?' (Busca por fatos vs. emoções)",
+        "Descatastrofização: Pergunte: 'Qual é o pior cenário possível? E se isso acontecer, o que eu faria?' (Reduz o medo do desconhecido)",
+        "Reescrita Compassiva: Reescreva o pensamento de forma mais equilibrada e gentil (Substitui a voz crítica pela de apoio)",
+        "Afirmação Realista: Crie 3 afirmações positivas baseadas em suas forças e conquistas passadas (Reforça a capacidade de lidar com o estresse)"
       ],
-      tip: "💡 Pensamento ansioso: 'Vou falhar'. Reestruturação: 'Estou nervoso, mas já me preparei. Farei o meu melhor.'"
+      tip: "💡 Pensamento: 'Vou estragar tudo'. Reestruturação: 'Estou sentindo medo, mas tenho as habilidades necessárias. Farei o meu melhor, e se errar, aprenderei.'"
     },
     {
       day: 6,
-      title: "Conexão e Expressão",
-      description: "Ansiedade prospera no isolamento. Conexões genuínas e expressão emocional são antídotos poderosos.",
+      title: "Conexão e Higiene Mental",
+      description: "O isolamento e o excesso de informação (notícias, redes sociais) amplificam a ansiedade. Priorize conexões humanas e atividades restauradoras.",
       tasks: [
-        "Converse honestamente com alguém de confiança sobre o que está sentindo",
-        "Escreva uma carta para sua ansiedade - diga como ela te afeta e o que você quer dela",
-        "Dedique 30 minutos a um hobby prazeroso: pintar, tocar música, cozinhar, jardinagem",
-        "Limite redes sociais a 30 minutos hoje - evite comparação e FOMO (medo de ficar de fora)",
-        "Faça um ato de gentileza: ajude alguém, envie mensagem carinhosa, elogie sinceramente",
-        "Assista ou leia algo engraçado por 20 minutos - rir reduz cortisol e ansiedade",
-        "Marque um café, chamada de vídeo ou encontro com alguém querido"
+        "Conexão Social: Converse com alguém de confiança (amigo, familiar) sobre algo positivo (Alivia a carga emocional e reforça o apoio)",
+        "Escrita Expressiva: Escreva em um diário por 15 minutos sobre suas emoções e o que você precisa liberar (Organiza o caos interno)",
+        "Desconexão Digital: Limite o tempo de redes sociais a 30 minutos (Reduz o estresse da comparação e a sobrecarga de informações)",
+        "Hobby Terapêutico: Dedique 30 minutos a um hobby prazeroso (música, arte, jardinagem) (Envolve a mente em um fluxo positivo)",
+        "Gentileza: Faça um ato de gentileza para um estranho ou colega (Focar nos outros reduz a auto-absorção ansiosa)",
+        "Humor: Assista ou leia algo genuinamente engraçado por 20 minutos (O riso é um poderoso relaxante muscular e mental)"
       ],
-      tip: "💡 Você não precisa passar por isso sozinho. Compartilhar alivia, conecta e cura. Permita-se ser vulnerável."
+      tip: "💡 O seu cérebro ansioso busca perigo. Evite notícias e temas negativos 1 hora antes de dormir para não alimentar a ruminação noturna."
     },
     {
       day: 7,
-      title: "Integrando e Continuando",
-      description: "Parabéns! Você completou 7 dias de práticas anti-ansiedade. Agora é hora de integrar o aprendizado ao seu dia a dia.",
+      title: "Integração e Plano de Manutenção",
+      description: "Parabéns! Você completou 7 dias de práticas. Agora é hora de consolidar o aprendizado e criar um plano de longo prazo.",
       tasks: [
-        "Revise todo o seu diário da semana: quais práticas tiveram mais impacto?",
-        "Escolha 3-5 técnicas favoritas e comprometa-se a praticá-las diariamente",
-        "Monte um 'Kit de Emergência': o que fazer durante uma crise de ansiedade aguda",
-        "Liste seus principais gatilhos e uma estratégia específica para cada",
-        "Celebre cada pequena vitória - reconheça a coragem de ter chegado até aqui",
-        "Defina 2-3 metas de bem-estar mental realistas para os próximos 30 dias",
-        "Se a ansiedade for intensa ou persistente, busque um psicólogo ou psiquiatra",
-        "Compartilhe o que aprendeu com alguém que também luta contra a ansiedade"
+        "Revisão: Revise o diário da semana e identifique as 3 práticas mais eficazes para o seu caso (Foco no que funciona)",
+        "Plano Diário: Crie um plano simples com suas 3-5 técnicas favoritas para praticar todos os dias (Garante a consistência)",
+        "Kit de Emergência: Liste 5 ações específicas para fazer durante uma crise aguda (Ex: Respirar 4-7-8, Tomar água, Ligar para X)",
+        "Metas Realistas: Defina 2-3 metas de bem-estar mental para o próximo mês (Mantém o foco no crescimento)",
+        "Reconhecimento: Celebre seu esforço e progresso (Reforça o comportamento positivo)",
+        "Ajuda Profissional: Se a ansiedade estiver limitando sua vida, comprometa-se a buscar um psicólogo ou psiquiatra (Aceitar ajuda é força)",
+        "Compartilhe o Aprendizado: Compartilhe uma dica que funcionou com alguém que você se importa (Reforça o seu próprio aprendizado)"
       ],
-      tip: "💡 Recuperação não é linear. Haverá altos e baixos, e tudo bem. Continue praticando com paciência e autocompaixão."
+      tip: "💡 A recuperação é um processo, não um evento. Haverá dias difíceis, e tudo bem. A autocompaixão é a ferramenta mais importante a longo prazo."
     }
   ];
 
@@ -135,7 +128,7 @@ const Projeto7DiasAnsiedade = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <div className="pt-20 sm:pt-24 pb-12 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-8 sm:mb-12">
@@ -143,7 +136,7 @@ const Projeto7DiasAnsiedade = () => {
               7 Dias para Vencer a Ansiedade
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground px-4">
-              Um programa completo com técnicas cientificamente comprovadas para reduzir ansiedade. 
+              Um programa completo com técnicas cientificamente comprovadas para reduzir ansiedade.
               Siga cada dia e transforme sua relação com o medo e a preocupação!
             </p>
           </div>
@@ -181,12 +174,12 @@ const Projeto7DiasAnsiedade = () => {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            
+
             <div className="flex items-center gap-2 bg-card px-4 sm:px-6 py-2 sm:py-3 rounded-lg border border-border">
               <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               <span className="text-lg sm:text-xl font-bold">Dia {currentDay}</span>
             </div>
-            
+
             <Button
               variant="secondary"
               size="icon"
@@ -205,13 +198,12 @@ const Projeto7DiasAnsiedade = () => {
                 key={index}
                 onClick={() => setCurrentDay(index + 1)}
                 aria-label={`Ir para dia ${index + 1}`}
-                className={`flex-1 h-2 sm:h-2.5 rounded-full transition-all ${
-                  index + 1 === currentDay
+                className={`flex-1 h-2 sm:h-2.5 rounded-full transition-all ${index + 1 === currentDay
                     ? "bg-primary shadow-glow"
                     : index + 1 < currentDay
-                    ? "bg-accent"
-                    : "bg-secondary"
-                }`}
+                      ? "bg-accent"
+                      : "bg-secondary"
+                  }`}
               />
             ))}
           </div>
@@ -255,11 +247,10 @@ const Projeto7DiasAnsiedade = () => {
                     />
                     <label
                       htmlFor={`task-${index}`}
-                      className={`flex-1 cursor-pointer text-sm sm:text-base leading-relaxed ${
-                        checkedItems[currentDay]?.[index]
+                      className={`flex-1 cursor-pointer text-sm sm:text-base leading-relaxed ${checkedItems[currentDay]?.[index]
                           ? "line-through text-muted-foreground"
                           : "text-foreground"
-                      }`}
+                        }`}
                     >
                       {task}
                     </label>
@@ -281,13 +272,13 @@ const Projeto7DiasAnsiedade = () => {
           {/* Motivational Images */}
           {(currentDay === 1 || currentDay === 7) && (
             <div className="mt-8 grid sm:grid-cols-2 gap-4">
-              <img 
-                src={meditationImage} 
+              <img
+                src={meditationImage}
                 alt="Meditação e paz interior"
                 className="w-full h-48 object-cover rounded-lg shadow-soft"
               />
-              <img 
-                src={breathingImage} 
+              <img
+                src={breathingImage}
                 alt="Exercícios de respiração"
                 className="w-full h-48 object-cover rounded-lg shadow-soft"
               />
@@ -296,7 +287,7 @@ const Projeto7DiasAnsiedade = () => {
 
           <div className="mt-6 sm:mt-8 text-center space-y-3">
             <p className="text-sm sm:text-base text-muted-foreground px-4 leading-relaxed">
-              🧘 Lembre-se: você é mais forte que sua ansiedade. Cada pequeno passo conta, 
+              🧘 Lembre-se: você é mais forte que sua ansiedade. Cada pequeno passo conta,
               e você está fazendo um trabalho incrível!
             </p>
             {currentDay === 7 && completedTasks === totalTasks && (

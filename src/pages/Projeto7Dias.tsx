@@ -15,108 +15,101 @@ const Projeto7Dias = () => {
   const dailyProgram = [
     {
       day: 1,
-      title: "Estabelecendo a Base",
-      description: "A consistência é o alicerce do bom sono. Hoje, você criará a estrutura fundamental para todas as próximas noites.",
+      title: "Estabelecendo a Base: O Ritmo Circadiano",
+      description: "A consistência é o alicerce do bom sono. A regularidade alinha seu Ritmo Circadiano, o relógio biológico que sinaliza quando dormir e acordar.",
       tasks: [
-        "Defina um horário fixo para dormir e acordar (mesmo nos fins de semana)",
-        "Evite cafeína após às 14h (café, chás, refrigerantes e chocolate)",
-        "Desligue todas as telas 1 hora antes de dormir",
-        "Tome um banho morno 30-60 minutos antes de deitar",
-        "Prepare seu quarto: escuro, silencioso e temperatura entre 18-22°C",
-        "Anote a hora que dormiu e acordou para acompanhar seu progresso"
+        "Horário Fixo: Defina um horário para dormir e acordar (Mantenha o mesmo nos fins de semana para alinhar o Ritmo Circadiano)",
+        "Corte de Cafeína: Evite cafeína (café, chás, refrigerantes, chocolate) após às 14h (Meia-vida longa: a cafeína bloqueia o sono por muitas horas)",
+        "Regra das Telas: Desligue telas (celular, TV, tablet) 1 hora antes de dormir (A luz azul suprime a produção de Melatonina, o hormônio do sono)",
+        "Banho Morno: Tome um banho morno 30-60 minutos antes de deitar (O resfriamento corporal posterior ao banho induz o sono)",
+        "Ambiente Ideal: Prepare o quarto: escuro, silencioso e temperatura entre 18-22°C (A temperatura baixa sinaliza ao cérebro que é hora de descansar)",
+        "Diário do Sono: Anote a hora que deitou, dormiu e acordou para acompanhar o padrão de sono"
       ],
-      tip: "💡 Use um despertador real em vez do celular para não ter a tentação de mexer no telefone na cama."
+      tip: "💡 Use um despertador real e deixe o celular fora do quarto. Isso elimina a tentação de scrolling noturno e a exposição à luz azul."
     },
     {
       day: 2,
-      title: "Construindo uma Rotina Noturna",
-      description: "Criar um ritual noturno sinaliza ao cérebro que é hora de desacelerar. Rituais reduzem a ansiedade noturna em até 60%.",
+      title: "O Poder da Rotina Noturna",
+      description: "Criar um ritual noturno previsível sinaliza ao cérebro que é hora de desacelerar, reduzindo a ansiedade noturna e preparando o corpo para o repouso.",
       tasks: [
-        "Mantenha rigorosamente os horários estabelecidos no dia 1",
-        "Pratique 10 minutos de respiração profunda (use nossa página de exercícios)",
-        "Leia um livro físico por 20-30 minutos (evite conteúdo estimulante)",
-        "Evite refeições pesadas 3h antes de dormir",
-        "Prepare sua roupa e bolsa para o próximo dia (reduz ansiedade)",
-        "Anote 3 coisas positivas do seu dia em um diário de gratidão"
+        "Consistência: Mantenha rigorosamente os horários fixos estabelecidos no dia 1 (Reforça o Ritmo Circadiano)",
+        "Respiração: Pratique 10 minutos de respiração profunda ou meditação guiada (Ativa o Sistema Nervoso Parassimpático, o 'modo descanso')",
+        "Atividade Calmante: De 20 a 30 minutos antes de deitar, realize uma atividade de baixo estímulo, como ler um livro físico (Evita a ruminação mental)",
+        "Digestão: Evite refeições pesadas, picantes ou gordurosas 3 horas antes de dormir (O corpo prioriza a digestão, não o sono)",
+        "Planejamento Calmo: Prepare seus itens (roupa, bolsa) para o dia seguinte (Reduz a ansiedade matinal e noturna)",
+        "Hidratação: Mantenha uma garrafa d'água, mas reduza a ingestão de líquidos 2 horas antes de deitar (Evita o despertar noturno para ir ao banheiro)"
       ],
-      tip: "💡 Mantenha uma garrafa d'água ao lado da cama, mas evite beber muito líquido 2h antes de dormir."
+      tip: "💡 Faça do seu ritual noturno uma sequência que você possa desfrutar. É um momento de autocuidado, não apenas uma tarefa."
     },
     {
       day: 3,
-      title: "Movimento e Energia",
-      description: "Exercícios regulares melhoram a qualidade do sono em 65%. O momento certo faz toda a diferença.",
+      title: "Exercício, Luz e Energia",
+      description: "Exercícios regulares melhoram a qualidade do sono. A exposição à luz natural matinal é crucial para 'dar corda' ao relógio biológico.",
       tasks: [
-        "Faça 30 minutos de exercício aeróbico pela manhã ou tarde",
-        "Caminhe ao ar livre para pegar luz natural (regula o ritmo circadiano)",
-        "Evite exercícios intensos após às 19h",
-        "Pratique 15 minutos de alongamento suave antes de dormir",
-        "Mantenha toda a rotina noturna dos dias anteriores",
-        "Tome um chá relaxante (camomila, valeriana ou maracujá)",
-        "Se exercitou à noite, espere 2-3h antes de dormir"
+        "Exercício Diário: Dedique 30 minutos a algum exercício aeróbico leve ou moderado durante o dia (Melhora a eficiência e a profundidade do sono)",
+        "Luz Matinal: Exponha-se à luz natural (sol) logo ao acordar (A luz é o sinal mais potente para regular o Ritmo Circadiano)",
+        "Limite de Exercício: Evite exercícios intensos 3 horas antes do horário de dormir (Aumentam a temperatura corporal e liberam adrenalina, dificultando o sono)",
+        "Alongamento: Pratique 5-10 minutos de alongamento suave antes de deitar (Alivia a tensão muscular e promove o relaxamento)",
+        "Chá Relaxante: Tome um chá sem cafeína (camomila, valeriana ou passiflora/maracujá) (Ajuda a acalmar o sistema nervoso)"
       ],
-      tip: "💡 Exercícios matinais são ideais: aumentam a energia diurna e melhoram o sono noturno."
+      tip: "💡 Se for se exercitar à noite, espere 2-3h antes de dormir para que a temperatura corporal e a frequência cardíaca voltem ao normal."
     },
     {
       day: 4,
-      title: "Mente Calma, Corpo Relaxado",
-      description: "A meditação e mindfulness reduzem o tempo para adormecer em 50% e melhoram a qualidade do sono profundo.",
+      title: "Acalmando a Mente Ansiosa",
+      description: "Uma mente calma adormece mais rápido. Técnicas de relaxamento e mindfulness reduzem a ruminação mental, o maior inimigo do sono.",
       tasks: [
-        "Medite por 15 minutos durante o dia (use apps como Insight Timer)",
-        "Pratique yoga suave, tai chi ou body scan antes de dormir",
-        "Evite discussões e decisões importantes à noite",
-        "Faça uma lista das preocupações e deixe-a fora do quarto",
-        "Ouça música instrumental calma (60-80 BPM) enquanto se prepara para dormir",
-        "Use aromaterapia com lavanda (travesseiro, difusor ou óleo essencial)",
-        "Pratique a técnica 4-7-8 na cama (veja nossa página de exercícios)"
+        "Meditação Diurna: Medite ou pratique mindfulness por 10-15 minutos durante o dia (Fortalece a capacidade de acalmar a mente à noite)",
+        "Despejo Mental: Faça uma lista de tarefas ou preocupações 1-2 horas antes de dormir e deixe-a fora do quarto (Evita levar os problemas para a cama)",
+        "Paz Noturna: Evite discussões, filmes violentos ou decisões importantes à noite (Altas emoções ativam o cérebro)",
+        "Áudio Calmante: Ouça música instrumental calma (60-80 BPM) ou podcasts relaxantes enquanto se prepara (Reduz o estado de alerta)",
+        "Aromaterapia: Use aromaterapia com lavanda (difusor, spray de travesseiro, óleo) (A lavanda tem efeitos ansiolíticos e sedativos leves)",
+        "Técnica 4-7-8: Pratique a respiração 4-7-8 (ou outra técnica de respiração) já na cama (É um 'tranquilizante natural' para o sistema nervoso)"
       ],
-      tip: "💡 Se pensamentos ansiosos aparecerem, anote-os em um papel e retome pela manhã. Libere sua mente."
+      tip: "💡 Se não conseguir dormir após 20 minutos, levante-se e faça uma atividade calma (ler) em outro cômodo até sentir sono, depois volte. (Evita associar a cama à frustração)."
     },
     {
       day: 5,
-      title: "Nutrição para o Sono",
-      description: "O que você come afeta diretamente seu sono. Certos nutrientes promovem a produção de melatonina e serotonina.",
+      title: "Nutrição e Sono: A Química do Descanso",
+      description: "O que você come e bebe influencia a produção de Melatonina e Serotonina. A nutrição correta é um apoio químico ao seu sono.",
       tasks: [
-        "Reduza líquidos 2h antes de dormir (evita despertar noturno)",
-        "Inclua alimentos ricos em triptofano no jantar (banana, aveia, nozes, peru)",
-        "Evite álcool à noite (fragmenta o sono e reduz sono REM)",
-        "Evite alimentos picantes, gordurosos ou muito açucarados à noite",
-        "Se sentir fome antes de dormir, faça lanche leve (banana com mel, leite morno)",
-        "Considere suplementos naturais: magnésio, melatonina (consulte um médico)",
-        "Mantenha todas as práticas dos 4 dias anteriores"
+        "Álcool Zero: Evite totalmente o álcool à noite (O álcool fragmenta o sono, especialmente o Sono REM e o Sono Profundo)",
+        "Triptofano: Inclua alimentos ricos em triptofano (leite, aveia, banana, nozes, peru) no jantar (O triptofano é precursor da Serotonina e Melatonina)",
+        "Lanche Leve: Se a fome incomodar, faça um lanche muito leve (banana com mel, leite morno, iogurte) (Evita o despertar por fome sem forçar a digestão)",
+        "Magnésio: Considere alimentos ricos em magnésio (folhas verdes, sementes) no jantar (O magnésio ajuda a relaxar músculos e o sistema nervoso)",
+        "Açúcar e Gordura: Evite grandes quantidades de açúcar e gordura à noite (Podem causar picos de energia e refluxo)",
+        "Consistência: Mantenha todas as práticas dos 4 dias anteriores, especialmente os horários fixos e o corte de telas (Garante a eficácia do programa)"
       ],
-      tip: "💡 Uma xícara de leite dourado (leite com cúrcuma e mel) 1h antes de dormir pode melhorar muito o sono."
+      tip: "💡 Consulte um médico ou nutricionista sobre suplementos como Magnésio ou Melatonina. Não se auto-medique, use-os apenas com orientação."
     },
     {
       day: 6,
-      title: "Santuário do Sono",
-      description: "Seu ambiente de sono pode melhorar a qualidade do sono em até 50%. Transforme seu quarto em um santuário.",
+      title: "O Santuário do Quarto",
+      description: "Seu ambiente de sono deve ser otimizado. Otimizar a 'higiene do sono' do quarto pode melhorar a qualidade do sono em até 50%.",
       tasks: [
-        "Ajuste a temperatura do quarto para 18-22°C (ideal para sono profundo)",
-        "Use cortinas blackout ou máscara de dormir (bloqueie 100% da luz)",
-        "Experimente ruído branco, ventilador ou sons da natureza (mascara ruídos)",
-        "Avalie seu colchão e travesseiro (devem dar suporte adequado)",
-        "Remova todos os eletrônicos do quarto (TV, celular, tablets)",
-        "Use roupa de cama confortável e respire",
-        "Considere usar meias para dormir (melhora a circulação)",
-        "Mantenha o quarto limpo e organizado (reduz estresse visual)"
+        "Temperatura: Confirme a temperatura do quarto para 18-22°C (A temperatura central deve cair para o sono de qualidade)",
+        "Escuridão Total: Use cortinas blackout, máscara de dormir ou fitas escuras em LEDs (Até pequenas luzes podem interromper o sono profundo)",
+        "Silêncio/Ruído: Use protetores auriculares ou ruído branco (ventilador, app de sons) para mascarar ruídos imprevisíveis (O ruído branco é constante e não desperta)",
+        "Eletrônicos Fora: Remova todos os eletrônicos do campo de visão (TV, celular, tablets) (O quarto é apenas para dormir)",
+        "Conforto: Avalie seu colchão e travesseiro (Devem dar suporte adequado para o alinhamento da coluna)",
+        "Roupas de Cama: Use roupa de cama limpa, confortável e que 'respire' (Microclima confortável ajuda a manter a temperatura ideal)"
       ],
-      tip: "💡 Seu quarto deve ser usado APENAS para dormir e intimidade. Treine seu cérebro a associar o quarto ao sono."
+      tip: "💡 Treine seu cérebro: use o quarto APENAS para dormir (e intimidade). Nunca trabalhe, coma ou assista TV na cama."
     },
     {
       day: 7,
-      title: "Reflexão e Continuidade",
-      description: "Parabéns por completar os 7 dias! Agora é hora de consolidar seus aprendizados e planejar o futuro.",
+      title: "Reflexão e Plano de Continuidade",
+      description: "Parabéns! É hora de consolidar seus aprendizados. O sucesso a longo prazo reside na identificação e manutenção dos hábitos mais eficazes.",
       tasks: [
-        "Revise seu diário de sono da semana (horários, qualidade, despertar)",
-        "Identifique as 3-5 práticas que mais funcionaram para você",
-        "Crie um plano de manutenção com as técnicas mais efetivas",
-        "Defina metas de sono para o próximo mês",
-        "Celebre seu progresso e reconheça as mudanças positivas",
-        "Compartilhe sua experiência com amigos ou familiares",
-        "Continue usando pelo menos 3 técnicas diariamente",
-        "Agende uma revisão em 30 dias para avaliar progresso contínuo"
+        "Revisão do Diário: Revise seu diário de sono da semana (Horários, qualidade, despertares) e encontre padrões",
+        "Top 3: Identifique as 3 a 5 práticas (ex: Banho Morno, Sem Cafeína, Despejo Mental) que mais funcionaram para você",
+        "Plano de Manutenção: Crie um plano simples e realista para manter essas práticas nas próximas 4 semanas (A consistência é chave)",
+        "Metas Futuras: Defina uma meta de sono (ex: 'Dormir 7h30 por noite' ou 'Acordar sem despertador 3x/semana')",
+        "Celebração: Reconheça seu progresso e se recompense de forma saudável (Melhora a motivação)",
+        "Comprometimento: Assine um 'Contrato do Sono' pessoal para manter a rotina nos fins de semana",
+        "Agendamento: Agende uma revisão em 30 dias para avaliar seu progresso contínuo e ajustar o plano"
       ],
-      tip: "💡 Hábitos levam 21-66 dias para se consolidarem. Continue praticando! Você está no caminho certo."
+      tip: "💡 O objetivo não é ser perfeito, mas ser consistente. Hábito levam tempo para se consolidarem. Siga em frente!"
     }
   ];
 
@@ -139,7 +132,7 @@ const Projeto7Dias = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <div className="pt-20 sm:pt-24 pb-12 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-8 sm:mb-12">
@@ -147,7 +140,7 @@ const Projeto7Dias = () => {
               Programa de 7 Dias
             </h1>
             <p className="text-base sm:text-lg text-muted-foreground px-4">
-              Um guia completo e estruturado para transformar seu sono. 
+              Um guia completo e estruturado para transformar seu sono.
               Siga cada dia e marque suas conquistas!
             </p>
           </div>
@@ -185,12 +178,12 @@ const Projeto7Dias = () => {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            
+
             <div className="flex items-center gap-2 bg-card px-4 sm:px-6 py-2 sm:py-3 rounded-lg border border-border">
               <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               <span className="text-lg sm:text-xl font-bold">Dia {currentDay}</span>
             </div>
-            
+
             <Button
               variant="secondary"
               size="icon"
@@ -209,13 +202,12 @@ const Projeto7Dias = () => {
                 key={index}
                 onClick={() => setCurrentDay(index + 1)}
                 aria-label={`Ir para dia ${index + 1}`}
-                className={`flex-1 h-2 sm:h-2.5 rounded-full transition-all ${
-                  index + 1 === currentDay
+                className={`flex-1 h-2 sm:h-2.5 rounded-full transition-all ${index + 1 === currentDay
                     ? "bg-primary shadow-glow"
                     : index + 1 < currentDay
-                    ? "bg-accent"
-                    : "bg-secondary"
-                }`}
+                      ? "bg-accent"
+                      : "bg-secondary"
+                  }`}
               />
             ))}
           </div>
@@ -259,11 +251,10 @@ const Projeto7Dias = () => {
                     />
                     <label
                       htmlFor={`task-${index}`}
-                      className={`flex-1 cursor-pointer text-sm sm:text-base leading-relaxed ${
-                        checkedItems[currentDay]?.[index]
+                      className={`flex-1 cursor-pointer text-sm sm:text-base leading-relaxed ${checkedItems[currentDay]?.[index]
                           ? "line-through text-muted-foreground"
                           : "text-foreground"
-                      }`}
+                        }`}
                     >
                       {task}
                     </label>
@@ -285,13 +276,13 @@ const Projeto7Dias = () => {
           {/* Motivational Images */}
           {(currentDay === 1 || currentDay === 7) && (
             <div className="mt-8 grid sm:grid-cols-2 gap-4">
-              <img 
-                src={sleepRoutineImage} 
+              <img
+                src={sleepRoutineImage}
                 alt="Rotina de sono saudável"
                 className="w-full h-48 object-cover rounded-lg shadow-soft"
               />
-              <img 
-                src={healthyLifestyleImage} 
+              <img
+                src={healthyLifestyleImage}
                 alt="Estilo de vida saudável"
                 className="w-full h-48 object-cover rounded-lg shadow-soft"
               />
@@ -300,7 +291,7 @@ const Projeto7Dias = () => {
 
           <div className="mt-6 sm:mt-8 text-center space-y-3">
             <p className="text-sm sm:text-base text-muted-foreground px-4 leading-relaxed">
-              🌙 Lembre-se: consistência é a chave para o sucesso. Cada dia concluído é um passo 
+              🌙 Lembre-se: consistência é a chave para o sucesso. Cada dia concluído é um passo
               em direção a noites tranquilas e dias energizados!
             </p>
             {currentDay === 7 && completedTasks === totalTasks && (
