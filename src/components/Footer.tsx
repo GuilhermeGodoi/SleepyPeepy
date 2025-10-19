@@ -13,7 +13,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Navegação */}
+          {/* Navegação (sem link de Vendas aqui) */}
           <div>
             <h3 className="font-semibold text-foreground mb-3">Navegação</h3>
             <ul className="space-y-2 text-sm">
@@ -82,8 +82,20 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-border text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} SleepyPeepy. Todos os direitos reservados.</p>
+        {/* Linha final + ÚNICO link para a página de vendas */}
+        <div className="mt-8 pt-6 border-t border-border text-center text-sm">
+          <p className="text-muted-foreground mb-3">
+            &copy; {new Date().getFullYear()} SleepyPeepy. Todos os direitos reservados.
+          </p>
+
+          {/* ÚNICO ponto de acesso para /vendas */}
+          <Link
+            to="/vendas"
+            className="inline-flex items-center justify-center px-3 py-1.5 rounded-md border border-border/60 text-foreground/90 hover:text-primary hover:border-primary/50 transition-colors"
+            aria-label="Conheça os planos do SleepyPeepy"
+          >
+            Conheça os planos (R$47/mês)
+          </Link>
         </div>
       </div>
     </footer>

@@ -21,6 +21,7 @@ import NotFound from "./pages/NotFound";
 import QuizInsonia from "./pages/QuizInsonia";
 import QuizAnsiedade from "./pages/QuizAnsiedade";
 import QuizMisto from "./pages/QuizMisto";
+import Vendas from "./pages/Vendas"; // <- nova página de vendas (pública)
 
 const queryClient = new QueryClient();
 
@@ -40,11 +41,17 @@ const App = () => (
           <Route path="/termos" element={<Termos />} />
           <Route path="/cookies" element={<Cookies />} />
 
+          {/* Página de vendas pública (sem aparecer no menu; acesse só pelo rodapé) */}
+          <Route path="/vendas" element={<Vendas />} />
+
           {/* Aliases (caso tenha links antigos com maiúsculas) */}
           <Route path="/QuizInsonia" element={<Navigate to="/quiz-insonia" replace />} />
           <Route path="/QuizAnsiedade" element={<Navigate to="/quiz-ansiedade" replace />} />
           <Route path="/QuizMisto" element={<Navigate to="/quiz-misto" replace />} />
-          <Route path="/Projeto7DiasAnsiedade" element={<Navigate to="/projeto-7-dias/ansiedade" replace />} />
+          <Route
+            path="/Projeto7DiasAnsiedade"
+            element={<Navigate to="/projeto-7-dias/ansiedade" replace />}
+          />
 
           {/* --- ROTAS PRIVADAS (exigem login) --- */}
           <Route
@@ -75,7 +82,7 @@ const App = () => (
             }
           />
 
-          {/* Projeto 7 dias — ansiedade (NOVA) */}
+          {/* Projeto 7 dias — ansiedade */}
           <Route
             path="/projeto-7-dias/ansiedade"
             element={

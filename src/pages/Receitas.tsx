@@ -2,17 +2,36 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Coffee, Leaf } from "lucide-react";
-import chaCamomila from "@/assets/cha-camomila.jpg";
-import leiteDourado from "@/assets/leite-dourado.jpg";
-import chaLavanda from "@/assets/cha-lavanda.jpg";
-import chaMaracuja from "@/assets/cha-maracuja.jpg";
+
+/* ===== Imagens (use a extensão real do seu projeto) ===== */
+import imgCascaLaranjaCamomila from "@/assets/chas/casca_laranja_camomila.png";
+import imgFolhasDeMaracuja from "@/assets/chas/folhas_de_maracuja.png";
+import imgLeiteAmendoasMel from "@/assets/chas/leite_amendoas_mel.png";
+import imgRosasMel from "@/assets/chas/rosas_mel.png";
+import imgSucoCereja from "@/assets/chas/suco_cereja.png";
+import imgVerbena from "@/assets/chas/verbena.png";
+import imgAveiaMel from "@/assets/chas/aveia_mel.png";
+import imgRooibosBaunilha from "@/assets/chas/rooibos_baunilha.png"; // (rooibos) arquivo conforme sua lista
+import imgCamomila from "@/assets/chas/Camomila.png";
+import imgCevada from "@/assets/chas/cevada.png";
+import imgCidreira from "@/assets/chas/cidreira.png";
+import imgErvaDoce from "@/assets/chas/erva_doce.png";
+import imgHortela from "@/assets/chas/hortela.png";
+import imgLavanda from "@/assets/chas/lavanda.png";
+import imgLeiteComCanela from "@/assets/chas/leite_com_canela.png";
+import imgLeiteDourado from "@/assets/chas/leite_dourado.png";
+import imgMacaCanela from "@/assets/chas/maca_canela.png";
+import imgMacela from "@/assets/chas/macela.png";
+import imgMulungu from "@/assets/chas/mulungu.png";
+import imgValeriana from "@/assets/chas/valeriana.png";
 
 const Receitas = () => {
   const recipes = [
+    /* ===== As 4 primeiras já existentes ===== */
     {
       title: "Chá de Camomila",
       category: "Chá",
-      image: chaCamomila,
+      image: imgCamomila,
       description: "Clássico calmante natural",
       ingredients: [
         "1 colher de sopa de flores de camomila",
@@ -30,7 +49,7 @@ const Receitas = () => {
     {
       title: "Leite Dourado",
       category: "Bebida",
-      image: leiteDourado,
+      image: imgLeiteDourado,
       description: "Bebida morna anti-inflamatória",
       ingredients: [
         "250ml de leite (vegetal ou animal)",
@@ -49,7 +68,7 @@ const Receitas = () => {
     {
       title: "Chá de Lavanda",
       category: "Chá",
-      image: chaLavanda,
+      image: imgLavanda,
       description: "Aroma floral relaxante",
       ingredients: [
         "1 colher de chá de flores de lavanda secas",
@@ -67,7 +86,7 @@ const Receitas = () => {
     {
       title: "Chá de Maracujá (Folhas)",
       category: "Chá",
-      image: chaMaracuja,
+      image: imgFolhasDeMaracuja,
       description: "Calmante suave tradicional",
       ingredients: [
         "2 colheres de sopa de folhas de maracujá secas",
@@ -82,10 +101,12 @@ const Receitas = () => {
       ],
       benefits: "Apoia o relaxamento noturno"
     },
+
+    /* ===== Restante com imagens alinhadas à sua lista ===== */
     {
       title: "Chá de Melissa (Erva-cidreira)",
       category: "Chá",
-      image: chaCamomila,
+      image: imgCidreira,
       description: "Acalma e suaviza a tensão",
       ingredients: [
         "2 colheres de chá de folhas de melissa",
@@ -103,7 +124,7 @@ const Receitas = () => {
     {
       title: "Leite com Canela",
       category: "Bebida",
-      image: leiteDourado,
+      image: imgLeiteComCanela,
       description: "Conforto morno e aromático",
       ingredients: [
         "250ml de leite morno",
@@ -121,7 +142,7 @@ const Receitas = () => {
     {
       title: "Chá de Erva-Cidreira Fresca",
       category: "Chá",
-      image: chaLavanda,
+      image: imgCidreira,
       description: "Aromático e relaxante",
       ingredients: [
         "2 colheres de sopa de folhas frescas",
@@ -139,7 +160,7 @@ const Receitas = () => {
     {
       title: "Suco de Cereja (sem açúcar)",
       category: "Suco",
-      image: chaMaracuja,
+      image: imgSucoCereja,
       description: "Opção fria pré-sono",
       ingredients: [
         "200g de cerejas frescas ou congeladas",
@@ -156,7 +177,7 @@ const Receitas = () => {
     {
       title: "Chá de Hortelã",
       category: "Chá",
-      image: chaMaracuja,
+      image: imgHortela,
       description: "Refrescante e digestivo",
       ingredients: [
         "10-12 folhas de hortelã fresca",
@@ -172,7 +193,7 @@ const Receitas = () => {
     {
       title: "Leite de Amêndoas com Mel",
       category: "Bebida",
-      image: leiteDourado,
+      image: imgLeiteAmendoasMel,
       description: "Leve e reconfortante",
       ingredients: [
         "250ml de leite de amêndoas",
@@ -190,7 +211,7 @@ const Receitas = () => {
     {
       title: "Chá de Mulungu",
       category: "Chá",
-      image: chaCamomila,
+      image: imgMulungu,
       description: "Tradicional no Brasil",
       ingredients: [
         "1 colher de sopa de casca de mulungu",
@@ -205,11 +226,11 @@ const Receitas = () => {
       benefits: "Uso noturno para desacelerar"
     },
 
-    /* ====== Novas receitas (10+) sem smoothies ====== */
+    /* ===== Novas receitas (10+) ===== */
     {
       title: "Chá de Erva-Doce (Funcho)",
       category: "Chá",
-      image: chaCamomila,
+      image: imgErvaDoce,
       description: "Doce, leve e calmante",
       ingredients: [
         "1 colher de chá de sementes de erva-doce",
@@ -225,7 +246,7 @@ const Receitas = () => {
     {
       title: "Rooibos com Baunilha",
       category: "Chá",
-      image: chaLavanda,
+      image: imgRooibosBaunilha,
       description: "Sem cafeína e aconchegante",
       ingredients: [
         "1 sachê ou 1 colher de chá de rooibos",
@@ -242,7 +263,7 @@ const Receitas = () => {
     {
       title: "Chá de Maçã com Canela",
       category: "Chá",
-      image: chaMaracuja,
+      image: imgMacaCanela,
       description: "Conforto frutado",
       ingredients: [
         "1 maçã em fatias",
@@ -259,7 +280,7 @@ const Receitas = () => {
     {
       title: "Casca de Laranja & Camomila",
       category: "Chá",
-      image: chaCamomila,
+      image: imgCascaLaranjaCamomila,
       description: "Cítrico suave com floral",
       ingredients: [
         "1 tira de casca de laranja (sem parte branca)",
@@ -276,7 +297,7 @@ const Receitas = () => {
     {
       title: "Verbena (Lúcia-lima)",
       category: "Chá",
-      image: chaLavanda,
+      image: imgVerbena,
       description: "Erva cítrica relaxante",
       ingredients: [
         "1 colher de chá de verbena seca",
@@ -291,7 +312,7 @@ const Receitas = () => {
     {
       title: "Chá de Valeriana",
       category: "Chá",
-      image: chaMaracuja,
+      image: imgValeriana,
       description: "Tradicional para a noite",
       ingredients: [
         "1 colher de chá de raiz de valeriana seca",
@@ -307,7 +328,7 @@ const Receitas = () => {
     {
       title: "Água de Aveia Morna com Mel",
       category: "Bebida",
-      image: leiteDourado,
+      image: imgAveiaMel,
       description: "Textura suave, leve para o estômago",
       ingredients: [
         "1 colher de sopa de aveia fina",
@@ -324,7 +345,7 @@ const Receitas = () => {
     {
       title: "Cevada Morna (Café de Cevada)",
       category: "Bebida",
-      image: chaCamomila,
+      image: imgCevada,
       description: "Alternativa sem cafeína",
       ingredients: [
         "1 colher de chá de pó de cevada torrada",
@@ -341,7 +362,7 @@ const Receitas = () => {
     {
       title: "Chá de Rosas com Mel",
       category: "Chá",
-      image: chaLavanda,
+      image: imgRosasMel,
       description: "Floral delicado",
       ingredients: [
         "1 colher de chá de pétalas de rosa comestíveis secas",
@@ -357,7 +378,7 @@ const Receitas = () => {
     {
       title: "Chá de Hibisco Suave com Maçã",
       category: "Chá",
-      image: chaMaracuja,
+      image: imgMacaCanela, // provisório — ajuste se tiver uma imagem própria de hibisco
       description: "Levemente ácido e relaxante",
       ingredients: [
         "1 colher de chá de hibisco",
@@ -373,7 +394,7 @@ const Receitas = () => {
     {
       title: "Chá de Macela (Camomila Gaúcha)",
       category: "Chá",
-      image: chaCamomila,
+      image: imgMacela,
       description: "Tradicional no sul do Brasil",
       ingredients: [
         "1 colher de chá de flores de macela",
@@ -390,7 +411,7 @@ const Receitas = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <div className="pt-20 sm:pt-24 pb-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8 sm:mb-12">
@@ -406,10 +427,11 @@ const Receitas = () => {
             {recipes.map((recipe, index) => (
               <Card key={index} className="bg-card border-border shadow-soft overflow-hidden hover:shadow-glow transition-all">
                 <div className="aspect-video w-full overflow-hidden">
-                  <img 
-                    src={recipe.image} 
+                  <img
+                    src={recipe.image}
                     alt={recipe.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 </div>
                 <CardHeader className="pb-3">
@@ -436,7 +458,7 @@ const Receitas = () => {
                       ))}
                     </ul>
                   </div>
-                  
+
                   <div>
                     <h4 className="font-semibold text-sm sm:text-base text-foreground mb-2">Modo de preparo:</h4>
                     <ol className="space-y-1 text-sm text-muted-foreground">
