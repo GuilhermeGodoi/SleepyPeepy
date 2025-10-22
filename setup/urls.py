@@ -31,6 +31,8 @@ urlpatterns = [
     # Estáticos
     path("robots.txt",  RedirectView.as_view(url="/static/robots.txt",  permanent=True)),
     path("sitemap.xml", RedirectView.as_view(url="/static/sitemap.xml", permanent=True)),
+
+    path("billing/", include("billing.urls")),
 ]
 
 # SPA fallback (mantenha por último)

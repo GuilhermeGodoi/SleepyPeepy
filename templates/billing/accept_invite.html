@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="pt-BR">
+  <body>
+    <h1>Crie sua senha</h1>
+    <form method="post">
+      {% csrf_token %}
+      <p>E-mail: <strong>{{ email }}</strong></p>
+      <label>Senha</label>
+      <input type="password" name="password" required minlength="8" />
+      <button type="submit">Criar conta</button>
+    </form>
+  </body>
+</html>
