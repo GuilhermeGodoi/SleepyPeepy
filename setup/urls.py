@@ -5,7 +5,10 @@ from django.views.generic import TemplateView, RedirectView
 from django.http import HttpResponse
 from .views import whoami, manage_invites
 
-def health(request): 
+# 👇 importe as novas views
+from .views import create_abacate_billing, abacatepay_webhook  # <---
+
+def health(request):
     return HttpResponse("ok", content_type="text/plain")
 
 urlpatterns = [
@@ -16,12 +19,16 @@ urlpatterns = [
     path("accounts/invites/", manage_invites, name="manage_invites"),
     path("health/", health),
 
-    # ◀️ Apontam a raiz para os arquivos estáticos gerados em /static/...
+    # === AbacatePay ===
+    path("api/abacatepay/create-billing", create_abacate_billing),   # POST
+    path("webhooks/abacatepay", abacatepay_webhook),                 # POST
+
+    # Estáticos
     path("robots.txt",  RedirectView.as_view(url="/static/robots.txt",  permanent=True)),
     path("sitemap.xml", RedirectView.as_view(url="/static/sitemap.xml", permanent=True)),
 ]
 
-# Catch-all do SPA — DEIXE POR ÚLTIMO e EXCLUINDO robots/sitemap
+# SPA fallback (mantenha por último)
 urlpatterns += [
     re_path(
         r"^(?!admin/|accounts/|api/|static/|media/|robots\.txt$|sitemap\.xml$|favicon\.ico$|\.well-known/).*$",

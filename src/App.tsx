@@ -21,7 +21,8 @@ import NotFound from "./pages/NotFound";
 import QuizInsonia from "./pages/QuizInsonia";
 import QuizAnsiedade from "./pages/QuizAnsiedade";
 import QuizMisto from "./pages/QuizMisto";
-import Vendas from "./pages/Vendas"; // <- nova página de vendas (pública)
+import Vendas from "./pages/Vendas"; // página de vendas (pública)
+import Checkout from "./pages/Checkout"; // <-- NOVO: página de checkout (pública)
 
 const queryClient = new QueryClient();
 
@@ -41,8 +42,9 @@ const App = () => (
           <Route path="/termos" element={<Termos />} />
           <Route path="/cookies" element={<Cookies />} />
 
-          {/* Página de vendas pública (sem aparecer no menu; acesse só pelo rodapé) */}
+          {/* Página de vendas e checkout (públicas) */}
           <Route path="/vendas" element={<Vendas />} />
+          <Route path="/checkout" element={<Checkout />} />
 
           {/* Aliases (caso tenha links antigos com maiúsculas) */}
           <Route path="/QuizInsonia" element={<Navigate to="/quiz-insonia" replace />} />

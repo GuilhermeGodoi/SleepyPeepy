@@ -112,7 +112,7 @@ LOGIN_EXEMPT_URLS = [
     r"^quiz-insonia/?$",
     r"^quiz-ansiedade/?$",
     r"^quiz-misto/?$",
-    
+
     # allauth/admin/estáticos
     r"^accounts/.*$",
     r"^admin/.*$",
@@ -125,7 +125,11 @@ LOGIN_EXEMPT_URLS = [
 
     # APIs públicas (se existirem)
     r"^api/public/.*$",
-    
+
+    # === NOVO: AbacatePay + health ===
+    r"^api/abacatepay/create-billing$",  # endpoint que cria a cobrança (POST)
+    r"^webhooks/abacatepay$",            # webhook (POST)
+    r"^health/$",                        # checagem de saúde
 ]
 
 # Login só por e-mail

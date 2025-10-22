@@ -26,9 +26,17 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Link } from "react-router-dom";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Link, useNavigate } from "react-router-dom"; // <-- ADICIONADO useNavigate
 import { Badge } from "@/components/ui/badge";
+
+/* ===== Banner REMOVIDO ===== */
+// import banner from "@/assets/Banner_pre_black_friday_resized.png";
 
 /* ===== Util: agora do Brasil e countdown até meia-noite America/Sao_Paulo ===== */
 function getBrazilParts(date = new Date()) {
@@ -52,18 +60,14 @@ function getBrazilParts(date = new Date()) {
         second: Number(map.second),
     };
 }
-
 function getBrazilNowUTCDate() {
     const { year, month, day, hour, minute, second } = getBrazilParts();
     return new Date(Date.UTC(year, month - 1, day, hour, minute, second));
 }
-
 function getBrazilMidnightUTCDate() {
     const { year, month, day } = getBrazilParts();
-    // Meia-noite do próximo dia em America/Sao_Paulo
     return new Date(Date.UTC(year, month - 1, day + 1, 0, 0, 0));
 }
-
 function formatHMS(ms: number) {
     if (ms < 0) ms = 0;
     const total = Math.floor(ms / 1000);
@@ -74,6 +78,10 @@ function formatHMS(ms: number) {
 }
 
 const Vendas: React.FC = () => {
+    const navigate = useNavigate(); // <-- ADICIONADO
+    const goToCheckout = (plano: "mensal" | "semestral" | "anual") =>
+        navigate(`/checkout?plano=${plano}`);
+
     const scrollToPlans = () => {
         document.getElementById("planos")?.scrollIntoView({ behavior: "smooth" });
     };
@@ -84,13 +92,11 @@ const Vendas: React.FC = () => {
         const end = getBrazilMidnightUTCDate().getTime();
         return end - now;
     });
-
     useEffect(() => {
         const id = setInterval(() => {
             const now = getBrazilNowUTCDate().getTime();
             const end = getBrazilMidnightUTCDate().getTime();
-            const diff = end - now;
-            setRemainingMs(diff > 0 ? diff : 0);
+            setRemainingMs(Math.max(0, end - now));
         }, 1000);
         return () => clearInterval(id);
     }, []);
@@ -98,36 +104,45 @@ const Vendas: React.FC = () => {
     // ===== COPY FOCO EM ANSIEDADE =====
     const benefits = useMemo(
         () => [
-            { icon: Brain, text: "Reduz a ansiedade com técnicas práticas do dia a dia", gradient: "from-purple-500 to-pink-500" },
-            { icon: Activity, text: "Alivia sintomas físicos (taquicardia, tensão, agitação)", gradient: "from-rose-500 to-orange-500" },
-            { icon: Users, text: "Exercícios guiados de respiração e grounding", gradient: "from-blue-500 to-cyan-500" },
-            { icon: Headphones, text: "Áudios calmantes e protocolos de autocuidado", gradient: "from-violet-500 to-purple-500" },
-            { icon: Leaf, text: "Rotinas e receitas relaxantes para regular o sistema nervoso", gradient: "from-green-500 to-emerald-500" },
-            { icon: MessageCircle, text: "Comunidade e suporte para manter a constância", gradient: "from-pink-500 to-rose-500" },
+            {
+                icon: Brain,
+                text: "Reduz a ansiedade com técnicas práticas do dia a dia",
+                gradient: "from-purple-500 to-pink-500",
+            },
+            {
+                icon: Activity,
+                text: "Alivia sintomas físicos (taquicardia, tensão, agitação)",
+                gradient: "from-rose-500 to-orange-500",
+            },
+            {
+                icon: Users,
+                text: "Exercícios guiados de respiração e grounding",
+                gradient: "from-blue-500 to-cyan-500",
+            },
+            {
+                icon: Headphones,
+                text: "Áudios calmantes e protocolos de autocuidado",
+                gradient: "from-violet-500 to-purple-500",
+            },
+            {
+                icon: Leaf,
+                text: "Rotinas e receitas relaxantes para regular o sistema nervoso",
+                gradient: "from-green-500 to-emerald-500",
+            },
+            {
+                icon: MessageCircle,
+                text: "Comunidade e suporte para manter a constância",
+                gradient: "from-pink-500 to-rose-500",
+            },
         ],
         []
     );
 
     const testimonials = useMemo(
         () => [
-            {
-                name: "Juliana M.",
-                age: "29 anos",
-                text: "Minhas crises de ansiedade diminuíram muito. Em poucos dias, senti meu corpo menos tenso.",
-                rating: 5,
-            },
-            {
-                name: "Roberto S.",
-                age: "45 anos",
-                text: "Eu vivia no alerta máximo. Hoje consigo desacelerar, respirar e dormir melhor.",
-                rating: 5,
-            },
-            {
-                name: "Mariana L.",
-                age: "32 anos",
-                text: "Não é milagre — é método. Os exercícios e áudios salvaram minhas noites.",
-                rating: 5,
-            },
+            { name: "Juliana M.", age: "29 anos", text: "Minhas crises de ansiedade diminuíram muito. Em poucos dias, senti meu corpo menos tenso.", rating: 5 },
+            { name: "Roberto S.", age: "45 anos", text: "Eu vivia no alerta máximo. Hoje consigo desacelerar, respirar e dormir melhor.", rating: 5 },
+            { name: "Mariana L.", age: "32 anos", text: "Não é milagre — é método. Os exercícios e áudios salvaram minhas noites.", rating: 5 },
         ],
         []
     );
@@ -145,7 +160,6 @@ const Vendas: React.FC = () => {
         "Acesso imediato, 100% online",
         "Cancelamento fácil",
     ];
-
 
     const plans = useMemo(
         () => [
@@ -178,7 +192,6 @@ const Vendas: React.FC = () => {
                 popular: false,
             },
         ],
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
 
@@ -201,11 +214,7 @@ const Vendas: React.FC = () => {
             },
             { question: "Posso cancelar quando quiser?", answer: "Sim! Você pode cancelar a qualquer momento direto pela sua conta, sem burocracia ou multas." },
             { question: "Preciso instalar app?", answer: "Não. Você acessa pelo navegador do celular, tablet ou computador." },
-            {
-                question: "Funciona mesmo se eu tiver muita ansiedade?",
-                answer:
-                    "Sim. O método foi construído para quem convive com ansiedade intensa e insônia, com técnicas testadas e fáceis de aplicar no dia a dia.",
-            },
+            { question: "Funciona mesmo se eu tiver muita ansiedade?", answer: "Sim. O método foi construído para quem convive com ansiedade intensa e insônia, com técnicas testadas e fáceis de aplicar no dia a dia." },
             { question: "O pagamento é seguro?", answer: "Totalmente seguro. Utilizamos criptografia de ponta e parceiros confiáveis de pagamento." },
         ],
         []
@@ -223,6 +232,8 @@ const Vendas: React.FC = () => {
 
     // ===== Scroll horizontal mobile: snap + auto-centralizar =====
     const railRef = useRef<HTMLDivElement | null>(null);
+    theScroll: {
+    }
     const scrollTimeoutRef = useRef<number | null>(null);
 
     function centerNearestCard() {
@@ -249,15 +260,12 @@ const Vendas: React.FC = () => {
             rail.scrollTo({ left: target, behavior: "smooth" });
         }
     }
-
     function onUserScroll() {
         if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
         scrollTimeoutRef.current = window.setTimeout(() => {
             centerNearestCard();
         }, 120);
     }
-
-    // Centraliza o plano popular no carregamento (mobile)
     useEffect(() => {
         const rail = railRef.current;
         if (!rail) return;
@@ -269,8 +277,7 @@ const Vendas: React.FC = () => {
             const target = childCenter - rail.clientWidth / 2;
             rail.scrollTo({ left: target, behavior: "smooth" });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [plans]);
 
     return (
         <div className="min-h-screen bg-gradient-night">
@@ -289,21 +296,11 @@ const Vendas: React.FC = () => {
 
                         {/* sem acesso à vendas pelo menu */}
                         <nav className="hidden lg:flex items-center gap-6">
-                            <a href="#inicio" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
-                                Início
-                            </a>
-                            <a href="#beneficios" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
-                                Benefícios
-                            </a>
-                            <a href="#planos" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
-                                Planos
-                            </a>
-                            <a href="#faq" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
-                                FAQ
-                            </a>
-                            <Link to="/" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
-                                Entrar
-                            </Link>
+                            <a href="#inicio" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Início</a>
+                            <a href="#beneficios" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Benefícios</a>
+                            <a href="#planos" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Planos</a>
+                            <a href="#faq" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">FAQ</a>
+                            <Link to="/" className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">Entrar</Link>
                         </nav>
 
                         <Button onClick={scrollToPlans} size="sm" className="bg-gradient-lavender hover:opacity-90 shadow-glow text-xs md:text-sm px-3 md:px-4">
@@ -396,10 +393,7 @@ const Vendas: React.FC = () => {
                         {benefits.map((benefit, index) => {
                             const Icon = benefit.icon;
                             return (
-                                <Card
-                                    key={index}
-                                    className="group border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-glow hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
-                                >
+                                <Card key={index} className="group border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-glow hover:border-primary/30 transition-all duration-300 hover:-translate-y-1">
                                     <CardContent className="pt-4 md:pt-6 px-4">
                                         <div className="flex flex-col gap-3 md:gap-4">
                                             <div className={`self-start p-3 md:p-4 rounded-xl bg-gradient-to-br ${benefit.gradient} shadow-lg`}>
@@ -440,9 +434,7 @@ const Vendas: React.FC = () => {
                                                 <Star key={i} className="h-4 md:h-5 w-4 md:w-5 fill-primary text-primary" />
                                             ))}
                                         </div>
-                                        <p className="text-sm md:text-base text-foreground/90 italic leading-relaxed">
-                                            "{testimonial.text}"
-                                        </p>
+                                        <p className="text-sm md:text-base text-foreground/90 italic leading-relaxed">"{testimonial.text}"</p>
                                         <div className="flex items-center gap-2 md:gap-3 mt-1 md:mt-2">
                                             <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-white font-bold text-lg md:text-xl bg-gradient-lavender shadow-lg shrink-0">
                                                 {testimonial.name.charAt(0)}
@@ -460,11 +452,12 @@ const Vendas: React.FC = () => {
                 </div>
             </section>
 
-            {/* PLANOS — descer mais + alinhamento oferta/timer + mobile sem clipping */}
+            {/* PLANOS */}
             <section
                 id="planos"
-                className="py-12 md:py-20 px-4 relative overflow-visible scroll-mt-28 md:scroll-mt-40 mt-8 md:mt-12"
+                className="py-12 md:py-20 px-4 relative overflow-visible scroll-mt-40 md:scroll-mt-56 mt-8 md:mt-12"
             >
+                {/* Glow decorativo */}
                 <div className="absolute inset-0">
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 md:w-96 h-64 md:h-96 bg-primary/10 rounded-full blur-3xl"></div>
                 </div>
@@ -475,7 +468,7 @@ const Vendas: React.FC = () => {
                             Escolha seu plano antiansiedade
                         </h2>
 
-                        {/* Oferta + Timer centralizados no desktop */}
+                        {/* Oferta + Timer */}
                         <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3">
                             <div className="flex items-center gap-2">
                                 <Badge className="bg-red-500/15 text-red-400 border-red-500/30 px-3 py-1 text-xs md:text-sm">
@@ -487,103 +480,150 @@ const Vendas: React.FC = () => {
                                 </span>
                             </div>
                             <span className="text-xs md:text-sm text-muted-foreground">
-                                Termina em <span className="font-semibold text-foreground">{formatHMS(remainingMs)}</span>
+                                Termina em{" "}
+                                <span className="font-semibold text-foreground">
+                                    {formatHMS(remainingMs)}
+                                </span>
                             </span>
                         </div>
 
                         <p className="text-base md:text-lg text-muted-foreground mt-3 px-4">
-                            Inclui planos de 7 dias (Insônia e Ansiedade), receitas, timers de respiração/meditação, exercícios guiados e descontos em produtos e muito mais.
-                            <br></br>
-                            <br></br>
+                            Inclui planos de 7 dias (Insônia e Ansiedade), receitas, timers de
+                            respiração/meditação, exercícios guiados e descontos em produtos e
+                            muito mais.
+                            <br />
+                            <br />
                         </p>
                     </div>
 
-                    {/* Rail mobile (sem clipping): overflow visível, sem scrollbar; ≥sm: grid */}
+                    {/* Rail mobile (sem clipping) */}
                     <div
                         ref={railRef}
                         onScroll={onUserScroll}
                         className="
-              flex gap-4 overflow-x-auto overflow-y-visible snap-x snap-mandatory pb-2 px-2
-              sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6 sm:overflow-visible sm:px-0
-              scroll-smooth hide-scroll
+                relative
+                flex gap-4 overflow-x-auto overflow-y-visible snap-x snap-mandatory
+                px-2 pb-2 pt-10 md:pt-12     /* <-- headroom para o chip fora do card */
+                sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-6 sm:overflow-visible sm:px-0
+                scroll-smooth hide-scroll
             "
                         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                     >
                         <style>{`.hide-scroll::-webkit-scrollbar { display: none; }`}</style>
 
-                        {plans.map((plan, index) => (
-                            <Card
-                                key={index}
-                                className={`relative border-2 transition-all duration-300 min-w-[85%] snap-center sm:min-w-0
-                  ${plan.popular
-                                        ? "border-primary shadow-glow sm:scale-105 bg-gradient-to-b from-card to-card/50"
-                                        : "border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 hover:shadow-soft"
-                                    }
-                `}
-                                style={{ scrollSnapAlign: "center" }}
-                            >
-                                {plan.popular && (
-                                    <div className="absolute -top-3 md:-top-4 left-1/2 -translate-x-1/2 px-4 md:px-6 py-1.5 md:py-2 rounded-full bg-gradient-lavender text-white text-xs md:text-sm font-bold shadow-glow whitespace-nowrap">
-                                        ⭐ Mais Popular
-                                    </div>
-                                )}
-                                {"economy" in plan && plan.economy && (
-                                    <div className="absolute -top-2 md:-top-3 -right-2 md:-right-3 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs md:text-sm font-bold shadow-lg">
-                                        {plan.economy as string}
-                                    </div>
-                                )}
+                        {plans.map((plan, index) => {
+                            const isSemestral = plan.name.toLowerCase() === "semestral";
+                            // slug do plano para o checkout:
+                            const slug =
+                                plan.name.toLowerCase() === "mensal"
+                                    ? "mensal"
+                                    : isSemestral
+                                    ? "semestral"
+                                    : "anual";
 
-                                <CardHeader className="pb-3 md:pb-4 px-4 md:px-6">
-                                    <CardTitle className="text-xl md:text-2xl font-bold">{plan.name}</CardTitle>
-                                    <CardDescription>
-                                        <div className="mt-4 md:mt-6">
-                                            {plan.originalPrice && (
-                                                <div className="text-xs md:text-sm text-muted-foreground line-through mb-1">
-                                                    De R${plan.originalPrice}
-                                                </div>
-                                            )}
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-xs md:text-sm text-muted-foreground">R$</span>
-                                                <span className="text-4xl md:text-5xl font-bold text-foreground">
-                                                    {"pricePerMonth" in plan && (plan as any).pricePerMonth ? (plan as any).pricePerMonth : plan.price}
-                                                </span>
-                                                <span className="text-sm md:text-base text-muted-foreground">{plan.period}</span>
-                                            </div>
-                                            {"pricePerMonth" in plan && (plan as any).pricePerMonth && (
-                                                <p className="text-xs md:text-sm text-muted-foreground mt-1 md:mt-2">
-                                                    Total: <span className="font-semibold">R${plan.price}</span> no plano {plan.name.toLowerCase()}
-                                                </p>
-                                            )}
+                            return (
+                                // WRAPPER com espaço no topo e posição relativa — o chip fica FORA do card
+                                <div
+                                    key={index}
+                                    className="
+                    relative min-w-[85%] snap-center sm:min-w-0
+                    pt-7 md:pt-9   /* reserva espaço para o chip fora do card */
+                  "
+                                    style={{ scrollSnapAlign: "center" }}
+                                >
+                                    {isSemestral && (
+                                        <div className="
+    absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2
+    px-4 md:px-6 py-1.5 md:py-2 rounded-full
+    bg-gradient-lavender text-white text-xs md:text-sm font-bold shadow-glow whitespace-nowrap
+  ">
+                                            ⭐ Mais Popular
                                         </div>
-                                    </CardDescription>
-                                </CardHeader>
+                                    )}
 
-                                <CardContent className="pb-4 md:pb-6 px-4 md:px-6">
-                                    <ul className="space-y-2 md:space-y-3">
-                                        {plan.benefits.map((benefit: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-2">
-                                                <div className="mt-0.5 p-0.5 md:p-1 rounded-full bg-primary/20 shrink-0">
-                                                    <Check className="h-3 md:h-4 w-3 md:w-4 text-primary" />
-                                                </div>
-                                                <span className="text-xs md:text-sm text-foreground/90 leading-tight">{benefit}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </CardContent>
-
-                                <CardFooter className="px-4 md:px-6 pb-4 md:pb-6">
-                                    <Button
-                                        className={`w-full text-sm md:text-base ${plan.popular ? "bg-gradient-lavender shadow-glow" : ""}`}
-                                        variant={plan.popular ? "default" : "outline"}
-                                        size="lg"
-                                        onClick={() => scrollToPlans()}
+                                    <Card
+                                        className={`relative border-2 transition-all duration-300
+                      ${plan.popular
+                                                ? "border-primary shadow-glow sm:scale-105 bg-gradient-to-b from-card to-card/50"
+                                                : "border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 hover:shadow-soft"
+                                            }
+                    `}
+                                        style={{ overflow: "visible" }}
                                     >
-                                        <Zap className="mr-2 h-3 md:h-4 w-3 md:w-4" />
-                                        Assinar Agora
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        ))}
+                                        {/* Badge de desconto continua DENTRO do card (canto superior direito) */}
+                                        {"economy" in plan && (plan as any).economy && (
+                                            <div className="absolute top-2 right-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs md:text-sm font-bold shadow-lg">
+                                                {(plan as any).economy as string}
+                                            </div>
+                                        )}
+
+                                        <CardHeader className="pb-3 md:pb-4 px-4 md:px-6">
+                                            <CardTitle className="text-xl md:text-2xl font-bold">
+                                                {plan.name}
+                                            </CardTitle>
+                                            <CardDescription>
+                                                <div className="mt-4 md:mt-6">
+                                                    {plan.originalPrice && (
+                                                        <div className="text-xs md:text-sm text-muted-foreground line-through mb-1">
+                                                            De R${plan.originalPrice}
+                                                        </div>
+                                                    )}
+                                                    <div className="flex items-baseline gap-1">
+                                                        <span className="text-xs md:text-sm text-muted-foreground">
+                                                            R$
+                                                        </span>
+                                                        <span className="text-4xl md:text-5xl font-bold text-foreground">
+                                                            {"pricePerMonth" in plan &&
+                                                            (plan as any).pricePerMonth
+                                                                ? (plan as any).pricePerMonth
+                                                                : plan.price}
+                                                        </span>
+                                                        <span className="text-sm md:text-base text-muted-foreground">
+                                                            {plan.period}
+                                                        </span>
+                                                    </div>
+                                                    {"pricePerMonth" in plan &&
+                                                        (plan as any).pricePerMonth && (
+                                                            <p className="text-xs md:text-sm text-muted-foreground mt-1 md:mt-2">
+                                                                Total: <span className="font-semibold">R${plan.price}</span> no plano{" "}
+                                                                {plan.name.toLowerCase()}
+                                                            </p>
+                                                        )}
+                                                </div>
+                                            </CardDescription>
+                                        </CardHeader>
+
+                                        <CardContent className="pb-4 md:pb-6 px-4 md:px-6">
+                                            <ul className="space-y-2 md:space-y-3">
+                                                {plan.benefits.map((benefit: string, i: number) => (
+                                                    <li key={i} className="flex items-start gap-2">
+                                                        <div className="mt-0.5 p-0.5 md:p-1 rounded-full bg-primary/20 shrink-0">
+                                                            <Check className="h-3 md:h-4 w-3 md:w-4 text-primary" />
+                                                        </div>
+                                                        <span className="text-xs md:text-sm text-foreground/90 leading-tight">
+                                                            {benefit}
+                                                        </span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </CardContent>
+
+                                        <CardFooter className="px-4 md:px-6 pb-4 md:pb-6">
+                                            <Button
+                                                className={`w-full text-sm md:text-base ${plan.popular ? "bg-gradient-lavender shadow-glow" : ""
+                                                    }`}
+                                                variant={plan.popular ? "default" : "outline"}
+                                                size="lg"
+                                                onClick={() => goToCheckout(slug)} // <-- CONECTADO AO CHECKOUT
+                                            >
+                                                <Zap className="mr-2 h-3 md:h-4 w-3 md:w-4" />
+                                                Assinar Agora
+                                            </Button>
+                                        </CardFooter>
+                                    </Card>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
@@ -610,8 +650,12 @@ const Vendas: React.FC = () => {
                                         <div className="absolute -top-1 md:-top-2 -right-1 md:-right-2 w-6 h-6 md:w-8 md:h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs md:text-sm border-2 border-primary">
                                             {step.number}
                                         </div>
-                                        <h3 className="font-semibold mb-1 md:mb-2 text-foreground text-sm md:text-base">{step.title}</h3>
-                                        <p className="text-xs md:text-sm text-muted-foreground leading-tight">{step.description}</p>
+                                        <h3 className="font-semibold mb-1 md:mb-2 text-foreground text-sm md:text-base">
+                                            {step.title}
+                                        </h3>
+                                        <p className="text-xs md:text-sm text-muted-foreground leading-tight">
+                                            {step.description}
+                                        </p>
                                     </div>
                                 </div>
                             );
@@ -669,7 +713,7 @@ const Vendas: React.FC = () => {
             <section className="py-20 px-4 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-lavender opacity-10"></div>
                 <div className="container mx-auto max-w-4xl text-center relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-lavender bg-clip-text text-transparent">
+                    <h2 className="text-4xl md:5xl font-bold mb-6 bg-gradient-lavender bg-clip-text text-transparent">
                         Pronto para reduzir a ansiedade? 🌙
                     </h2>
                     <p className="text-xl text-foreground/80 mb-8">
@@ -682,7 +726,7 @@ const Vendas: React.FC = () => {
                 </div>
             </section>
 
-            {/* Footer local da página (o site já tem um global; mantenha o acesso a /vendas só no rodapé principal) */}
+            {/* Footer local da página */}
             <footer className="py-12 px-4 bg-card/50 border-t border-border/50">
                 <div className="container mx-auto max-w-6xl">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-8">
@@ -691,21 +735,19 @@ const Vendas: React.FC = () => {
                                 <Moon className="h-6 w-6 text-white" />
                             </div>
                             <div>
-                                <p className="font-bold bg-gradient-lavender bg-clip-text text-transparent text-lg">SleepyPeepy</p>
-                                <p className="text-sm text-muted-foreground">Solução prática contra a ansiedade.</p>
+                                <p className="font-bold bg-gradient-lavender bg-clip-text text-transparent text-lg">
+                                    SleepyPeepy
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    Solução prática contra a ansiedade.
+                                </p>
                             </div>
                         </div>
 
                         <div className="flex flex-wrap justify-center gap-6 text-sm">
-                            <Link to="/privacidade" className="text-muted-foreground hover:text-primary transition-colors">
-                                Política de Privacidade
-                            </Link>
-                            <Link to="/termos" className="text-muted-foreground hover:text-primary transition-colors">
-                                Termos de Uso
-                            </Link>
-                            <a href="mailto:contato@sleepypeepy.com" className="text-muted-foreground hover:text-primary transition-colors">
-                                Contato
-                            </a>
+                            <Link to="/privacidade" className="text-muted-foreground hover:text-primary transition-colors">Política de Privacidade</Link>
+                            <Link to="/termos" className="text-muted-foreground hover:text-primary transition-colors">Termos de Uso</Link>
+                            <a href="mailto:contato@sleepypeepy.com" className="text-muted-foreground hover:text-primary transition-colors">Contato</a>
                         </div>
                     </div>
 
