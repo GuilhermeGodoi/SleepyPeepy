@@ -9,6 +9,26 @@ import { Badge } from "@/components/ui/badge";
 import { Shield, Lock, CreditCard, ArrowLeft, Check, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+/* ===== Helpers ===== */
+function onlyDigits(s: string) {
+  return s.replace(/\D/g, "");
+}
+
+// Máscara BR simples para telefone: (11) 98765-4321 / (11) 8765-4321
+function formatBRPhone(digits: string) {
+  const d = digits.slice(0, 11);
+  if (d.length <= 10) {
+    // (AA) NNNN-NNNN
+    return d.replace(/^(\d{0,2})(\d{0,4})(\d{0,4}).*/, (_, a, b, c) =>
+      [a && `(${a}`, a && ") ", b, b && (c ? "-" : ""), c].filter(Boolean).join("")
+    );
+  }
+  // 11 dígitos: (AA) NNNNN-NNNN
+  return d.replace(/^(\d{0,2})(\d{0,5})(\d{0,4}).*/, (_, a, b, c) =>
+    [a && `(${a}`, a && ") ", b, b && (c ? "-" : ""), c].filter(Boolean).join("")
+  );
+}
+
 /* ==== Helper para criar cobrança na sua API do backend ==== */
 type AbacateBillingPayload = {
   plan: "mensal" | "semestral" | "anual";
@@ -96,6 +116,7 @@ export default function Checkout() {
     name: "",
     email: "",
     cpf: "",
+    cellphone: "",       // 👈 NOVO
     cardNumber: "",
     cardName: "",
     expiryDate: "",
@@ -121,13 +142,24 @@ export default function Checkout() {
       setIsProcessing(true);
 
       if (paymentMethod === "pix") {
+        // Limpa e valida CPF/CNPJ
+        const cpfCnpj = onlyDigits(formData.cpf);
+        const taxId =
+          cpfCnpj.length === 11 || cpfCnpj.length === 14 ? cpfCnpj : undefined;
+
+        // Limpa, formata para E.164 e valida telefone
+        const rawPhone = onlyDigits(formData.cellphone);
+        const phoneE164 =
+          rawPhone.length === 10 || rawPhone.length === 11 ? `+55${rawPhone}` : undefined;
+
         // Integração AbacatePay (redireciona para o checkout hospedado)
         const { checkoutUrl } = await createAbacateBilling({
           plan: planId,
           customer: {
             name: formData.name,
             email: formData.email,
-            taxId: formData.cpf, // CPF/CNPJ
+            ...(taxId ? { taxId } : {}),
+            ...(phoneE164 ? { cellphone: phoneE164 } : {}),
           },
           orderId: crypto.randomUUID(), // opcional
         });
@@ -221,16 +253,35 @@ export default function Checkout() {
                         />
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="seu@email.com"
-                      />
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email *</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          placeholder="seu@email.com"
+                        />
+                      </div>
+                      {/* Telefone */}
+                      <div className="space-y-2">
+                        <Label htmlFor="cellphone">
+                          Telefone (com DDD) {paymentMethod === "pix" ? "*" : ""}
+                        </Label>
+                        <Input
+                          id="cellphone"
+                          inputMode="tel"
+                          placeholder="(11) 98765-4321"
+                          required={paymentMethod === "pix"}
+                          value={formData.cellphone}
+                          onChange={(e) => {
+                            const digits = onlyDigits(e.target.value);
+                            setFormData({ ...formData, cellphone: formatBRPhone(digits) });
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
 
