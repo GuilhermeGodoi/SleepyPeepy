@@ -17,11 +17,13 @@ def ensure_customer(email: str, name: str = "") -> Customer:
 def maybe_send_single_invite(customer: Customer) -> InviteToken | None:
     """
     Regra: se já foi enviado convite uma vez (invite_sent_at), NÃO reenviar.
-    Se já tem user vinculado, não precisa.
+    Se ALLOW_RESEND_INVITE=True no settings/.env, permite reenvio (útil p/ testes).
+    Se já tem user vinculado, não envia.
     """
+    allow_resend = getattr(settings, "ALLOW_RESEND_INVITE", False)
     if customer.user:
         return None
-    if customer.invite_sent_at:
+    if customer.invite_sent_at and not allow_resend:
         return None
 
     token = InviteToken.objects.create(
@@ -39,5 +41,5 @@ def maybe_send_single_invite(customer: Customer) -> InviteToken | None:
 
 def get_or_create_subscription(customer: Customer, plan_code: str) -> Subscription:
     plan = Plan.objects.get(code=plan_code, active=True)
-    sub, created = Subscription.objects.get_or_create(customer=customer, plan=plan)
+    sub, _ = Subscription.objects.get_or_create(customer=customer, plan=plan)
     return sub

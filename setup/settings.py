@@ -1,19 +1,15 @@
 """
 Django settings for setup project.
-
 Gerado pelo 'django-admin startproject' (Django 5.2.7).
 """
-
 import os
 from pathlib import Path
 
-# Opcional para produção (Railway/Postgres). Mantém sqlite se não houver DATABASE_URL:
 try:
-    import dj_database_url  # adicionado
+    import dj_database_url
 except Exception:
     dj_database_url = None
 
-# === Paths ===
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 try:
@@ -23,10 +19,9 @@ except Exception:
     pass
 
 # === Segurança básica ===
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-insecure-key")  # troque no .env
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-insecure-key")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-# Domínios permitidos (ajuste no .env se precisar)
 ALLOWED_HOSTS = [h.strip() for h in os.getenv(
     "ALLOWED_HOSTS",
     "sleepypeepy.site,sleepypeepy-production.up.railway.app,localhost,127.0.0.1"
@@ -44,7 +39,7 @@ INSTALLED_APPS = [
 
     # Terceiros
     "corsheaders",
-    "django.contrib.sites",   # necessário p/ allauth
+    "django.contrib.sites",
 
     # Allauth
     "allauth",
@@ -62,32 +57,25 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# Adapter do allauth (mantido)
 ACCOUNT_ADAPTER = "setup.account_adapter.MyAccountAdapter"
-
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
-# Configurações comuns do allauth
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"  # ou "email"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"  # sem verificação obrigatória
+ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_USERNAME_REQUIRED = True
-
-# Login só por e-mail (mantendo sua intenção)
 ACCOUNT_LOGIN_METHODS = {"email"}
-
-# Cadastro com apenas e-mail e senha
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False  # 1 campo de senha
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 
-# Em DEV usa console; em PROD usa SMTP Hostinger
-if DEBUG:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-else:
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# ===== E-mail =====
+# Permite forçar SMTP mesmo com DEBUG=True via .env
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend" if DEBUG else "django.core.mail.backends.smtp.EmailBackend"
+)
 
-# ===== E-mail (Hostinger SMTP) =====
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "contato@sleepypeepy.site")
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.hostinger.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
@@ -96,27 +84,30 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() == "true"
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False").lower() == "true"
 
-# ===== App config =====
+# ===== Flags de app =====
 SITE_URL = os.getenv("SITE_URL", "https://sleepypeepy.site")
 
-# ===== Stripe =====
+# Stripe
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
-# ===== AbacatePay (HMAC) =====
-ABACATEPAY_WEBHOOK_SECRET = os.getenv("ABACATEPAY_WEBHOOK_SECRET")  # defina igual no painel
+# AbacatePay (HMAC)
+ABACATEPAY_WEBHOOK_SECRET = os.getenv("ABACATEPAY_WEBHOOK_SECRET")
+
+# Permitir reenvio de convite (apenas para testes)
+ALLOW_RESEND_INVITE = os.getenv("ALLOW_RESEND_INVITE", "False").lower() == "true"
 
 # === Middlewares ===
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",         # estáticos em prod
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "allauth.account.middleware.AccountMiddleware",       # <— ANTES
-    "setup.middleware.LoginRequiredMiddleware",           # <— DEPOIS (mantido)
+    "allauth.account.middleware.AccountMiddleware",
+    "setup.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -130,11 +121,10 @@ CORS_ALLOWED_ORIGINS = [
     "https://sleepypeepy.site",
 ]
 CSRF_TRUSTED_ORIGINS = [f"https://{h}" for h in ALLOWED_HOSTS if "." in h]
+CORS_ALLOW_CREDENTIALS = True
 
 # === URLs liberadas de login ===
-# (regex relativas à raiz, sem a "/")
 LOGIN_EXEMPT_URLS = [
-    # Públicas do seu site
     r"^lp/$", r"^lp/.*$",
     r"^whatsapp/$",
     r"^politica-de-privacidade/$",
@@ -143,13 +133,11 @@ LOGIN_EXEMPT_URLS = [
     r"^quiz-ansiedade/?$",
     r"^quiz-misto/?$",
 
-    # SPA públicas
     r"^vendas/?$",
     r"^vendas/.*$",
     r"^checkout/?$",
     r"^checkout/.*$",
 
-    # allauth/admin/estáticos
     r"^accounts/.*$",
     r"^admin/.*$",
     r"^static/.*$",
@@ -159,26 +147,20 @@ LOGIN_EXEMPT_URLS = [
     r"^sitemap\.xml$",
     r"^\.well-known/.*$",
 
-    # APIs públicas (se existirem)
     r"^api/public/.*$",
-
-    # Healthcheck
     r"^health/?$",
 
-    # === Webhooks e rotas do billing ===
-    r"^billing/accept-invite/?$",       # GET/POST criar conta por token
-    r"^billing/webhooks/abacatepay/?$", # POST webhook
-    r"^billing/webhooks/stripe/?$",     # POST webhook
+    # Webhooks/rotas billing
+    r"^billing/accept-invite/?$",
+    r"^billing/webhooks/abacatepay/?$",
+    r"^billing/webhooks/stripe/?$",
 
-    # Se você expõe essas rotas fora de /billing, mantenha também:
-    r"^api/abacatepay/create-billing/?$",   # POST (se existir)
-    r"^webhooks/abacatepay/?$",             # legado
+    # se expôs versões "legado":
+    r"^api/abacatepay/create-billing/?$",
+    r"^webhooks/abacatepay/?$",
     r"^api/stripe/create-checkout-session/?$",
-    r"^webhooks/stripe/?$",                 # legado
+    r"^webhooks/stripe/?$",
 ]
-
-
-CORS_ALLOW_CREDENTIALS = True  # Para cookies
 
 # === URLConf / Templates / WSGI ===
 ROOT_URLCONF = "setup.urls"
@@ -187,8 +169,8 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            BASE_DIR / "templates",  # overrides (allauth etc.)
-            BASE_DIR / "dist",       # index.html do Vite (SPA)
+            BASE_DIR / "templates",
+            BASE_DIR / "dist",
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -204,8 +186,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "setup.wsgi.application"
 
 # === Database ===
-# Mantém Postgres fixo (Railway) e, SE existir DATABASE_URL no ambiente e dj_database_url estiver disponível,
-# sobrepõe automaticamente com ela.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -216,12 +196,8 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-# Em produção (Railway), se existir DATABASE_URL no ambiente e dj_database_url estiver disponível,
-# sobrepõe usando Postgres automaticamente, sem remover a variável original.
 if dj_database_url and os.getenv("DATABASE_URL"):
     DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
-
 
 # === Password validators ===
 AUTH_PASSWORD_VALIDATORS = [
@@ -241,13 +217,11 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
-    BASE_DIR / "dist",              # build do Vite (SPA)
-    BASE_DIR / "public",            # se usar
-    BASE_DIR / "src" / "assets",    # assets do React (se realmente precisar)
-    BASE_DIR / "setup" / "static",  # seu caminho adicional
+    BASE_DIR / "dist",
+    BASE_DIR / "public",
+    BASE_DIR / "src" / "assets",
+    BASE_DIR / "setup" / "static",
 ]
-
-# Em produção, ativa storage com manifest + compressão
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -258,3 +232,11 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # === Default PK ===
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# === LOGGING (observabilidade mínima) ===
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": os.getenv("LOG_LEVEL", "INFO")},
+}

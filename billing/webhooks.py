@@ -1,16 +1,21 @@
 # billing/webhooks.py
 import json
+import hmac
+import hashlib
+import base64
+import logging
+
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.utils import timezone
 from django.conf import settings
 from django.db import transaction
+
 from .services import ensure_customer, maybe_send_single_invite, get_or_create_subscription
-from .models import Customer
-import hmac, hashlib
+
+log = logging.getLogger(__name__)
 
 # --- STRIPE ---
-# pip install stripe
 import stripe
 stripe.api_key = getattr(settings, "STRIPE_SECRET_KEY", None)
 STRIPE_ENDPOINT_SECRET = getattr(settings, "STRIPE_WEBHOOK_SECRET", None)
@@ -20,34 +25,35 @@ def stripe_webhook_view(request):
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
     if not STRIPE_ENDPOINT_SECRET:
+        log.error("Stripe webhook: STRIPE_WEBHOOK_SECRET não configurado.")
         return HttpResponseForbidden("STRIPE_WEBHOOK_SECRET não configurado.")
 
     try:
         event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_ENDPOINT_SECRET)
-    except Exception:
+    except Exception as e:
+        log.exception("Stripe webhook: assinatura inválida: %s", e)
         return HttpResponseBadRequest("Assinatura inválida.")
 
-    # Eventos relevantes: checkout.session.completed, invoice.payment_succeeded, customer.subscription.updated
-    type_ = event["type"]
+    type_ = event.get("type")
+    log.info("Stripe webhook recebido: type=%s", type_)
 
     if type_ in ("checkout.session.completed", "invoice.payment_succeeded"):
-        data = event["data"]["object"]
-        # Obter email e metadados do plano
+        data = event.get("data", {}).get("object", {})
         email = (data.get("customer_details", {}) or {}).get("email") or data.get("customer_email")
         plan_code = None
 
-        # invoice.payment_succeeded -> price->lookup_key/metadata
         if type_ == "invoice.payment_succeeded":
             lines = data.get("lines", {}).get("data", [])
             if lines:
                 price = (lines[0].get("price") or {})
-                plan_code = (price.get("metadata") or {}).get("plan_code") or price.get("lookup_key")
+                price_metadata = price.get("metadata") or {}
+                plan_code = price_metadata.get("plan_code") or price.get("lookup_key")
 
-        # checkout.session.completed -> metadata definida na Session
         if type_ == "checkout.session.completed" and not plan_code:
             plan_code = (data.get("metadata") or {}).get("plan_code")
 
         if not email or not plan_code:
+            log.warning("Stripe webhook ignorado: email=%s plan_code=%s", email, plan_code)
             return HttpResponse("Ignorado: faltam dados.")
 
         external_payment_id = data.get("id") or data.get("payment_intent") or data.get("invoice")
@@ -57,61 +63,81 @@ def stripe_webhook_view(request):
             customer = ensure_customer(email=email, name=name)
             sub = get_or_create_subscription(customer, plan_code)
             applied = sub.apply_successful_payment(external_payment_id, paid_at=timezone.now())
-
-            # Se ainda não tem conta (user=None), envia convite UMA única vez
+            log.info("Stripe: assinatura aplicada? %s | sub_id=%s | plan=%s | email=%s",
+                     applied, sub.id, plan_code, email)
             maybe_send_single_invite(customer)
 
         return HttpResponse("OK")
 
-    # Outros eventos podem ser tratados conforme necessidade
+    log.info("Stripe webhook não tratado: %s", type_)
     return HttpResponse("Unhandled")
 
 
 # --- ABACATEPAY (PIX) ---
-# Webhook genérico com HMAC: configure um segredo e valide o header.
-ABACATEPAY_WEBHOOK_SECRET = getattr(settings, "ABACATEPAY_WEBHOOK_SECRET", None)
-ABACATEPAY_HEADER = "HTTP_X_ABACATEPAY_SIGNATURE"  # ajuste para o header real fornecido
+# Ajuste este header para o NOME exato que a AbacatePay envia (ver no painel ou logs).
+ABACATEPAY_HEADER = "HTTP_X_WEBHOOK_SIGNATURE"  # confirme o nome do header real no request.META
 
 def _valid_abacatepay_signature(raw_body: bytes, signature: str) -> bool:
-    if not ABACATEPAY_WEBHOOK_SECRET or not signature:
+    """
+    Valida HMAC-SHA256 aceitando assinatura em HEX ou BASE64.
+    Também tolera formatos 't=...,v1=assinatura' ou 'v1=assinatura'.
+    """
+    secret = getattr(settings, "ABACATEPAY_WEBHOOK_SECRET", None)
+    if not secret or not signature:
         return False
-    mac = hmac.new(ABACATEPAY_WEBHOOK_SECRET.encode(), raw_body, hashlib.sha256).hexdigest()
-    # Compare em tempo constante
-    return hmac.compare_digest(mac, signature)
+    digest = hmac.new(secret.encode(), raw_body, hashlib.sha256).digest()
+    computed_hex = digest.hex()
+    computed_b64 = base64.b64encode(digest).decode()
+
+    sig = signature.strip()
+    if "=" in sig:
+        try:
+            parts = dict(kv.split("=", 1) for kv in sig.split(",") if "=" in kv)
+            sig = parts.get("v1", sig)
+        except Exception:
+            pass
+
+    return hmac.compare_digest(sig, computed_hex) or hmac.compare_digest(sig, computed_b64)
 
 @csrf_exempt
 def abacatepay_webhook_view(request):
     sig = request.META.get(ABACATEPAY_HEADER, "")
     body = request.body
     if not _valid_abacatepay_signature(body, sig):
+        log.warning("AbacatePay webhook: assinatura inválida. Header=%s", ABACATEPAY_HEADER)
         return HttpResponseForbidden("Assinatura inválida.")
 
     try:
-        data = json.loads(body.decode("utf-8"))
-    except Exception:
+        payload = json.loads(body.decode("utf-8"))
+    except Exception as e:
+        log.exception("AbacatePay webhook: JSON inválido: %s", e)
         return HttpResponseBadRequest("JSON inválido.")
 
-    # Normalizar payload (ajuste conforme seu painel)
-    # Esperado: status == "paid", email, plan_code, payment_id
-    event_type = data.get("event")  # p.ex. "charge.paid"
-    payload = data.get("data", {})
+    event_type = payload.get("event")  # ex: "charge.paid"
+    data = payload.get("data", {}) or {}
+    log.info("AbacatePay webhook: event=%s", event_type)
 
     if event_type in ("charge.paid", "payment.succeeded"):
-        email = payload.get("customer", {}).get("email") or payload.get("email")
-        plan_code = payload.get("metadata", {}).get("plan_code") or payload.get("plan_code")
-        external_payment_id = payload.get("id") or payload.get("charge_id")
+        # Ajuste mapeamento conforme o payload real do AbacatePay
+        email = (data.get("customer") or {}).get("email") or data.get("email")
+        plan_code = (data.get("metadata") or {}).get("plan_code") or data.get("plan_code")
+        external_payment_id = data.get("id") or data.get("charge_id")
+        name = (data.get("customer") or {}).get("name", "")
 
         if not email or not plan_code or not external_payment_id:
+            log.warning("AbacatePay ignorado: faltam dados. email=%s plan_code=%s external_id=%s",
+                        email, plan_code, external_payment_id)
             return HttpResponse("Ignorado: faltam dados.")
-
-        name = payload.get("customer", {}).get("name", "")
 
         with transaction.atomic():
             customer = ensure_customer(email=email, name=name)
             sub = get_or_create_subscription(customer, plan_code)
-            sub.apply_successful_payment(external_payment_id, paid_at=timezone.now())
+            applied = sub.apply_successful_payment(external_payment_id, paid_at=timezone.now())
+            log.info("AbacatePay: assinatura aplicada? %s | sub_id=%s | plan=%s | email=%s",
+                     applied, sub.id, plan_code, email)
             maybe_send_single_invite(customer)
 
         return HttpResponse("OK")
 
+    log.info("AbacatePay webhook não tratado: %s", event_type)
     return HttpResponse("Unhandled")

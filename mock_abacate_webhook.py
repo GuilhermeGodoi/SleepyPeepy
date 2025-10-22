@@ -7,8 +7,8 @@ SECRET = os.getenv("ABACATEPAY_WEBHOOK_SECRET", "U0FySJRcOYE2hXuembAN6dPeYe8dF5g
 payload = {
     "event": "charge.paid",
     "data": {
-        "id": "pix_test_0019",  # << mude para um NOVO id
-        "email": "guilhermegodoibarreiros@gmail.com",   # << seu Gmail
+        "id": "pix_test_0032",  # << mude para um NOVO id
+        "email": "guilhermegodoibarreiros2@gmail.com",   # << seu Gmail
         "plan_code": "mensal",
         "metadata": {"plan_code": "mensal"},
         "customer": {"email": "guilhermegodoibarreiros@gmail.com", "name": "Teste PIX Gmail"}
