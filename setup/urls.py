@@ -4,6 +4,7 @@ from django.urls import path, re_path, include
 from django.views.generic import TemplateView, RedirectView
 from django.http import HttpResponse
 from .views import whoami, manage_invites
+from .views import create_stripe_checkout_session, stripe_webhook
 
 # 👇 importe as novas views
 from .views import create_abacate_billing, abacatepay_webhook  # <---
@@ -22,6 +23,10 @@ urlpatterns = [
     # === AbacatePay ===
     path("api/abacatepay/create-billing", create_abacate_billing),   # POST
     path("webhooks/abacatepay", abacatepay_webhook),                 # POST
+
+    # === Stripe === 
+    path("api/stripe/create-checkout-session", create_stripe_checkout_session),
+    path("webhooks/stripe", stripe_webhook),
 
     # Estáticos
     path("robots.txt",  RedirectView.as_view(url="/static/robots.txt",  permanent=True)),

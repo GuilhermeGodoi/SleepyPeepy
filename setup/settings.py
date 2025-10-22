@@ -136,6 +136,11 @@ LOGIN_EXEMPT_URLS = [
     r"^api/abacatepay/create-billing$",   # POST
     r"^webhooks/abacatepay$",             # POST
     r"^health/$",
+
+    #Stripe
+    r"^api/stripe/create-checkout-session$",
+    r"^webhooks/stripe$",
+
 ]
 
 

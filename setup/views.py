@@ -8,11 +8,23 @@ import requests
 
 from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.core.signing import TimestampSigner, dumps as s_dumps
 from django.urls import reverse
 
+# ================
+# Stripe
+# ================
+import stripe
+
+# Chaves/URLs
+SITE_URL = os.getenv("SITE_URL", "https://sleepypeepy.site")
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+stripe.api_key = STRIPE_SECRET_KEY  # ok mesmo se vazio em dev, só não cria sessão
 
 # =======================
 # Views já existentes
@@ -75,7 +87,6 @@ PLANS = {
 ABACATEPAY_API_KEY = os.getenv("ABACATEPAY_API_KEY", "")
 ABACATEPAY_WEBHOOK_SECRET = os.getenv("ABACATEPAY_WEBHOOK_SECRET", "")    # token passado na query
 ABACATEPAY_PUBLIC_HMAC_KEY = os.getenv("ABACATEPAY_PUBLIC_HMAC_KEY", "")  # chave para X-Webhook-Signature
-SITE_URL = os.getenv("SITE_URL", "https://sleepypeepy.site")
 ABACATEPAY_API_BASE = os.getenv("ABACATEPAY_API_BASE", "https://api.abacatepay.com")  # permite trocar por sandbox se existir
 
 
@@ -204,20 +215,116 @@ def abacatepay_webhook(request):
     # WebhookEvent.objects.create(event_id=event_id, payload=evt)
 
     if event == "billing.paid":
-        # Referências úteis para conciliação
         external_id = data.get("externalId") or data.get("billing", {}).get("externalId")
         billing_id = data.get("id") or data.get("billing", {}).get("id")
-
-        # TODO:
-        # - localizar pedido/assinatura por external_id
-        # - marcar como "pago/ativo", salvar billing_id, valor e data
-        # Exemplo:
-        # order = Order.objects.filter(external_id=external_id).first()
-        # if order and not order.paid:
-        #     order.paid = True
-        #     order.billing_id = billing_id
-        #     order.save()
+        # TODO: ativar assinatura/pedido identificado por external_id
         pass
 
-    # Responda 200 para evitar reentrega contínua
+    return HttpResponse(status=200)
+
+
+# =======================
+# Stripe – Integração
+# =======================
+
+@csrf_exempt
+@require_POST
+def create_stripe_checkout_session(request):
+    """
+    POST /api/stripe/create-checkout-session
+    Body: {
+      "plan": "mensal"|"semestral"|"anual",
+      "customer": {"name": "...", "email": "...", "taxId"?: "...", "cellphone"?: "..."},
+      "orderId"?: "..."
+    }
+    Resp: { "url": "https://checkout.stripe.com/..." }
+    """
+    if not STRIPE_SECRET_KEY:
+        return JsonResponse({"error": "STRIPE_SECRET_KEY não configurada"}, status=500)
+
+    try:
+        body = json.loads(request.body or "{}")
+    except Exception:
+        return JsonResponse({"error": "JSON inválido"}, status=400)
+
+    plan = (body.get("plan") or "mensal").lower()
+    product = PLANS.get(plan)
+    if not product:
+        return JsonResponse({"error": "Plano inválido"}, status=400)
+
+    customer = body.get("customer") or {}
+    email = customer.get("email") or None
+
+    metadata = {"provider": "stripe", "plan": plan}
+    if body.get("orderId"):
+        metadata["externalId"] = body["orderId"]
+
+    line_items = [{
+        "price_data": {
+            "currency": "brl",
+            "unit_amount": product["price"],  # centavos
+            "product_data": {
+                "name": product["name"],
+                "description": "Assinatura SleepyPeepy",
+            },
+        },
+        "quantity": 1,
+    }]
+
+    try:
+        session = stripe.checkout.Session.create(
+            mode="payment",                      # pagamento único (igual AbacatePay hoje)
+            payment_method_types=["card"],
+            line_items=line_items,
+            customer_email=email,                # cria/associa ao email
+            metadata=metadata,
+            success_url=f"{SITE_URL}/checkout?ok=1&provider=stripe&session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{SITE_URL}/checkout?canceled=1&provider=stripe",
+            allow_promotion_codes=True,
+            automatic_tax={"enabled": False},
+        )
+    except Exception as exc:
+        return JsonResponse({"error": "Falha ao criar sessão do Stripe", "detail": str(exc)}, status=400)
+
+    return JsonResponse({"url": session.url})
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    """
+    POST /webhooks/stripe
+    Processa eventos enviados pela Stripe.
+    Importante: configure STRIPE_WEBHOOK_SECRET (whsec_...)
+    """
+    if not STRIPE_WEBHOOK_SECRET:
+        return JsonResponse({"error": "STRIPE_WEBHOOK_SECRET não configurada"}, status=500)
+
+    payload = request.body
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload=payload,
+            sig_header=sig_header,
+            secret=STRIPE_WEBHOOK_SECRET,
+        )
+    except stripe.error.SignatureVerificationError:
+        return JsonResponse({"error": "Invalid signature"}, status=401)
+    except Exception as exc:
+        return JsonResponse({"error": "Invalid payload", "detail": str(exc)}, status=400)
+
+    event_type = event["type"]
+
+    if event_type == "checkout.session.completed":
+        session = event["data"]["object"]
+        # Garantia extra (opcional)
+        # if session.get("payment_status") != "paid": ...
+        external_id = (session.get("metadata") or {}).get("externalId")
+        payment_intent = session.get("payment_intent")
+        # TODO:
+        # - localizar pedido/assinatura por external_id
+        # - marcar como pago/ativo, salvar payment_intent / session.id
+        # - disparar e-mail de boas-vindas
+        pass
+
     return HttpResponse(status=200)
