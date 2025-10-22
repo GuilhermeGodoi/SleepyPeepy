@@ -204,20 +204,24 @@ TEMPLATES = [
 WSGI_APPLICATION = "setup.wsgi.application"
 
 # === Database ===
-# Postgres (Railway). Se DATABASE_URL existir, sobrepõe com dj_database_url.
+# Mantém Postgres fixo (Railway) e, SE existir DATABASE_URL no ambiente e dj_database_url estiver disponível,
+# sobrepõe automaticamente com ela.
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB", "railway"),
-        "USER": os.getenv("POSTGRES_USER", "postgres"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", ""),
-        "HOST": os.getenv("POSTGRES_HOST", "postgres.railway.internal"),
-        "PORT": os.getenv("POSTGRES_PORT", "5432"),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'jrPGtaPCKajpfYsMsoRVOtaWJGYpIcYK',
+        'HOST': 'postgres.railway.internal',
+        'PORT': '5432',
     }
 }
 
+# Em produção (Railway), se existir DATABASE_URL no ambiente e dj_database_url estiver disponível,
+# sobrepõe usando Postgres automaticamente, sem remover a variável original.
 if dj_database_url and os.getenv("DATABASE_URL"):
-    DATABASES["default"] = dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
+    DATABASES['default'] = dj_database_url.parse(os.getenv("DATABASE_URL"), conn_max_age=600)
+
 
 # === Password validators ===
 AUTH_PASSWORD_VALIDATORS = [
