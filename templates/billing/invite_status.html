@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Convite SleepyPeepy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 24px; background: #fafafa; }
+    .card { max-width: 480px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; padding: 24px; }
+    h1 { font-size: 20px; margin: 0 0 16px; }
+    .muted { color: #6b7280; }
+    .error { color: #b91c1c; }
+    label { display: block; font-weight: 600; margin: 8px 0 4px; }
+    input { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; }
+    button { width: 100%; margin-top: 16px; padding: 12px; border: 0; border-radius: 8px; background: #6d28d9; color: #fff; font-weight: 700; cursor: pointer; }
+    .row { display: flex; gap: 12px; margin-top: 12px; }
+    a.btn { display: inline-block; padding: 10px 12px; border-radius: 8px; background: #111827; color: #fff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    {% if status == "ok_form" %}
+      <h1>Criar sua conta</h1>
+      {% if message %}<p class="error">{{ message }}</p>{% endif %}
+      <form method="POST">
+        {% csrf_token %}
+        <p>E-mail: <strong>{{ email }}</strong></p>
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" minlength="8" required />
+        <button type="submit">Criar conta</button>
+        <p class="muted">Seu link é de uso único e pode expirar.</p>
+      </form>
+
+    {% elif status == "already_has_user" %}
+      <h1>Conta já existe</h1>
+      {% if message %}<p class="muted">{{ message }}</p>{% endif %}
+      <div class="row">
+        <a class="btn" href="/accounts/login/">Fazer login</a>
+        <a class="btn" href="/">Ir para a página inicial</a>
+      </div>
+
+    {% elif status == "expired" %}
+      <h1>Link expirado</h1>
+      <p class="muted">{{ message }}</p>
+      <form action="/billing/resend-invite" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="email" value="{{ email }}" />
+        <button type="submit">Reenviar convite</button>
+      </form>
+
+    {% elif status == "used" %}
+      <h1>Link já utilizado</h1>
+      <p class="muted">{{ message }}</p>
+      <div class="row">
+        <a class="btn" href="/accounts/login/">Fazer login</a>
+        <form action="/billing/resend-invite" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="email" value="{{ email }}" />
+          <button type="submit">Pedir novo link</button>
+        </form>
+      </div>
+
+    {% elif status == "invalid" %}
+      <h1>Link inválido</h1>
+      <p class="muted">{{ message }}</p>
+      <a class="btn" href="/">Voltar ao início</a>
+
+    {% else %}
+      <h1>Algo não saiu como esperado</h1>
+      <p class="muted">{{ message|default:"Tente novamente ou peça um novo convite." }}</p>
+      <a class="btn" href="/">Voltar ao início</a>
+    {% endif %}
+  </div>
+</body>
+</html>

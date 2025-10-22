@@ -20,7 +20,7 @@ def create_checkout_session(request):
 
     session = stripe.checkout.Session.create(
         mode="subscription",
-        success_url=settings.SITE_URL + "/sucesso",
+        success_url=settings.SITE_URL + "/billing/sucesso",  # <- aqui!
         cancel_url=settings.SITE_URL + "/cancelado",
         customer_email=email,
         line_items=[{"price": plan.stripe_price_id, "quantity": 1}],

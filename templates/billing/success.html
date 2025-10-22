@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Pagamento confirmado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 24px; background: #fafafa; }
+    .card { max-width: 540px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; padding: 24px; }
+    h1 { font-size: 22px; margin: 0 0 16px; }
+    .muted { color: #6b7280; }
+    label { display: block; font-weight: 600; margin: 16px 0 4px; }
+    input { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; }
+    button { width: 100%; margin-top: 12px; padding: 12px; border: 0; border-radius: 8px; background: #6d28d9; color: #fff; font-weight: 700; cursor: pointer; }
+    .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    a.btn { display: inline-block; padding: 10px 12px; border-radius: 8px; background: #111827; color: #fff; text-decoration: none; }
+  </style>
+  <script>
+    async function resendInvite(ev) {
+      ev.preventDefault();
+      const form = ev.target.closest("form");
+      const fd = new FormData(form);
+      const res = await fetch("/billing/resend-invite", { method: "POST", body: fd, headers: { "X-Requested-With": "fetch" } });
+      const data = await res.json();
+      const box = document.getElementById("res-msg");
+      box.textContent = data.message || data.error || "Tente novamente em instantes.";
+      box.style.color = data.ok ? "#065f46" : "#b91c1c";
+    }
+  </script>
+</head>
+<body>
+  <div class="card">
+    <h1>Pagamento confirmado ✅</h1>
+    <p class="muted">
+      Enviamos um e-mail com um <strong>link único</strong> para você criar sua conta e acessar a SleepyPeepy.
+      Isso pode levar alguns instantes. Verifique também sua caixa de <em>spam</em> ou <em>promoções</em>.
+    </p>
+
+    <label for="email">Não recebeu? Reenviar convite</label>
+    <form method="POST" onsubmit="resendInvite(event)">
+      {% csrf_token %}
+      <input id="email" name="email" type="email" required placeholder="seuemail@exemplo.com" value="{{ email_hint|default:'' }}" />
+      <button type="submit">Reenviar convite</button>
+      <div id="res-msg" class="muted" style="margin-top:8px;"></div>
+    </form>
+
+    <div class="row">
+      <a class="btn" href="/">Voltar ao início</a>
+      <a class="btn" href="/accounts/login/">Ir para login</a>
+    </div>
+  </div>
+</body>
+</html>
