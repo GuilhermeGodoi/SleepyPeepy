@@ -142,7 +142,7 @@ LOGIN_EXEMPT_URLS = [
     r"^admin/.*$",
     r"^static/.*$",
     r"^media/.*$",
-    r"^favicon\.ico$",
+    r"^favicon\.ico/?$",
     r"^robots\.txt$",
     r"^sitemap\.xml$",
     r"^\.well-known/.*$",
