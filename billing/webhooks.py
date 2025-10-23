@@ -74,13 +74,25 @@ def stripe_webhook_view(request):
 
 
 # --- ABACATEPAY (PIX) ---
-# Ajuste este header para o NOME exato que a AbacatePay envia (ver no painel ou logs).
-ABACATEPAY_HEADER = "HTTP_X_WEBHOOK_SIGNATURE"  # confirme o nome do header real no request.META
+
+# Aceita múltiplos nomes de header comuns
+POSSIBLE_ABACATE_HEADERS = [
+    "HTTP_X_ABACATEPAY_SIGNATURE",  # X-ABACATEPAY-SIGNATURE
+    "HTTP_X_WEBHOOK_SIGNATURE",     # X-Webhook-Signature
+    "HTTP_X_SIGNATURE",             # X-Signature
+]
+
+def _get_abacate_signature(meta) -> str:
+    for h in POSSIBLE_ABACATE_HEADERS:
+        if h in meta:
+            return meta[h]
+    return ""
 
 def _valid_abacatepay_signature(raw_body: bytes, signature: str) -> bool:
     """
-    Valida HMAC-SHA256 aceitando assinatura em HEX ou BASE64.
-    Também tolera formatos 't=...,v1=assinatura' ou 'v1=assinatura'.
+    Valida HMAC-SHA256 usando o segredo ABACATEPAY_WEBHOOK_SECRET.
+    Aceita assinatura em HEX ou BASE64.
+    Tolerante a formatos 't=...,v1=assinatura' ou 'v1=assinatura'.
     """
     secret = getattr(settings, "ABACATEPAY_WEBHOOK_SECRET", None)
     if not secret or not signature:
@@ -101,14 +113,17 @@ def _valid_abacatepay_signature(raw_body: bytes, signature: str) -> bool:
 
 @csrf_exempt
 def abacatepay_webhook_view(request):
-    sig = request.META.get(ABACATEPAY_HEADER, "")
-    body = request.body
+    body = request.body or b""
+    sig = _get_abacate_signature(request.META)
+
     if not _valid_abacatepay_signature(body, sig):
-        log.warning("AbacatePay webhook: assinatura inválida. Header=%s", ABACATEPAY_HEADER)
+        # Loga quais headers HTTP_* chegaram pra ajudar debug
+        received = [k for k in request.META.keys() if k.startswith("HTTP_")]
+        log.warning("AbacatePay webhook: assinatura inválida. Headers recebidos: %s", received)
         return HttpResponseForbidden("Assinatura inválida.")
 
     try:
-        payload = json.loads(body.decode("utf-8"))
+        payload = json.loads(body.decode("utf-8") or "{}")
     except Exception as e:
         log.exception("AbacatePay webhook: JSON inválido: %s", e)
         return HttpResponseBadRequest("JSON inválido.")
@@ -118,7 +133,6 @@ def abacatepay_webhook_view(request):
     log.info("AbacatePay webhook: event=%s", event_type)
 
     if event_type in ("charge.paid", "payment.succeeded"):
-        # Ajuste mapeamento conforme o payload real do AbacatePay
         email = (data.get("customer") or {}).get("email") or data.get("email")
         plan_code = (data.get("metadata") or {}).get("plan_code") or data.get("plan_code")
         external_payment_id = data.get("id") or data.get("charge_id")
