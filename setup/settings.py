@@ -160,6 +160,10 @@ LOGIN_EXEMPT_URLS = [
     r"^webhooks/abacatepay/?$",
     r"^api/stripe/create-checkout-session/?$",
     r"^webhooks/stripe/?$",
+
+    r"^api/stripe/create-payment-intent/?$",
+    r"^api/stripe/create-checkout-session/?$",
+
 ]
 
 # === URLConf / Templates / WSGI ===

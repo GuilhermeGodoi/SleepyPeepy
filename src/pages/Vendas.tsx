@@ -518,8 +518,8 @@ const Vendas: React.FC = () => {
                                 plan.name.toLowerCase() === "mensal"
                                     ? "mensal"
                                     : isSemestral
-                                    ? "semestral"
-                                    : "anual";
+                                        ? "semestral"
+                                        : "anual";
 
                             return (
                                 // WRAPPER com espaço no topo e posição relativa — o chip fica FORA do card
@@ -574,7 +574,7 @@ const Vendas: React.FC = () => {
                                                         </span>
                                                         <span className="text-4xl md:text-5xl font-bold text-foreground">
                                                             {"pricePerMonth" in plan &&
-                                                            (plan as any).pricePerMonth
+                                                                (plan as any).pricePerMonth
                                                                 ? (plan as any).pricePerMonth
                                                                 : plan.price}
                                                         </span>
@@ -614,12 +614,26 @@ const Vendas: React.FC = () => {
                                                     }`}
                                                 variant={plan.popular ? "default" : "outline"}
                                                 size="lg"
-                                                onClick={() => goToCheckout(slug)} // <-- CONECTADO AO CHECKOUT
+                                                onClick={() => {
+                                                    // ===== Meta Pixel: evento de início de checkout =====
+                                                    if (typeof window !== "undefined" && typeof window.fbq === "function") {
+                                                        window.fbq("track", "InitiateCheckout", {
+                                                            content_category: "planos",
+                                                            content_name: `Plano ${slug}`,
+                                                            value: plan.price,
+                                                            currency: "BRL",
+                                                        });
+                                                    }
+
+                                                    // Redireciona para o checkout normalmente
+                                                    goToCheckout(slug);
+                                                }}
                                             >
                                                 <Zap className="mr-2 h-3 md:h-4 w-3 md:w-4" />
                                                 Assinar Agora
                                             </Button>
                                         </CardFooter>
+
                                     </Card>
                                 </div>
                             );

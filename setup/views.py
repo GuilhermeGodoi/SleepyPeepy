@@ -225,3 +225,46 @@ def create_stripe_checkout_session(request):
         return JsonResponse({"error": "Falha ao criar sessão do Stripe", "detail": str(exc)}, status=400)
 
     return JsonResponse({"url": session.url})
+
+# =======================
+# Stripe Elements - PaymentIntent
+# =======================
+@csrf_exempt
+@require_POST
+def create_payment_intent(request):
+    """
+    POST /api/stripe/create-payment-intent
+    Cria um PaymentIntent do Stripe para o plano escolhido (mensal/semestral/anual).
+    """
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        plan = data.get("plan")
+
+        plans = {
+            "mensal": 4700,      # R$47,00
+            "semestral": 22200,  # R$222,00
+            "anual": 38400,      # R$384,00
+        }
+
+        amount = plans.get(plan)
+        if not amount:
+            return JsonResponse({"error": "Plano inválido"}, status=400)
+
+        # Adicione metadados úteis para o webhook
+        metadata = {
+            "plan_code": plan,
+            "customer_email": (data.get("customer") or {}).get("email", ""),
+            "customer_name": (data.get("customer") or {}).get("name", ""),
+        }
+
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency="brl",
+            metadata=metadata,
+            automatic_payment_methods={"enabled": True},
+        )
+
+        return JsonResponse({"clientSecret": intent.client_secret})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

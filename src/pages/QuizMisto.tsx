@@ -348,35 +348,32 @@ const ResultCard = memo(function ResultCard({
         </div>
 
         <a
-          href={waHref}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/vendas"
           onClick={() => {
-            const event_id =
-              (typeof crypto !== "undefined" && typeof (crypto as any).randomUUID === "function")
-                ? (crypto as any).randomUUID()
-                : String(Date.now());
-
-            trackWhatsAppClick({
-              button_id: "quiz-whatsapp",
-              score: total,
-              page: typeof window !== "undefined" ? window.location.pathname : "",
-              value: 1,
-              currency: "BRL",
-              event_id,
-            });
+            if (typeof window !== "undefined" && typeof window.fbq === "function") {
+              window.fbq("track", "ViewContent", {
+                content_name: "Página de Vendas SleepyPeepy",
+                content_type: "quiz_resultado",
+                value: 1,
+                currency: "BRL",
+              });
+            }
           }}
           className={cn(
             "w-full md:w-auto inline-flex items-center justify-center gap-3 rounded-2xl px-7 py-3",
             "text-base font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-            "bg-[linear-gradient(90deg,#25D366_0%,#128C7E_100%)] hover:brightness-110",
-            "shadow-glow animate-pulseGlow mx-auto"
+            "bg-gradient-lavender hover:brightness-110 shadow-glow animate-pulseGlow mx-auto"
           )}
         >
-          <svg aria-hidden="true" viewBox="0 0 32 32" className="h-5 w-5 shrink-0 -translate-y-[1px]" fill="currentColor">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 32 32"
+            className="h-5 w-5 shrink-0 -translate-y-[1px]"
+            fill="currentColor"
+          >
             <path d="M19.11 17.3c-.27-.14-1.6-.79-1.84-.88-.25-.09-.43-.14-.62.14-.18.27-.71.88-.87 1.06-.16.18-.32.2-.59.07-.27-.14-1.16-.43-2.2-1.37-.81-.72-1.35-1.6-1.51-1.86-.16-.27-.02-.41.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.06-.22-.53-.44-.46-.62-.46-.16-.01-.34-.01-.52-.01-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.3 0 1.36.99 2.67 1.13 2.85.14.18 1.95 2.98 4.73 4.15.66.28 1.18.45 1.58.58.66.21 1.27.18 1.75.11.53-.08 1.6-.65 1.83-1.28.23-.63.23-1.18.16-1.29-.07-.11-.25-.18-.52-.32zM16.02 3.2c-7.1 0-12.87 5.77-12.87 12.87 0 2.27.6 4.5 1.74 6.45L3 29l6.65-1.74a12.83 12.83 0 0 0 6.37 1.67h.01c7.1 0 12.87-5.77 12.87-12.87 0-3.44-1.34-6.67-3.78-9.1a12.82 12.82 0 0 0-9.1-3.78zm0 23.49h-.01a10.6 10.6 0 0 1-5.39-1.48l-.39-.23-3.97 1.04 1.06-3.87-.25-.4a10.63 10.63 0 0 1-1.62-5.65c0-5.86 4.77-10.63 10.64-10.63 2.85 0 5.53 1.11 7.54 3.12 2.01 2.01 3.11 4.69 3.11 7.54 0 5.86-4.77 10.63-10.62 10.63z" />
           </svg>
-          <span className="leading-none">Quero ajuda integrada e acesso a plataforma</span>
+          <span className="leading-none">Quero ajuda integrada e acesso à plataforma</span>
         </a>
 
         {/* ===== Avaliações / Comentários com fotos ===== */}
@@ -385,6 +382,7 @@ const ResultCard = memo(function ResultCard({
     </Card>
   );
 });
+
 
 /** ===== Página ===== */
 export default function QuizMisto() {
