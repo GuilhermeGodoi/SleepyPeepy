@@ -15,7 +15,6 @@ import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
 
-
 /* ===== Helpers ===== */
 function onlyDigits(s: string) {
   return s.replace(/\D/g, "");
@@ -335,9 +334,10 @@ export default function Checkout() {
                     <span className="font-medium text-sm">Cartão (via Stripe)</span>
                   </div>
 
-                  {/* Renderização segura do Stripe Elements */}
+                  {/* Renderiza somente depois que o clientSecret existir */}
                   {clientSecret ? (
                     <Elements
+                      key={clientSecret}  // 🔥 Força recriação segura do Elements
                       stripe={stripePromise}
                       options={{
                         clientSecret,
@@ -352,7 +352,6 @@ export default function Checkout() {
                             borderRadius: "12px",
                           },
                         },
-                        loader: "auto",
                       }}
                     >
                       <StripeForm
@@ -368,6 +367,7 @@ export default function Checkout() {
                     </div>
                   )}
                 </div>
+
 
 
                 <Separator />
