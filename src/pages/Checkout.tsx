@@ -354,8 +354,25 @@ export default function Checkout() {
                     <span className="font-medium text-sm">Cartão (via Stripe)</span>
                   </div>
 
-                  {elementsOptions ? (
-                    <Elements stripe={stripePromise} options={elementsOptions}>
+                  {clientSecret ? (
+                    <Elements
+                      stripe={stripePromise}
+                      options={{
+                        clientSecret,
+                        appearance: {
+                          theme: "stripe",
+                          variables: {
+                            colorPrimary: "#0089AC",        // azul padrão
+                            colorBackground: "#FFFFFF",
+                            colorText: "#000000",
+                            colorDanger: "#E11D48",         // vermelho para erros
+                            fontFamily: "Inter, system-ui, sans-serif",
+                            borderRadius: "12px",
+                          },
+                        },
+                        loader: "auto",
+                      }}
+                    >
                       <StripeForm
                         planId={planId}
                         formData={formData}
@@ -369,6 +386,7 @@ export default function Checkout() {
                     </div>
                   )}
                 </div>
+
 
                 <Separator />
 
@@ -411,8 +429,8 @@ export default function Checkout() {
                     type="button"
                     onClick={() => setPlanId(id)}
                     className={`w-full text-left rounded-lg border-2 p-4 transition-all ${planId === id
-                        ? "border-primary bg-primary/10"
-                        : "border-border hover:border-primary/40"
+                      ? "border-primary bg-primary/10"
+                      : "border-border hover:border-primary/40"
                       }`}
                   >
                     <div className="flex justify-between items-center">
