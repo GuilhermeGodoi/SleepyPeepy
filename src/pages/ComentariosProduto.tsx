@@ -1,4 +1,4 @@
-//  --- Comentários com fotos, 30 itens, 10 páginas (3 por página) ---
+// --- Comentários com fotos, 30 itens, 10 páginas (3 por página) ---
 //  Requer seus componentes shadcn: Button, Card, Input, Textarea (ajuste imports se necessário)
 import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

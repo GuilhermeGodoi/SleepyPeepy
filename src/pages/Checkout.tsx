@@ -15,6 +15,7 @@ import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
 
+
 /* ===== Helpers ===== */
 function onlyDigits(s: string) {
   return s.replace(/\D/g, "");
@@ -334,6 +335,7 @@ export default function Checkout() {
                     <span className="font-medium text-sm">Cartão (via Stripe)</span>
                   </div>
 
+                  {/* Renderização segura do Stripe Elements */}
                   {clientSecret ? (
                     <Elements
                       stripe={stripePromise}
@@ -342,10 +344,10 @@ export default function Checkout() {
                         appearance: {
                           theme: "stripe",
                           variables: {
-                            colorPrimary: "#0089AC",        // azul padrão
+                            colorPrimary: "#0089AC",
                             colorBackground: "#FFFFFF",
                             colorText: "#000000",
-                            colorDanger: "#E11D48",         // vermelho para erros
+                            colorDanger: "#E11D48",
                             fontFamily: "Inter, system-ui, sans-serif",
                             borderRadius: "12px",
                           },
