@@ -1,4 +1,4 @@
-// src/pages/Checkout.tsx
+// src/pages/Checkout.tsx //
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
