@@ -240,26 +240,6 @@ export default function Checkout() {
   }, [planId, formData.email]);
 
   // Aparência do Stripe alinhada ao seu tema
-  const elementsOptions = useMemo(
-    () =>
-      clientSecret
-        ? {
-          clientSecret,
-          appearance: {
-            theme: "stripe",
-            variables: {
-              colorPrimary: "hsl(var(--primary))",
-              colorText: "hsl(var(--foreground))",
-              colorBackground: "hsl(var(--background))",
-              fontFamily: "inherit",
-              borderRadius: "12px",
-            },
-          },
-          loader: "auto",
-        }
-        : undefined,
-    [clientSecret]
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
