@@ -225,6 +225,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "public",
     BASE_DIR / "src" / "assets",
     BASE_DIR / "setup" / "static",
+    BASE_DIR / "frontend/dist",
 ]
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
