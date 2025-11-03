@@ -151,6 +151,7 @@ LOGIN_EXEMPT_URLS = [
     r"^health/?$",
 
     # Webhooks/rotas billing
+    r"^billing/sucesso/?$",  
     r"^billing/accept-invite/?$",
     r"^billing/webhooks/abacatepay/?$",
     r"^billing/webhooks/stripe/?$",
