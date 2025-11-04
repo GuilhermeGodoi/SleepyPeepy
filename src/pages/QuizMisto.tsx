@@ -370,7 +370,7 @@ const ResultCard = memo(function ResultCard({
 
 
         {/* ===== Avaliações / Comentários com fotos ===== */}
-        <ComentariosProduto key="comentarios-misto" tema="misto" />
+        {/* <ComentariosProduto key="comentarios-misto" tema="misto" />*/}
       </CardContent>
     </Card>
   );
@@ -477,8 +477,8 @@ export default function QuizMisto() {
       {submitted && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-red-600 text-white font-bold text-sm md:text-base">
           <div className="mx-auto max-w-[1000px] px-3 py-2 text-center">
-            ⚠️ Últimas vagas: {slots} • prioridade expira em{" "}
-            <span className="tabular-nums underline">{mm}:{ss}</span> — Clique e garanta já!
+            ⚠️ Últimas vagas! {/*{slots} • prioridade expira hoje em{" "}*/}
+            <span className="tabular-nums underline">Por tempo limitado {mm}:{ss}</span> — Clique e garanta já!
           </div>
         </div>
       )}

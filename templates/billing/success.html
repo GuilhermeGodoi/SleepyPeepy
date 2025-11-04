@@ -15,12 +15,33 @@
     .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
     a.btn { display: inline-block; padding: 10px 12px; border-radius: 8px; background: #111827; color: #fff; text-decoration: none; }
   </style>
+
   <script>
+    // ⚡️ Dispara o evento Purchase ao carregar a página de sucesso
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof fbq === "function") {
+        fbq("track", "Purchase", {
+          value: {{ plan_price|default:"0" }},
+          currency: "BRL",
+          content_name: "{{ plan_name|default:"Assinatura SleepyPeepy" }}",
+          event_source: "success_page"
+        });
+        console.log("✅ Pixel Meta Purchase disparado com sucesso");
+      } else {
+        console.warn("⚠️ Pixel Meta não encontrado no carregamento da página de sucesso");
+      }
+    });
+
+    // Função de reenviar e-mail
     async function resendInvite(ev) {
       ev.preventDefault();
       const form = ev.target.closest("form");
       const fd = new FormData(form);
-      const res = await fetch("/billing/resend-invite", { method: "POST", body: fd, headers: { "X-Requested-With": "fetch" } });
+      const res = await fetch("/billing/resend-invite", {
+        method: "POST",
+        body: fd,
+        headers: { "X-Requested-With": "fetch" }
+      });
       const data = await res.json();
       const box = document.getElementById("res-msg");
       box.textContent = data.message || data.error || "Tente novamente em instantes.";
@@ -28,6 +49,7 @@
     }
   </script>
 </head>
+
 <body>
   <div class="card">
     <h1>Pagamento confirmado ✅</h1>

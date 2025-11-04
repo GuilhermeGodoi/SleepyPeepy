@@ -310,6 +310,17 @@ const Vendas: React.FC = () => {
                 </div>
             </header>
 
+{/* ===== TIMER FIXO ABAIXO DO MENU ===== */}
+<div className="fixed top-16 left-0 right-0 z-40 bg-[#ff1a1a] text-white text-center font-extrabold py-3 shadow-[0_0_20px_rgba(255,0,0,0.5)] border-b border-red-700 animate-pulse">
+  ⏰ <span className="text-lg md:text-2xl tracking-wider">OFERTA TERMINA EM</span>
+  <span className="ml-2 text-2xl md:text-4xl font-mono bg-black/20 px-3 py-1 rounded-md">
+    {formatHMS(remainingMs)}
+  </span>
+</div>
+
+
+
+
             {/* HERO */}
             <section id="inicio" className="relative pt-24 md:pt-32 pb-12 md:pb-20 px-4 overflow-hidden">
                 <div className="absolute inset-0 overflow-hidden">
@@ -376,6 +387,64 @@ const Vendas: React.FC = () => {
                     </div>
                 </div>
             </section>
+            
+            {/* MOTIVOS DA ANSIEDADE — versão otimizada */}
+<section
+  id="motivos"
+  className="py-10 md:py-14 px-4 bg-card/30 backdrop-blur-sm relative overflow-hidden"
+>
+  {/* Fundo sutil lavanda */}
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-1/3 left-0 w-56 h-56 bg-primary/10 rounded-full blur-3xl"></div>
+    <div className="absolute bottom-1/3 right-0 w-56 h-56 bg-accent/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <div className="container mx-auto max-w-5xl relative z-10 text-center">
+    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-lavender bg-clip-text text-transparent">
+      Motivos que alimentam sua ansiedade
+    </h2>
+    <p className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto mb-8">
+      Situações comuns que desgastam sua mente e seu corpo — veja se você se identifica.
+    </p>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-left">
+      {[
+        { Icon: TrendingUp, text: "Pressão no trabalho e chefe exigente." },
+        { Icon: Zap, text: "Dinheiro curto e contas acumulando." },
+        { Icon: Heart, text: "Relacionamentos cheios de conflito." },
+        { Icon: Smartphone, text: "Excesso de redes sociais e comparações." },
+        { Icon: MessageCircle, text: "Ambiente tóxico em casa ou no trabalho." },
+        { Icon: Moon, text: "Noites ruins e mente acelerada." },
+        { Icon: Users, text: "Sensação de solidão mesmo acompanhado." },
+        { Icon: Activity, text: "Sedentarismo e falta de energia." },
+        { Icon: Brain, text: "Autocobrança por ser sempre “perfeito”." },
+        { Icon: Clock, text: "Medo do futuro e da incerteza." },
+      ].map(({ Icon, text }, i) => (
+        <div
+          key={i}
+          className="flex items-start gap-3 p-3 rounded-xl bg-card/60 border border-border/30 hover:border-primary/40 hover:shadow-glow transition-all duration-300"
+        >
+          <div className="p-2 rounded-lg bg-gradient-lavender shrink-0">
+            <Icon className="w-4 h-4 md:w-5 md:h-5 text-white" />
+          </div>
+          <p className="text-sm md:text-base text-foreground/90 leading-snug">
+            {text}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <div className="mt-8">
+      <Button
+        onClick={scrollToPlans}
+        size="sm"
+        className="text-sm md:text-base px-6 py-4 bg-gradient-lavender hover:opacity-90 shadow-glow font-semibold tracking-wide"
+      >
+        Quero resolver isso agora
+      </Button>
+    </div>
+  </div>
+</section>
 
             {/* BENEFÍCIOS */}
             <section id="beneficios" className="py-12 md:py-20 px-4 relative">
