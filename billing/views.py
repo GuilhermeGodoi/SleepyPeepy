@@ -253,7 +253,7 @@ def create_abacatepay_charge(request):
             "Content-Type": "application/json",
         }
 
-        endpoint = f"{settings.ABACATEPAY_BASE_URL}/v1/charge"
+        endpoint = f"{settings.ABACATEPAY_BASE_URL}/v1/pixQrCode/create"
         response = requests.post(endpoint, headers=headers, json=payload, timeout=30)
 
         if not response.ok:
