@@ -165,6 +165,9 @@ LOGIN_EXEMPT_URLS = [
     r"^api/stripe/create-payment-intent/?$",
     r"^api/stripe/create-checkout-session/?$",
 
+    #AbacatePay PIX
+    r"^api/abacatepay/create-charge/?$",
+
 ]
 
 # === URLConf / Templates / WSGI ===
