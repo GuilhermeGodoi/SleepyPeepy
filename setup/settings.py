@@ -167,8 +167,7 @@ LOGIN_EXEMPT_URLS = [
 
     #AbacatePay PIX
     r"^billing/webhooks/abacatepay/?$",
-    r"^billing/api/abacatepay/create-charge/?$",
-    
+    r"^api/abacatepay/create-charge/?$",
 
 ]
 
