@@ -226,10 +226,10 @@ def create_abacatepay_charge(request):
             "amount": amount_cents,
             "description": f"Assinatura {plan_info['label']} SleepyPeepy",
             "customer": {
-                "name": customer.get("name"),
-                "cellphone": customer.get("cellphone"),
+                "name": customer.get("name") or "Cliente SleepyPeepy",
+                "cellphone": customer.get("cellphone") or "",
                 "email": customer.get("email"),
-                "taxId": customer.get("cpf") or customer.get("taxId"),
+                "taxId": customer.get("cpf") or customer.get("taxId") or "00000000000",  # campo obrigatório
             },
             "metadata": {
                 "plan_code": plan,
@@ -237,6 +237,13 @@ def create_abacatepay_charge(request):
             },
             "returnUrl": f"{settings.SITE_URL}/billing/sucesso/",
             "notificationUrl": f"{settings.SITE_URL}/billing/webhooks/abacatepay/"
+        }
+
+        # === Cabeçalhos obrigatórios ===
+        headers = {
+            "Authorization": f"Bearer {settings.ABACATEPAY_API_KEY}",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
         }
 
         endpoint = f"{settings.ABACATEPAY_BASE_URL}/v1/pixQrCode/create"
@@ -251,8 +258,7 @@ def create_abacatepay_charge(request):
 
         result = response.json()
 
-        # === Interpretação do retorno da API ===
-        payment_url = result.get("url") or result.get("paymentUrl")
+        payment_url = result.get("paymentUrl") or result.get("url")
         qr_code = result.get("pix", {}).get("qrCode") or result.get("qrCode")
         qr_image = result.get("pix", {}).get("qrCodeBase64") or result.get("qrCodeBase64")
 
