@@ -241,7 +241,9 @@ def create_abacatepay_charge(request):
             "notification_url": settings.SITE_URL + "/billing/webhooks/abacatepay",
         }
 
-        r = requests.post("https://api.abacatepay.com/v1/charges", headers=headers, json=payload, timeout=30)
+        r = requests.post(f"{getattr(settings, 'ABACATEPAY_BASE_URL', 'https://api.abacatepay.com/api/v1')}/charge",
+                  headers=headers, json=payload, timeout=30)
+
         if not r.ok:
             return JsonResponse({"error": f"Erro AbacatePay: {r.text}"}, status=400)
 

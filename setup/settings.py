@@ -94,7 +94,7 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 # === AbacatePay API ===
 ABACATEPAY_API_KEY = os.getenv("ABACATEPAY_API_KEY", "")
 ABACATEPAY_PUBLIC_HMAC_KEY = os.getenv("ABACATEPAY_PUBLIC_HMAC_KEY", "")
-ABACATEPAY_BASE_URL = "https://api.abacatepay.com/v1"
+ABACATEPAY_BASE_URL = "https://api.abacatepay.com/api/v1"
 
 
 # Permitir reenvio de convite (apenas para testes)
