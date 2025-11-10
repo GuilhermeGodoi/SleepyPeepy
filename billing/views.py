@@ -229,6 +229,7 @@ def create_abacatepay_charge(request):
                 "name": customer.get("name"),
                 "cellphone": customer.get("cellphone"),
                 "email": customer.get("email"),
+                "taxId": customer.get("cpf") or customer.get("taxId"),
             },
             "metadata": {
                 "plan_code": plan,
@@ -236,11 +237,6 @@ def create_abacatepay_charge(request):
             },
             "returnUrl": f"{settings.SITE_URL}/billing/sucesso/",
             "notificationUrl": f"{settings.SITE_URL}/billing/webhooks/abacatepay/"
-        }
-
-        headers = {
-            "Authorization": f"Bearer {settings.ABACATEPAY_API_KEY}",
-            "Content-Type": "application/json",
         }
 
         endpoint = f"{settings.ABACATEPAY_BASE_URL}/v1/pixQrCode/create"
