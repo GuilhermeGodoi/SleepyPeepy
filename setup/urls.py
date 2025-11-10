@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, RedirectView
 from django.http import HttpResponse
 
 from .views import whoami, manage_invites, create_stripe_checkout_session, create_abacate_billing, create_payment_intent
-from billing import views as billing_views  # <-- importa create_abacatepay_charge daqui
+from billing import views as billing_views  # <-- Importa a view do AbacatePay corretamente
 
 def health(request):
     return HttpResponse("ok", content_type="text/plain")
@@ -22,22 +22,22 @@ urlpatterns = [
     # Health check
     path("health/", health),
 
-    # Utilitários / API base
+    # API base
     path("api/whoami/", whoami),
 
-    # AbacatePay (legado e novo)
+    # === AbacatePay ===
     path("api/abacatepay/create-billing", create_abacate_billing),  # legado
-    path("api/abacatepay/create-charge", billing_views.create_abacatepay_charge, name="create_abacatepay_charge"),  # NOVO PIX
+    path("api/abacatepay/create-charge", billing_views.create_abacatepay_charge, name="create_abacatepay_charge"),
     path("api/abacatepay/create-charge/", billing_views.create_abacatepay_charge),
 
-    # Stripe (PaymentIntent + Checkout Session)
+    # === Stripe ===
     path("api/stripe/create-payment-intent", create_payment_intent),  # Stripe Elements
     path("api/stripe/create-checkout-session", create_stripe_checkout_session),  # Checkout legado
 
-    # Billing (convites, sucesso e webhooks)
+    # === Billing ===
     path("billing/", include("billing.urls")),
 
-    # Robots / Sitemap
+    # === Outros ===
     path("robots.txt", RedirectView.as_view(url="/static/robots.txt", permanent=True)),
     path("sitemap.xml", RedirectView.as_view(url="/static/sitemap.xml", permanent=True)),
 ]
