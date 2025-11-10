@@ -193,12 +193,13 @@ def resend_invite_view(request):
 # === AbacatePay (Pix) ===
 import requests
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 @csrf_exempt
 @require_http_methods(["POST"])
 def create_abacatepay_charge(request):
     """
-    Cria uma cobrança Pix via AbacatePay e retorna o QR Code + link de pagamento.
+    Cria uma cobrança Pix via AbacatePay (nova API 2025) e retorna o link de pagamento ou QR Code.
     """
     try:
         data = json.loads(request.body.decode("utf-8"))
@@ -217,47 +218,67 @@ def create_abacatepay_charge(request):
         if not plan_info:
             return JsonResponse({"error": "Plano inválido."}, status=400)
 
-        amount = plan_info["price"]
+        # === Montagem do payload no novo formato ===
+        amount_cents = int(plan_info["price"] * 100)
+
+        payload = {
+            "frequency": "ONE_TIME",
+            "methods": ["PIX"],
+            "products": [
+                {
+                    "externalId": plan,
+                    "name": f"Assinatura {plan_info['label']} SleepyPeepy",
+                    "description": f"Acesso ao plano {plan_info['label']} da plataforma SleepyPeepy",
+                    "quantity": 1,
+                    "price": amount_cents
+                }
+            ],
+            "customer": {
+                "name": customer.get("name"),
+                "cellphone": customer.get("cellphone"),
+                "email": customer.get("email"),
+                # "taxId": customer.get("cpf"),  # opcional
+            },
+            "metadata": {
+                "plan_code": plan,
+                "origin": "sleepypeepy.site"
+            },
+            "returnUrl": f"{settings.SITE_URL}/billing/sucesso/",
+            "completionUrl": f"{settings.SITE_URL}/billing/sucesso/",
+            "notificationUrl": f"{settings.SITE_URL}/billing/webhooks/abacatepay/"
+        }
+
         headers = {
             "Authorization": f"Bearer {settings.ABACATEPAY_API_KEY}",
             "Content-Type": "application/json",
         }
 
-        payload = {
-            "amount": amount,
-            "currency": "BRL",
-            "payment_method": "pix",
-            "description": f"Assinatura {plan_info['label']} SleepyPeepy",
-            "metadata": {
-                "plan_code": plan,
-                "email": customer.get("email"),
-                "name": customer.get("name"),
-            },
-            "customer": {
-                "name": customer.get("name"),
-                "email": customer.get("email"),
-                "phone": customer.get("cellphone"),
-            },
-            "notification_url": settings.SITE_URL + "/billing/webhooks/abacatepay",
-        }
+        endpoint = f"{settings.ABACATEPAY_BASE_URL}/v1/charge"
+        response = requests.post(endpoint, headers=headers, json=payload, timeout=30)
 
-        r = requests.post(f"{getattr(settings, 'ABACATEPAY_BASE_URL', 'https://api.abacatepay.com/api/v1')}/charge",
-                  headers=headers, json=payload, timeout=30)
+        if not response.ok:
+            try:
+                err = response.json()
+            except Exception:
+                err = {"message": response.text}
+            return JsonResponse({"error": f"Erro AbacatePay: {err}"}, status=response.status_code)
 
-        if not r.ok:
-            return JsonResponse({"error": f"Erro AbacatePay: {r.text}"}, status=400)
+        result = response.json()
 
-        result = r.json()
-        qr_code = result.get("pix", {}).get("qr_code")
-        qr_image = result.get("pix", {}).get("qr_code_base64")
-        payment_url = result.get("pix", {}).get("payment_url")
+        # A API pode retornar diferentes formatos dependendo do método (Pix, cartão, etc)
+        payment_url = result.get("url") or result.get("paymentUrl") or result.get("pix", {}).get("payment_url")
+        qr_code = result.get("pix", {}).get("qr_code") if "pix" in result else None
+        qr_image = result.get("pix", {}).get("qr_code_base64") if "pix" in result else None
 
         return JsonResponse({
             "ok": True,
+            "payment_url": payment_url,
             "qr_code": qr_code,
             "qr_image": qr_image,
-            "payment_url": payment_url,
+            "status": result.get("status"),
+            "id": result.get("id"),
         })
+
     except Exception as e:
-        log.exception("Erro ao criar cobrança Pix: %s", e)
+        log.exception("Erro ao criar cobrança Pix AbacatePay: %s", e)
         return JsonResponse({"error": "Falha ao gerar Pix."}, status=500)
