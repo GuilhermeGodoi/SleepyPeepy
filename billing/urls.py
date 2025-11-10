@@ -22,6 +22,6 @@ urlpatterns = [
     path("stripe/create-checkout-session", stripe_checkout.create_checkout_session, name="stripe_create_checkout_session"),
 
     # Endpoint API AbacatePay
-    path("/billing/api/abacatepay/create-charge", views.create_abacatepay_charge, name="create_abacatepay_charge"),
+    path("billing/api/abacatepay/create-charge", views.create_abacatepay_charge, name="create_abacatepay_charge"),
 
 ]
