@@ -91,8 +91,11 @@ SITE_URL = os.getenv("SITE_URL", "https://sleepypeepy.site")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
-# AbacatePay (HMAC)
-ABACATEPAY_WEBHOOK_SECRET = os.getenv("ABACATEPAY_WEBHOOK_SECRET")
+# === AbacatePay API ===
+ABACATEPAY_API_KEY = os.getenv("ABACATEPAY_API_KEY", "")
+ABACATEPAY_PUBLIC_HMAC_KEY = os.getenv("ABACATEPAY_PUBLIC_HMAC_KEY", "")
+ABACATEPAY_BASE_URL = "https://api.abacatepay.com/v1"
+
 
 # Permitir reenvio de convite (apenas para testes)
 ALLOW_RESEND_INVITE = os.getenv("ALLOW_RESEND_INVITE", "False").lower() == "true"
