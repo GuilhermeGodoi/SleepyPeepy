@@ -205,10 +205,11 @@ def create_abacatepay_charge(request):
         data = json.loads(request.body.decode("utf-8"))
         plan = data.get("plan")
         customer = data.get("customer") or {}
+
         if not plan or not customer.get("email"):
             return JsonResponse({"error": "Dados inválidos."}, status=400)
 
-        # Planos locais (espelho do frontend)
+        # === Planos locais (espelho do frontend) ===
         plans = {
             "mensal": {"price": 47, "label": "Mensal"},
             "semestral": {"price": 222, "label": "Semestral"},
@@ -218,33 +219,22 @@ def create_abacatepay_charge(request):
         if not plan_info:
             return JsonResponse({"error": "Plano inválido."}, status=400)
 
-        # === Montagem do payload no novo formato ===
+        # === Montagem do payload no formato PixQrCode ===
         amount_cents = int(plan_info["price"] * 100)
 
         payload = {
-            "frequency": "ONE_TIME",
-            "methods": ["PIX"],
-            "products": [
-                {
-                    "externalId": plan,
-                    "name": f"Assinatura {plan_info['label']} SleepyPeepy",
-                    "description": f"Acesso ao plano {plan_info['label']} da plataforma SleepyPeepy",
-                    "quantity": 1,
-                    "price": amount_cents
-                }
-            ],
+            "amount": amount_cents,
+            "description": f"Assinatura {plan_info['label']} SleepyPeepy",
             "customer": {
                 "name": customer.get("name"),
                 "cellphone": customer.get("cellphone"),
                 "email": customer.get("email"),
-                # "taxId": customer.get("cpf"),  # opcional
             },
             "metadata": {
                 "plan_code": plan,
                 "origin": "sleepypeepy.site"
             },
             "returnUrl": f"{settings.SITE_URL}/billing/sucesso/",
-            "completionUrl": f"{settings.SITE_URL}/billing/sucesso/",
             "notificationUrl": f"{settings.SITE_URL}/billing/webhooks/abacatepay/"
         }
 
@@ -265,10 +255,10 @@ def create_abacatepay_charge(request):
 
         result = response.json()
 
-        # A API pode retornar diferentes formatos dependendo do método (Pix, cartão, etc)
-        payment_url = result.get("url") or result.get("paymentUrl") or result.get("pix", {}).get("payment_url")
-        qr_code = result.get("pix", {}).get("qr_code") if "pix" in result else None
-        qr_image = result.get("pix", {}).get("qr_code_base64") if "pix" in result else None
+        # === Interpretação do retorno da API ===
+        payment_url = result.get("url") or result.get("paymentUrl")
+        qr_code = result.get("pix", {}).get("qrCode") or result.get("qrCode")
+        qr_image = result.get("pix", {}).get("qrCodeBase64") or result.get("qrCodeBase64")
 
         return JsonResponse({
             "ok": True,
