@@ -222,6 +222,13 @@ def create_abacatepay_charge(request):
         # === Montagem do payload no formato PixQrCode ===
         amount_cents = int(plan_info["price"] * 100)
 
+        # === Normaliza e valida o CPF/CNPJ ===
+        tax_id = (customer.get("cpf") or customer.get("taxId") or "").replace(".", "").replace("-", "").replace("/", "").strip()
+        if not tax_id or not tax_id.isdigit():
+            return JsonResponse({"error": "CPF/CNPJ inválido ou ausente."}, status=400)
+
+        tax_id_type = "CNPJ" if len(tax_id) == 14 else "CPF"
+
         payload = {
             "amount": amount_cents,
             "description": f"Assinatura {plan_info['label']} SleepyPeepy",
@@ -229,7 +236,8 @@ def create_abacatepay_charge(request):
                 "name": customer.get("name") or "Cliente SleepyPeepy",
                 "cellphone": customer.get("cellphone") or "",
                 "email": customer.get("email"),
-                "taxId": customer.get("cpf") or customer.get("taxId") or "00000000000",  # campo obrigatório
+                "taxId": tax_id,
+                "taxIdType": tax_id_type,
             },
             "metadata": {
                 "plan_code": plan,
@@ -246,7 +254,9 @@ def create_abacatepay_charge(request):
             "Content-Type": "application/json",
         }
 
+        # === Endpoint atualizado da API ===
         endpoint = f"{settings.ABACATEPAY_BASE_URL}/v1/pixQrCode/create"
+
         response = requests.post(endpoint, headers=headers, json=payload, timeout=30)
 
         if not response.ok:
