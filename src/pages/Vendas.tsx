@@ -310,16 +310,6 @@ const Vendas: React.FC = () => {
                 </div>
             </header>
 
-{/* ===== TIMER FIXO ABAIXO DO MENU ===== */}
-<div className="fixed top-16 left-0 right-0 z-40 bg-[#ff1a1a] text-white text-center font-extrabold py-3 shadow-[0_0_20px_rgba(255,0,0,0.5)] border-b border-red-700 animate-pulse">
-  ⏰ <span className="text-lg md:text-2xl tracking-wider">OFERTA TERMINA EM</span>
-  <span className="ml-2 text-2xl md:text-4xl font-mono bg-black/20 px-3 py-1 rounded-md">
-    {formatHMS(remainingMs)}
-  </span>
-</div>
-
-
-
 
             {/* HERO */}
             <section id="inicio" className="relative pt-24 md:pt-32 pb-12 md:pb-20 px-4 overflow-hidden">
