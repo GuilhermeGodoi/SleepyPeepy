@@ -215,7 +215,7 @@ def abacatepay_webhook_view(request):
 
     from .services import ensure_customer, maybe_send_single_invite, get_or_create_subscription
 
-    if event_type in ("charge.paid", "payment.succeeded"):
+    if event_type in ("charge.paid", "payment.succeeded", "charge.completed", "pix.settled"):
         email = (data.get("customer") or {}).get("email") or data.get("email")
         plan_code = (data.get("metadata") or {}).get("plan_code") or data.get("plan_code")
         external_payment_id = data.get("id") or data.get("charge_id")

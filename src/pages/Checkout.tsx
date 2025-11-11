@@ -392,27 +392,29 @@ export default function Checkout() {
   <div style="
     background: #fff;
     padding: 30px;
-    border-radius: 16px;
+    border-radius: 20px;
     max-width: 400px;
+    width: 90%;
     text-align: center;
     font-family: 'Inter', sans-serif;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   ">
     <h2 style="font-size:20px;font-weight:600;margin-bottom:16px;color:#222;">Escaneie o QR Code Pix</h2>
-${(() => {
+    ${(() => {
                               if (!res.qr_image) return "";
-                              // Corrige duplicações e prefixos inválidos
                               let imgData = res.qr_image.trim();
                               if (imgData.includes("data:image/png;base64,data:image")) {
-                                // remove duplicação
                                 imgData = imgData.replace("data:image/png;base64,data:image/png;base64,", "data:image/png;base64,");
                               } else if (!imgData.startsWith("data:image/png;base64,")) {
-                                // adiciona prefixo se faltar
                                 imgData = "data:image/png;base64," + imgData;
                               }
                               return `<img src="${imgData}"
-    alt="QR Code Pix"
-    style="width:240px;height:auto;margin-bottom:14px;border-radius:12px;">`;
+        alt="QR Code Pix"
+        style="width:260px;height:auto;margin-bottom:16px;border-radius:12px;display:block;margin-left:auto;margin-right:auto;">`;
                             })()}
 
     ${res.qr_code
@@ -425,23 +427,27 @@ ${(() => {
                             }
     <button id="closePixModal" style="
       margin-top:20px;
-      padding:10px 20px;
+      padding:12px 26px;
       border:none;
-      background:#0089AC;
+      background:#7b5cff;
       color:white;
-      border-radius:8px;
-      font-weight:500;
+      border-radius:10px;
+      font-weight:600;
+      font-size:15px;
       cursor:pointer;
       transition:background 0.2s ease;
     ">Fechar</button>
   </div>
   <style>
     @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @media (max-width: 480px) {
+      .pix-modal-container { width: 90%; }
+    }
   </style>
 `;
-
                           document.body.appendChild(modal);
                           modal.querySelector("#closePixModal")?.addEventListener("click", () => modal.remove());
+
 
                           // ✅ Verifica status de pagamento (até 90s)
                           const start = Date.now();
