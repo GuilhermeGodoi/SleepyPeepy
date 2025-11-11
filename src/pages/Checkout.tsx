@@ -376,59 +376,59 @@ export default function Checkout() {
                           const res = await r.json();
                           if (!r.ok) throw new Error(res.error || "Falha ao criar Pix.");
 
-                          // ✅ Cria modal central
                           const modal = document.createElement("div");
                           modal.style.cssText = `
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        animation: fadeIn 0.2s ease;
-      `;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+`;
 
                           modal.innerHTML = `
-        <div style="
-          background: #fff;
-          padding: 30px;
-          border-radius: 16px;
-          max-width: 400px;
-          text-align: center;
-          font-family: 'Inter', sans-serif;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        ">
-          <h2 style="font-size:20px;font-weight:600;margin-bottom:16px;color:#222;">Escaneie o QR Code Pix</h2>
-          ${res.qr_image
-                              ? `<img src="data:image/png;base64,${res.qr_image}" 
-                   style="width:240px;height:auto;margin-bottom:14px;border-radius:12px;">`
+  <div style="
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    max-width: 400px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  ">
+    <h2 style="font-size:20px;font-weight:600;margin-bottom:16px;color:#222;">Escaneie o QR Code Pix</h2>
+    ${res.qr_image
+                              ? `<img src="${res.qr_image.startsWith('data:image') ? res.qr_image : 'data:image/png;base64,' + res.qr_image}"
+          alt="QR Code Pix"
+          style="width:240px;height:auto;margin-bottom:14px;border-radius:12px;">`
                               : ""
                             }
-          ${res.qr_code
+    ${res.qr_code
                               ? `<p style="font-size:13px;word-break:break-all;color:#555;margin-bottom:10px;">${res.qr_code}</p>`
                               : ""
                             }
-          ${res.payment_url
+    ${res.payment_url
                               ? `<p><a href="${res.payment_url}" target="_blank" style="color:#0089AC;text-decoration:none;font-weight:bold;">Clique aqui para pagar</a></p>`
                               : ""
                             }
-          <button id="closePixModal" style="
-            margin-top:20px;
-            padding:10px 20px;
-            border:none;
-            background:#0089AC;
-            color:white;
-            border-radius:8px;
-            font-weight:500;
-            cursor:pointer;
-            transition:background 0.2s ease;
-          ">Fechar</button>
-        </div>
-        <style>
-          @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-        </style>
-      `;
+    <button id="closePixModal" style="
+      margin-top:20px;
+      padding:10px 20px;
+      border:none;
+      background:#0089AC;
+      color:white;
+      border-radius:8px;
+      font-weight:500;
+      cursor:pointer;
+      transition:background 0.2s ease;
+    ">Fechar</button>
+  </div>
+  <style>
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+  </style>
+`;
 
                           document.body.appendChild(modal);
                           modal.querySelector("#closePixModal")?.addEventListener("click", () => modal.remove());
