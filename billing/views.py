@@ -162,6 +162,33 @@ def payment_success_view(request):
     email_hint = request.GET.get("email") or ""
     return render(request, "billing/success.html", {"email_hint": email_hint})
 
+
+# === Reenvio de convite (opcional, compatível com services.py) ===
+@csrf_exempt
+@require_http_methods(["POST"])
+def resend_invite_view(request):
+    """
+    Permite reenviar o link de convite para um cliente já cadastrado.
+    Requer que o e-mail exista no banco (Customer).
+    """
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        email = (data.get("email") or "").strip().lower()
+        if not email:
+            return JsonResponse({"error": "E-mail é obrigatório."}, status=400)
+
+        try:
+            customer = Customer.objects.get(email=email)
+        except Customer.DoesNotExist:
+            return JsonResponse({"error": "Cliente não encontrado."}, status=404)
+
+        maybe_send_single_invite(customer)
+        return JsonResponse({"ok": True, "message": f"Convite reenviado para {email}."})
+    except Exception as e:
+        log.exception("Erro ao reenviar convite: %s", e)
+        return JsonResponse({"error": "Falha ao reenviar convite."}, status=500)
+
+
 # === AbacatePay (Pix) ===
 import requests
 from django.views.decorators.csrf import csrf_exempt
