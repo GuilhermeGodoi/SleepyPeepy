@@ -324,52 +324,53 @@ export default function Checkout() {
                   </div>
                 </div>
 
-<Separator />
+                <Separator />
 
-{/* Pagamento */}
-<div className="space-y-4">
-  <h2 className="text-lg font-semibold">Método de Pagamento</h2>
+                {/* Pagamento */}
+                <div className="space-y-4">
+                  <h2 className="text-lg font-semibold">Método de Pagamento</h2>
 
-  {/* Seletores visuais */}
-  <div className="grid grid-cols-2 gap-4">
-    {/* Cartão */}
-    <button
-      type="button"
-      onClick={() => {
-        const el = document.getElementById("card-form");
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }}
-      className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-primary/50 bg-primary/5 transition-all hover:border-primary"
-      aria-label="Pagar com cartão"
-    >
-      <CreditCard className="h-6 w-6 text-primary" />
-      <span className="text-sm font-medium text-primary">Cartão de Crédito</span>
-    </button>
+                  {/* Seletores visuais */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* Cartão */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("card-form");
+                        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                      }}
+                      className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-primary/50 bg-primary/5 transition-all hover:border-primary"
+                      aria-label="Pagar com cartão"
+                    >
+                      <CreditCard className="h-6 w-6 text-primary" />
+                      <span className="text-sm font-medium text-primary">Cartão de Crédito</span>
+                    </button>
 
-    {/* Pix */}
-    <button
-      type="button"
-      onClick={async () => {
-        setIsProcessing(true);
-        try {
-          const r = await fetch("/api/abacatepay/create-charge", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              plan: planId,
-              customer: {
-                name: formData.name,
-                email: formData.email,
-                cellphone: formData.cellphone,
-              },
-            }),
-          });
-          const res = await r.json();
-          if (!res.ok) throw new Error(res.error || "Falha ao criar Pix.");
+                    {/* Pix */}
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setIsProcessing(true);
+                        try {
+                          const r = await fetch("/api/abacatepay/create-charge", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              plan: planId,
+                              customer: {
+                                name: formData.name,
+                                email: formData.email,
+                                cellphone: formData.cellphone,
+                                cpf: onlyDigits(formData.cpf), // ✅ envia o CPF puro, sem pontos/traços
+                              },
+                            }),
+                          });
+                          const res = await r.json();
+                          if (!res.ok) throw new Error(res.error || "Falha ao criar Pix.");
 
-          const qrPopup = window.open("", "_blank", "width=420,height=520");
-          if (qrPopup && res.qr_image) {
-            qrPopup.document.write(`
+                          const qrPopup = window.open("", "_blank", "width=420,height=520");
+                          if (qrPopup && res.qr_image) {
+                            qrPopup.document.write(`
               <html><body style="font-family:Arial;text-align:center;background:#fafafa;color:#333;">
                 <h2 style="margin-top:16px;">Escaneie o QR Code Pix</h2>
                 <img src="data:image/png;base64,${res.qr_image}" style="width:260px;height:auto;margin:20px 0;border-radius:12px;">
@@ -377,79 +378,79 @@ export default function Checkout() {
                 <p><a href="${res.payment_url}" target="_blank" style="color:#8b5cf6;text-decoration:none;font-weight:bold;">Ou clique aqui para pagar</a></p>
               </body></html>
             `);
-          }
+                          }
 
-          const start = Date.now();
-          const check = async () => {
-            if (Date.now() - start > 90000) return;
-            const resp = await fetch(res.payment_url);
-            const text = await resp.text();
-            if (text.includes("Pago") || text.includes("Concluído")) {
-              window.location.href = "/billing/sucesso";
-            } else {
-              setTimeout(check, 5000);
-            }
-          };
-          check();
-        } catch (err: any) {
-          alert(err.message || "Erro ao processar Pix.");
-        } finally {
-          setIsProcessing(false);
-        }
-      }}
-      className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-border hover:border-primary/50 transition-all"
-      aria-label="Pagar com Pix"
-    >
-      {/* Ícone Pix restaurado ao tamanho original */}
-      <svg
-        className="h-6 w-6 text-primary"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M12 3L3 8v8l9 5 9-5V8l-9-5zm6.5 13.5l-6.5 3.6-6.5-3.6v-5l6.5 3.6 6.5-3.6v5z" />
-      </svg>
-      <span className="text-sm font-medium">Pix</span>
-    </button>
-  </div>
+                          const start = Date.now();
+                          const check = async () => {
+                            if (Date.now() - start > 90000) return;
+                            const resp = await fetch(res.payment_url);
+                            const text = await resp.text();
+                            if (text.includes("Pago") || text.includes("Concluído")) {
+                              window.location.href = "/billing/sucesso";
+                            } else {
+                              setTimeout(check, 5000);
+                            }
+                          };
+                          check();
+                        } catch (err: any) {
+                          alert(err.message || "Erro ao processar Pix.");
+                        } finally {
+                          setIsProcessing(false);
+                        }
+                      }}
+                      className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-border hover:border-primary/50 transition-all"
+                      aria-label="Pagar com Pix"
+                    >
+                      {/* Ícone Pix restaurado ao tamanho original */}
+                      <svg
+                        className="h-6 w-6 text-primary"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M12 3L3 8v8l9 5 9-5V8l-9-5zm6.5 13.5l-6.5 3.6-6.5-3.6v-5l6.5 3.6 6.5-3.6v5z" />
+                      </svg>
+                      <span className="text-sm font-medium">Pix</span>
+                    </button>
+                  </div>
 
-  {/* Stripe Elements (sem alterações) */}
-  <div id="card-form">
-    {clientSecret ? (
-      <Elements
-        key={clientSecret}
-        stripe={stripePromise}
-        options={{
-          clientSecret,
-          appearance: {
-            theme: "stripe",
-            variables: {
-              colorPrimary: "#0089AC",
-              colorBackground: "#FFFFFF",
-              colorText: "#000000",
-              colorDanger: "#E11D48",
-              fontFamily: "Inter, system-ui, sans-serif",
-              borderRadius: "12px",
-            },
-          },
-        }}
-      >
-        <StripeForm
-          planId={planId}
-          formData={formData}
-          clientSecret={clientSecret}
-          onProcessing={setIsProcessing}
-        />
-      </Elements>
-    ) : (
-      <div className="text-sm text-muted-foreground">
-        Preencha seu e-mail para carregar o pagamento.
-      </div>
-    )}
-  </div>
-</div>
+                  {/* Stripe Elements (sem alterações) */}
+                  <div id="card-form">
+                    {clientSecret ? (
+                      <Elements
+                        key={clientSecret}
+                        stripe={stripePromise}
+                        options={{
+                          clientSecret,
+                          appearance: {
+                            theme: "stripe",
+                            variables: {
+                              colorPrimary: "#0089AC",
+                              colorBackground: "#FFFFFF",
+                              colorText: "#000000",
+                              colorDanger: "#E11D48",
+                              fontFamily: "Inter, system-ui, sans-serif",
+                              borderRadius: "12px",
+                            },
+                          },
+                        }}
+                      >
+                        <StripeForm
+                          planId={planId}
+                          formData={formData}
+                          clientSecret={clientSecret}
+                          onProcessing={setIsProcessing}
+                        />
+                      </Elements>
+                    ) : (
+                      <div className="text-sm text-muted-foreground">
+                        Preencha seu e-mail para carregar o pagamento.
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-<Separator />
+                <Separator />
 
 
                 {/* Termos */}
