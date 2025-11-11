@@ -361,37 +361,65 @@ export default function Checkout() {
                                 name: formData.name,
                                 email: formData.email,
                                 cellphone: formData.cellphone,
-                                cpf: onlyDigits(formData.cpf), // ✅ envia o CPF puro, sem pontos/traços
+                                cpf: onlyDigits(formData.cpf), // ✅ CPF limpo (sem pontos/traços)
                               },
                             }),
                           });
-                          const res = await r.json();
-                          if (!res.ok) throw new Error(res.error || "Falha ao criar Pix.");
 
-                          const qrPopup = window.open("", "_blank", "width=420,height=520");
-                          if (qrPopup && res.qr_image) {
-                            qrPopup.document.write(`
-              <html><body style="font-family:Arial;text-align:center;background:#fafafa;color:#333;">
-                <h2 style="margin-top:16px;">Escaneie o QR Code Pix</h2>
-                <img src="data:image/png;base64,${res.qr_image}" style="width:260px;height:auto;margin:20px 0;border-radius:12px;">
-                <p style="font-size:14px;word-break:break-all;padding:0 10px;">${res.qr_code}</p>
-                <p><a href="${res.payment_url}" target="_blank" style="color:#8b5cf6;text-decoration:none;font-weight:bold;">Ou clique aqui para pagar</a></p>
-              </body></html>
-            `);
+                          const res = await r.json();
+
+                          if (!r.ok) {
+                            throw new Error(res.error || "Falha ao criar cobrança Pix.");
                           }
 
+                          // ✅ Abre pop-up de maneira segura e mostra conteúdo
+                          const qrPopup = window.open("", "_blank", "width=420,height=520");
+                          if (!qrPopup) {
+                            alert("Permita pop-ups no navegador para exibir o QR Code Pix.");
+                            return;
+                          }
+
+                          if (res.qr_image) {
+                            qrPopup.document.write(`
+          <html>
+            <body style="font-family:Arial;text-align:center;background:#fafafa;color:#333;">
+              <h2 style="margin-top:16px;">Escaneie o QR Code Pix</h2>
+              <img src="data:image/png;base64,${res.qr_image}" 
+                   style="width:260px;height:auto;margin:20px 0;border-radius:12px;">
+              <p style="font-size:14px;word-break:break-all;padding:0 10px;">${res.qr_code}</p>
+              <p>
+                <a href="${res.payment_url}" target="_blank" 
+                   style="color:#8b5cf6;text-decoration:none;font-weight:bold;">
+                   Ou clique aqui para pagar
+                </a>
+              </p>
+            </body>
+          </html>
+        `);
+                          } else {
+                            qrPopup.document.write(`
+          <html>
+            <body style="font-family:Arial;text-align:center;padding:40px;">
+              <h2>Erro ao gerar o QR Code Pix</h2>
+              <p>${res.error || "Tente novamente em alguns minutos."}</p>
+            </body>
+          </html>
+        `);
+                          }
+
+                          // ✅ Verificação automática do pagamento por até 90s
                           const start = Date.now();
-                          const check = async () => {
-                            if (Date.now() - start > 90000) return;
+                          const checkPayment = async () => {
+                            if (Date.now() - start > 90000) return; // para em 90s
                             const resp = await fetch(res.payment_url);
                             const text = await resp.text();
                             if (text.includes("Pago") || text.includes("Concluído")) {
                               window.location.href = "/billing/sucesso";
                             } else {
-                              setTimeout(check, 5000);
+                              setTimeout(checkPayment, 5000);
                             }
                           };
-                          check();
+                          checkPayment();
                         } catch (err: any) {
                           alert(err.message || "Erro ao processar Pix.");
                         } finally {
@@ -401,7 +429,6 @@ export default function Checkout() {
                       className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-border hover:border-primary/50 transition-all"
                       aria-label="Pagar com Pix"
                     >
-                      {/* Ícone Pix restaurado ao tamanho original */}
                       <svg
                         className="h-6 w-6 text-primary"
                         viewBox="0 0 24 24"
@@ -412,6 +439,7 @@ export default function Checkout() {
                       </svg>
                       <span className="text-sm font-medium">Pix</span>
                     </button>
+
                   </div>
 
                   {/* Stripe Elements (sem alterações) */}
