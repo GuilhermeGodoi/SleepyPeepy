@@ -410,33 +410,42 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   <div style="
     background: #fff;
     padding: 30px;
-    border-radius: 16px;
+    border-radius: 20px;
     max-width: 400px;
+    width: 90%;
     text-align: center;
     font-family: 'Inter', sans-serif;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   ">
     <h2 style="font-size:20px;font-weight:600;margin-bottom:16px;color:#222;">Escaneie o QR Code Pix</h2>
-${(()=>{if(!x.qr_image)return"";let N=x.qr_image.trim();return N.includes("data:image/png;base64,data:image")?N=N.replace("data:image/png;base64,data:image/png;base64,","data:image/png;base64,"):N.startsWith("data:image/png;base64,")||(N="data:image/png;base64,"+N),`<img src="${N}"
-    alt="QR Code Pix"
-    style="width:240px;height:auto;margin-bottom:14px;border-radius:12px;">`})()}
+    ${(()=>{if(!x.qr_image)return"";let N=x.qr_image.trim();return N.includes("data:image/png;base64,data:image")?N=N.replace("data:image/png;base64,data:image/png;base64,","data:image/png;base64,"):N.startsWith("data:image/png;base64,")||(N="data:image/png;base64,"+N),`<img src="${N}"
+        alt="QR Code Pix"
+        style="width:260px;height:auto;margin-bottom:16px;border-radius:12px;display:block;margin-left:auto;margin-right:auto;">`})()}
 
     ${x.qr_code?`<p style="font-size:13px;word-break:break-all;color:#555;margin-bottom:10px;">${x.qr_code}</p>`:""}
     ${x.payment_url?`<p><a href="${x.payment_url}" target="_blank" style="color:#0089AC;text-decoration:none;font-weight:bold;">Clique aqui para pagar</a></p>`:""}
     <button id="closePixModal" style="
       margin-top:20px;
-      padding:10px 20px;
+      padding:12px 26px;
       border:none;
-      background:#0089AC;
+      background:#7b5cff;
       color:white;
-      border-radius:8px;
-      font-weight:500;
+      border-radius:10px;
+      font-weight:600;
+      font-size:15px;
       cursor:pointer;
       transition:background 0.2s ease;
     ">Fechar</button>
   </div>
   <style>
     @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @media (max-width: 480px) {
+      .pix-modal-container { width: 90%; }
+    }
   </style>
 `,document.body.appendChild(p),(f=p.querySelector("#closePixModal"))==null||f.addEventListener("click",()=>p.remove());const b=Date.now(),j=async()=>{if(Date.now()-b>9e4)return;const C=await(await fetch(x.payment_url)).text();C.includes("Pago")||C.includes("Concluído")?(p.remove(),window.location.href="/billing/sucesso"):setTimeout(j,5e3)};j()}catch(w){alert(w.message||"Erro ao processar Pix.")}finally{h(!1);const w=document.activeElement;w&&(w.innerHTML=`
         <svg
