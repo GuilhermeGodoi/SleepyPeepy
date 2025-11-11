@@ -377,7 +377,7 @@ export default function Checkout() {
                           if (!r.ok) throw new Error(res.error || "Falha ao criar Pix.");
 
                           const modal = document.createElement("div");
-                          modal.style.cssText = `
+modal.style.cssText = `
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.8);
@@ -388,7 +388,7 @@ export default function Checkout() {
   animation: fadeIn 0.2s ease;
 `;
 
-                          modal.innerHTML = `
+modal.innerHTML = `
   <div style="
     background: #fff;
     padding: 30px;
@@ -405,26 +405,40 @@ export default function Checkout() {
   ">
     <h2 style="font-size:20px;font-weight:600;margin-bottom:16px;color:#222;">Escaneie o QR Code Pix</h2>
     ${(() => {
-                              if (!res.qr_image) return "";
-                              let imgData = res.qr_image.trim();
-                              if (imgData.includes("data:image/png;base64,data:image")) {
-                                imgData = imgData.replace("data:image/png;base64,data:image/png;base64,", "data:image/png;base64,");
-                              } else if (!imgData.startsWith("data:image/png;base64,")) {
-                                imgData = "data:image/png;base64," + imgData;
-                              }
-                              return `<img src="${imgData}"
+      if (!res.qr_image) return "";
+      let imgData = res.qr_image.trim();
+      if (imgData.includes("data:image/png;base64,data:image")) {
+        imgData = imgData.replace("data:image/png;base64,data:image/png;base64,", "data:image/png;base64,");
+      } else if (!imgData.startsWith("data:image/png;base64,")) {
+        imgData = "data:image/png;base64," + imgData;
+      }
+      return `<img src="${imgData}"
         alt="QR Code Pix"
         style="width:260px;height:auto;margin-bottom:16px;border-radius:12px;display:block;margin-left:auto;margin-right:auto;">`;
-                            })()}
+    })()}
 
     ${res.qr_code
-                              ? `<p style="font-size:13px;word-break:break-all;color:#555;margin-bottom:10px;">${res.qr_code}</p>`
-                              : ""
-                            }
+      ? `<p id="pixCodeText" style="font-size:13px;word-break:break-all;color:#555;margin-bottom:10px;">${res.qr_code}</p>
+         <button id="copyPixCode" style="
+           background:#7b5cff;
+           color:white;
+           border:none;
+           border-radius:8px;
+           padding:8px 18px;
+           font-size:13px;
+           font-weight:600;
+           cursor:pointer;
+           margin-bottom:10px;
+           transition:background 0.2s ease;
+         ">Copiar código Pix</button>`
+      : ""
+    }
+
     ${res.payment_url
-                              ? `<p><a href="${res.payment_url}" target="_blank" style="color:#0089AC;text-decoration:none;font-weight:bold;">Clique aqui para pagar</a></p>`
-                              : ""
-                            }
+      ? `<p><a href="${res.payment_url}" target="_blank" style="color:#0089AC;text-decoration:none;font-weight:bold;">Clique aqui para pagar</a></p>`
+      : ""
+    }
+
     <button id="closePixModal" style="
       margin-top:20px;
       padding:12px 26px;
@@ -445,8 +459,16 @@ export default function Checkout() {
     }
   </style>
 `;
-                          document.body.appendChild(modal);
-                          modal.querySelector("#closePixModal")?.addEventListener("click", () => modal.remove());
+
+document.body.appendChild(modal);
+modal.querySelector("#closePixModal")?.addEventListener("click", () => modal.remove());
+modal.querySelector("#copyPixCode")?.addEventListener("click", async () => {
+  const text = document.getElementById("pixCodeText")?.textContent;
+  if (text) {
+    await navigator.clipboard.writeText(text);
+    alert("Código Pix copiado!");
+  }
+});
 
 
                           // ✅ Verifica status de pagamento (até 90s)
