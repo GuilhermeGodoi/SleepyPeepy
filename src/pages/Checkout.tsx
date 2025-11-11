@@ -350,8 +350,15 @@ export default function Checkout() {
                     <button
                       type="button"
                       onClick={async () => {
+                        if (isProcessing) return;
                         setIsProcessing(true);
+
                         try {
+                          // Mostra carregando no botão
+                          const originalText = "Pix";
+                          const btn = document.activeElement as HTMLButtonElement | null;
+                          if (btn) btn.innerHTML = `<svg class='animate-spin h-5 w-5 text-primary' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'><circle class='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle><path class='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z'></path></svg>`;
+
                           const r = await fetch("/api/abacatepay/create-charge", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
@@ -361,59 +368,79 @@ export default function Checkout() {
                                 name: formData.name,
                                 email: formData.email,
                                 cellphone: formData.cellphone,
-                                cpf: onlyDigits(formData.cpf), // ✅ CPF limpo (sem pontos/traços)
+                                cpf: onlyDigits(formData.cpf),
                               },
                             }),
                           });
 
                           const res = await r.json();
+                          if (!r.ok) throw new Error(res.error || "Falha ao criar Pix.");
 
-                          if (!r.ok) {
-                            throw new Error(res.error || "Falha ao criar cobrança Pix.");
-                          }
+                          // ✅ Cria modal central
+                          const modal = document.createElement("div");
+                          modal.style.cssText = `
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        animation: fadeIn 0.2s ease;
+      `;
 
-                          // ✅ Abre pop-up de maneira segura e mostra conteúdo
-                          const qrPopup = window.open("", "_blank", "width=420,height=520");
-                          if (!qrPopup) {
-                            alert("Permita pop-ups no navegador para exibir o QR Code Pix.");
-                            return;
-                          }
+                          modal.innerHTML = `
+        <div style="
+          background: #fff;
+          padding: 30px;
+          border-radius: 16px;
+          max-width: 400px;
+          text-align: center;
+          font-family: 'Inter', sans-serif;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        ">
+          <h2 style="font-size:20px;font-weight:600;margin-bottom:16px;color:#222;">Escaneie o QR Code Pix</h2>
+          ${res.qr_image
+                              ? `<img src="data:image/png;base64,${res.qr_image}" 
+                   style="width:240px;height:auto;margin-bottom:14px;border-radius:12px;">`
+                              : ""
+                            }
+          ${res.qr_code
+                              ? `<p style="font-size:13px;word-break:break-all;color:#555;margin-bottom:10px;">${res.qr_code}</p>`
+                              : ""
+                            }
+          ${res.payment_url
+                              ? `<p><a href="${res.payment_url}" target="_blank" style="color:#0089AC;text-decoration:none;font-weight:bold;">Clique aqui para pagar</a></p>`
+                              : ""
+                            }
+          <button id="closePixModal" style="
+            margin-top:20px;
+            padding:10px 20px;
+            border:none;
+            background:#0089AC;
+            color:white;
+            border-radius:8px;
+            font-weight:500;
+            cursor:pointer;
+            transition:background 0.2s ease;
+          ">Fechar</button>
+        </div>
+        <style>
+          @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+        </style>
+      `;
 
-                          if (res.qr_image) {
-                            qrPopup.document.write(`
-          <html>
-            <body style="font-family:Arial;text-align:center;background:#fafafa;color:#333;">
-              <h2 style="margin-top:16px;">Escaneie o QR Code Pix</h2>
-              <img src="data:image/png;base64,${res.qr_image}" 
-                   style="width:260px;height:auto;margin:20px 0;border-radius:12px;">
-              <p style="font-size:14px;word-break:break-all;padding:0 10px;">${res.qr_code}</p>
-              <p>
-                <a href="${res.payment_url}" target="_blank" 
-                   style="color:#8b5cf6;text-decoration:none;font-weight:bold;">
-                   Ou clique aqui para pagar
-                </a>
-              </p>
-            </body>
-          </html>
-        `);
-                          } else {
-                            qrPopup.document.write(`
-          <html>
-            <body style="font-family:Arial;text-align:center;padding:40px;">
-              <h2>Erro ao gerar o QR Code Pix</h2>
-              <p>${res.error || "Tente novamente em alguns minutos."}</p>
-            </body>
-          </html>
-        `);
-                          }
+                          document.body.appendChild(modal);
+                          modal.querySelector("#closePixModal")?.addEventListener("click", () => modal.remove());
 
-                          // ✅ Verificação automática do pagamento por até 90s
+                          // ✅ Verifica status de pagamento (até 90s)
                           const start = Date.now();
                           const checkPayment = async () => {
-                            if (Date.now() - start > 90000) return; // para em 90s
+                            if (Date.now() - start > 90000) return;
                             const resp = await fetch(res.payment_url);
                             const text = await resp.text();
                             if (text.includes("Pago") || text.includes("Concluído")) {
+                              modal.remove();
                               window.location.href = "/billing/sucesso";
                             } else {
                               setTimeout(checkPayment, 5000);
@@ -424,6 +451,18 @@ export default function Checkout() {
                           alert(err.message || "Erro ao processar Pix.");
                         } finally {
                           setIsProcessing(false);
+                          const btn = document.activeElement as HTMLButtonElement | null;
+                          if (btn) btn.innerHTML = `
+        <svg
+          class="h-6 w-6 text-primary"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M12 3L3 8v8l9 5 9-5V8l-9-5zm6.5 13.5l-6.5 3.6-6.5-3.6v-5l6.5 3.6 6.5-3.6v5z" />
+        </svg>
+        <span class="text-sm font-medium">Pix</span>
+      `;
                         }
                       }}
                       className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-border hover:border-primary/50 transition-all"
