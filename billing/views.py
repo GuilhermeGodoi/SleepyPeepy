@@ -162,6 +162,11 @@ def payment_success_view(request):
     email_hint = request.GET.get("email") or ""
     return render(request, "billing/success.html", {"email_hint": email_hint})
 
+# === AbacatePay (Pix) ===
+import requests
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
 @transaction.atomic
 @csrf_exempt
 @require_http_methods(["POST"])
