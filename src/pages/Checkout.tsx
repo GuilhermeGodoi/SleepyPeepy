@@ -399,12 +399,22 @@ export default function Checkout() {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   ">
     <h2 style="font-size:20px;font-weight:600;margin-bottom:16px;color:#222;">Escaneie o QR Code Pix</h2>
-    ${res.qr_image
-                              ? `<img src="${res.qr_image.startsWith('data:image') ? res.qr_image : 'data:image/png;base64,' + res.qr_image}"
-          alt="QR Code Pix"
-          style="width:240px;height:auto;margin-bottom:14px;border-radius:12px;">`
-                              : ""
-                            }
+${(() => {
+                              if (!res.qr_image) return "";
+                              // Corrige duplicações e prefixos inválidos
+                              let imgData = res.qr_image.trim();
+                              if (imgData.includes("data:image/png;base64,data:image")) {
+                                // remove duplicação
+                                imgData = imgData.replace("data:image/png;base64,data:image/png;base64,", "data:image/png;base64,");
+                              } else if (!imgData.startsWith("data:image/png;base64,")) {
+                                // adiciona prefixo se faltar
+                                imgData = "data:image/png;base64," + imgData;
+                              }
+                              return `<img src="${imgData}"
+    alt="QR Code Pix"
+    style="width:240px;height:auto;margin-bottom:14px;border-radius:12px;">`;
+                            })()}
+
     ${res.qr_code
                               ? `<p style="font-size:13px;word-break:break-all;color:#555;margin-bottom:10px;">${res.qr_code}</p>`
                               : ""
