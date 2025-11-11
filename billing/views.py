@@ -162,54 +162,18 @@ def payment_success_view(request):
     email_hint = request.GET.get("email") or ""
     return render(request, "billing/success.html", {"email_hint": email_hint})
 
-
-@require_http_methods(["POST"])
 @transaction.atomic
-def resend_invite_view(request):
-    email = (request.POST.get("email") or "").strip().lower()
-    try:
-        validate_email(email)
-    except ValidationError:
-        return JsonResponse({"ok": False, "error": "E-mail inválido."}, status=400)
-
-    customer = ensure_customer(email=email, name="")
-    token = maybe_send_single_invite(customer)
-    if token:
-        return JsonResponse({
-            "ok": True,
-            "message": "Convite enviado. Verifique sua caixa de entrada (e o spam)."
-        })
-
-    if customer.user:
-        return JsonResponse({"ok": False, "error": "Este e-mail já possui conta criada. Faça login."}, status=200)
-
-    return JsonResponse({
-        "ok": False,
-        "error": "Já enviamos um convite recentemente. Aguarde alguns minutos ou peça suporte."
-    }, status=200)
-
-
-
-# === AbacatePay (Pix) ===
-import requests
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
-
 @csrf_exempt
 @require_http_methods(["POST"])
 def create_abacatepay_charge(request):
-    """
-    Cria uma cobrança Pix via AbacatePay (nova API 2025) e retorna o link de pagamento ou QR Code.
-    """
     try:
         data = json.loads(request.body.decode("utf-8"))
         plan = data.get("plan")
         customer = data.get("customer") or {}
 
         if not plan or not customer.get("email"):
-            return JsonResponse({"error": "Dados inválidos."}, status=400)
+            return JsonResponse({"error": "Dados inválidos: plano ou e-mail ausente."}, status=400)
 
-        # === Planos locais (espelho do frontend) ===
         plans = {
             "mensal": {"price": 47, "label": "Mensal"},
             "semestral": {"price": 222, "label": "Semestral"},
@@ -219,22 +183,22 @@ def create_abacatepay_charge(request):
         if not plan_info:
             return JsonResponse({"error": "Plano inválido."}, status=400)
 
-        # === Montagem do payload no formato PixQrCode ===
         amount_cents = int(plan_info["price"] * 100)
 
-        # === Normaliza e valida o CPF/CNPJ ===
         tax_id = (customer.get("cpf") or customer.get("taxId") or "").replace(".", "").replace("-", "").replace("/", "").strip()
         if not tax_id or not tax_id.isdigit():
             return JsonResponse({"error": "CPF/CNPJ inválido ou ausente."}, status=400)
-
         tax_id_type = "CNPJ" if len(tax_id) == 14 else "CPF"
+
+        cellphone = (customer.get("cellphone") or "").replace("(", "").replace(")", "").replace("-", "").replace(" ", "").strip()
+        # opcional: se o telefone for obrigatório, verificar se len(cellphone)>=10
 
         payload = {
             "amount": amount_cents,
             "description": f"Assinatura {plan_info['label']} SleepyPeepy",
             "customer": {
-                "name": customer.get("name") or "Cliente SleepyPeepy",
-                "cellphone": customer.get("cellphone") or "",
+                "name": customer.get("name") or "",
+                "cellphone": cellphone,
                 "email": customer.get("email"),
                 "taxId": tax_id,
                 "taxIdType": tax_id_type,
@@ -243,20 +207,19 @@ def create_abacatepay_charge(request):
                 "plan_code": plan,
                 "origin": "sleepypeepy.site"
             },
+            # adicionado o expiresIn: 3600 segundos (1 hora) — ajuste conforme sua necessidade
+            "expiresIn": 3600,
             "returnUrl": f"{settings.SITE_URL}/billing/sucesso/",
             "notificationUrl": f"{settings.SITE_URL}/billing/webhooks/abacatepay/"
         }
 
-        # === Cabeçalhos obrigatórios ===
         headers = {
             "Authorization": f"Bearer {settings.ABACATEPAY_API_KEY}",
             "Accept": "application/json",
             "Content-Type": "application/json",
         }
 
-        # === Endpoint atualizado da API ===
         endpoint = f"{settings.ABACATEPAY_BASE_URL}/v1/pixQrCode/create"
-
         response = requests.post(endpoint, headers=headers, json=payload, timeout=30)
 
         if not response.ok:
@@ -267,20 +230,21 @@ def create_abacatepay_charge(request):
             return JsonResponse({"error": f"Erro AbacatePay: {err}"}, status=response.status_code)
 
         result = response.json()
+        # dependendo da API, pode estar em result['data']
+        data_field = result.get("data", result)
 
-        payment_url = result.get("paymentUrl") or result.get("url")
-        qr_code = result.get("pix", {}).get("qrCode") or result.get("qrCode")
-        qr_image = result.get("pix", {}).get("qrCodeBase64") or result.get("qrCodeBase64")
+        payment_url = data_field.get("paymentUrl") or data_field.get("url")
+        qr_code = data_field.get("brCode") or data_field.get("qrCode") or data_field.get("brCode64")
+        qr_image = data_field.get("brCodeBase64") or data_field.get("qrCodeBase64")
 
         return JsonResponse({
             "ok": True,
             "payment_url": payment_url,
             "qr_code": qr_code,
             "qr_image": qr_image,
-            "status": result.get("status"),
-            "id": result.get("id"),
+            "status": data_field.get("status"),
+            "id": data_field.get("id"),
         })
-
     except Exception as e:
         log.exception("Erro ao criar cobrança Pix AbacatePay: %s", e)
         return JsonResponse({"error": "Falha ao gerar Pix."}, status=500)
